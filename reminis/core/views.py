@@ -9,8 +9,8 @@ from reminis.core.models import User, Story, TaggedUser
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 
-#def home(request):
-#	return render_to_response('home.html', locals())
+def home(request):
+	return render_to_response('home.html', locals())
 
 @csrf_exempt
 def post(request):

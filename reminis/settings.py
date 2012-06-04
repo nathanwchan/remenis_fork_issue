@@ -7,7 +7,6 @@ if socket.gethostname() == 'Nathans-MacBook-Air.local':
 else:
     DEBUG = False
 
-DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -161,3 +160,46 @@ LOGGING = {
         },
     }
 }
+
+
+# Manually inject Heroku settings due to lack of a settings.py file
+# https://github.com/heroku/heroku-buildpack-python/blob/master/bin/compile
+# 
+# Issue logged https://github.com/heroku/heroku-buildpack-python/issues/15
+
+import os
+import sys
+import urlparse
+urlparse.uses_netloc.append('postgres')
+urlparse.uses_netloc.append('mysql')
+
+try:
+    
+    # Check to make sure DATABASES is set in settings.py file.
+    # If not default to {}
+    
+    if 'DATABASES' not in locals():
+        DATABASES = {}
+    
+    if 'DATABASE_URL' in os.environ:
+        url = urlparse.urlparse(os.environ['DATABASE_URL'])
+        
+        # Ensure default database exists.
+        DATABASES['default'] = DATABASES.get('default', {})
+        
+        # Update with environment configuration.
+        DATABASES['default'].update({
+                                    'NAME': url.path[1:],
+                                    'USER': url.username,
+                                    'PASSWORD': url.password,
+                                    'HOST': url.hostname,
+                                    'PORT': url.port,
+                                    })
+        if url.scheme == 'postgres':
+            DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+        
+        if url.scheme == 'mysql':
+            DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
+except:
+    print 'Unexpected error:', sys.exc_info()
+

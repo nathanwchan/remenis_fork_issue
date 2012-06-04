@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <title>Reminis</title>
+    </head>
+    <body>
+        <h1>Home</h1>
+        
+        <div id="fb-root"></div>
+        <script>
+            window.fbAsyncInit = function() {
+                FB.init({
+                        appId      : '301406439948925',
+                        status     : true, 
+                        cookie     : true,
+                        xfbml      : true,
+                        oauth      : true,
+                        });
+            };
+            (function(d){
+             var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+             js = d.createElement('script'); js.id = id; js.async = true;
+             js.src = "//connect.facebook.net/en_US/all.js";
+             d.getElementsByTagName('head')[0].appendChild(js);
+             }(document));
+        </script>
+        
+        {% csrf_token %}
+        <a rel=parent href=../post/>post</a>
+        <a rel=parent href=../search/>search</a>
+        
+        <div class="fb-login-button">Login with Facebook</div>
+        
+    </body>
+</html>
