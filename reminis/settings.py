@@ -7,6 +7,7 @@ if socket.gethostname() == 'Nathans-MacBook-Air.local':
 else:
     DEBUG = False
 
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
