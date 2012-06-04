@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <title>Search</title>
+    </head>
+    <body>
+        {% if error %}
+        <p style="color: red;">Please submit a search term.</p>
+        {% endif %}
+        <form action="" method="get">
+            <p>Enter a User ID: <input type="text" name="q"></p>
+            <input type="submit" value="Search">
+        </form>
+    </body>
+</html>

@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title>Reminis</title>
+    </head>
+    <body>
+        <h1>Post a story!</h1>
+        
+        {% if errors %}
+        <ul style="color: red;">
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        
+        {% csrf_token %}
+        <form action="/post/" method="post">
+            <p>AuthorID: <input type="text" name="authorid" value="{{ authorid }}"></p>
+            <p>Title (optional): <input type="text" name="title" value="{{ title }}"></p>
+            <p>Tell us a story: <textarea name="story" rows="10" cols="50"></textarea></p>
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>

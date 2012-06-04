@@ -1,0 +1,22 @@
+<p>You searched for: <strong>{{ query }}</strong></p>
+
+
+{% if error %}
+<p style="color: red;">{{ error }}</p>
+{% else %}
+    {% if stories %}
+        <p>Found {{ stories|length }} stories.</p>
+        <ul>
+        {% for story in stories %}
+            <li>{{ story.title }} - {{ story.story }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No stories for {{ query }}.</p>
+    {% endif %}
+{% endif %}
+
+
+<form action="/search/" method="get">
+    <input type="submit" value="Search Again">
+</form>
