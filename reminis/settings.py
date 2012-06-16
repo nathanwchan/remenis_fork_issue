@@ -1,5 +1,4 @@
 # Django settings for reminis project.
-import dj_database_url
 import socket
 import os.path
 
@@ -27,6 +26,7 @@ else:
 MANAGERS = ADMINS
 
 if not DEBUG:
+    import dj_database_url
     DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
 else:
     DATABASES = {
@@ -102,7 +102,7 @@ ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(SITE_ROOT, 'reminis/static'),
+    os.path.join(SITE_ROOT, 'core/static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
