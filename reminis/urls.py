@@ -3,7 +3,6 @@ from reminis.core import views
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-admin.autodiscover()
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from reminis import settings
@@ -27,6 +26,8 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += staticfiles_urlpatterns()
+
+admin.autodiscover()
 
 if not settings.DEBUG:
     urlpatterns += patterns('',
