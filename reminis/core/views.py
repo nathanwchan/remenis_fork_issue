@@ -34,7 +34,7 @@ def home(request):
         authenticated = True
         fb = require_persistent_graph(request)
         name = fb.get('me')['name']
-    setting = settings.SITE_ROOT_URL
+    setting = settings.SITE_ROOT_URL + " " + settings.SITE_ROOT + " " + settings.PROJECT_PATH
     return render_to_response('home.html', locals())
 
 def logout(request):
