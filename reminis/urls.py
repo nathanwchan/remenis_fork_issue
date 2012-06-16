@@ -5,7 +5,8 @@ from reminis.core import views
 from django.contrib import admin
 admin.autodiscover()
 
-from django.conf import settings
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from reminis import settings
 
 urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -25,7 +26,9 @@ urlpatterns = patterns('',
     (r'^facebook/', include('django_facebook.urls')),
 )
 
-if settings.DEBUG:
+urlpatterns += staticfiles_urlpatterns()
+
+if not settings.DEBUG:
     urlpatterns += patterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-    )
+                            (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+)
