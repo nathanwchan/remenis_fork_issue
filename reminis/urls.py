@@ -5,18 +5,27 @@ from reminis.core import views
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'reminis.views.home', name='home'),
-    # url(r'^reminis/', include('reminis.foo.urls')),
+from django.conf import settings
 
+urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-                       
+                      
+    url(r'^$', views.home),
     url(r'^home/$', views.home),
     url(r'^post/$', views.post),
     url(r'^search/$', views.search),
+    
+    url(r'^logout/$', views.logout),
+    (r'^xd_receiver\.html$', views.xd_receiver),
+    
+    (r'^facebook/', include('django_facebook.urls')),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    )
