@@ -1,5 +1,5 @@
 # Django settings for reminis project.
-#import dj_database_url
+import dj_database_url
 import socket
 import os.path
 
