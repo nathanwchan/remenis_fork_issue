@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 import datetime, random, re, logging
 from reminis.core.models import User, Story, TaggedUser
+from reminis import settings
 
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
@@ -33,6 +34,7 @@ def home(request):
         authenticated = True
         fb = require_persistent_graph(request)
         name = fb.get('me')['name']
+    setting = settings.SITE_ROOT_URL
     return render_to_response('home.html', locals())
 
 def logout(request):
