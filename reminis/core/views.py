@@ -20,9 +20,23 @@ from django_facebook.decorators import (facebook_required,
 from open_facebook.utils import send_warning
 from open_facebook.exceptions import OpenFacebookException
 
-def xd_receiver(request):
-    return render_to_response('xd_receiver.html')
+@csrf_exempt
+def login(request):
+    context = RequestContext(request)
+    graph = get_facebook_graph(request)
+    try:
+        facebook = FacebookUserConverter(graph).is_authenticated()
+        if facebook:
+            fb = require_persistent_graph(request)
+            name = fb.get('me')['name']
+            return render_to_response('home.html', locals())
+    except:
+        authenticated = False
+    else:
+        authenticated = True
+    return render_to_response('login.html', locals())
 
+@csrf_exempt
 def home(request):
     context = RequestContext(request)
     graph = get_facebook_graph(request)
@@ -34,7 +48,6 @@ def home(request):
         authenticated = True
         fb = require_persistent_graph(request)
         name = fb.get('me')['name']
-    setting = settings.SITE_ROOT_URL + " " + settings.SITE_ROOT + " " + settings.PROJECT_PATH
     return render_to_response('home.html', locals())
 
 def logout(request):
@@ -91,6 +104,7 @@ def post(request):
                               RequestContext(request)
                               )
 
+@csrf_exempt
 def search(request):
     
     fb = require_persistent_graph(request)

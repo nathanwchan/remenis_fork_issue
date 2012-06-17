@@ -1,57 +1,170 @@
-{% extends "admin/base_site.html" %}
-{% load i18n admin_static %}
-{% load url from future %}
-
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}" />{% endblock %}
-
-{% block bodyclass %}login{% endblock %}
-
-{% block nav-global %}{% endblock %}
-
-{% block content_title %}{% endblock %}
-
-{% block breadcrumbs %}{% endblock %}
-
-{% block content %}
-{% if form.errors and not form.non_field_errors and not form.this_is_the_login_form.errors %}
-<p class="errornote">
-{% blocktrans count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
-</p>
-{% endif %}
-
-{% if form.non_field_errors or form.this_is_the_login_form.errors %}
-{% for error in form.non_field_errors|add:form.this_is_the_login_form.errors %}
-<p class="errornote">
-    {{ error }}
-</p>
-{% endfor %}
-{% endif %}
-
-<div id="content-main">
-<form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
-  <div class="form-row">
-    {% if not form.this_is_the_login_form.errors %}{{ form.username.errors }}{% endif %}
-    <label for="id_username" class="required">{% trans 'Username:' %}</label> {{ form.username }}
-  </div>
-  <div class="form-row">
-    {% if not form.this_is_the_login_form.errors %}{{ form.password.errors }}{% endif %}
-    <label for="id_password" class="required">{% trans 'Password:' %}</label> {{ form.password }}
-    <input type="hidden" name="this_is_the_login_form" value="1" />
-    <input type="hidden" name="next" value="{{ next }}" />
-  </div>
-  {% url 'admin_password_reset' as password_reset_url %}
-  {% if password_reset_url %}
-  <div class="password-reset-link">
-    <a href="{{ password_reset_url }}">{% trans 'Forgotten your password or username?' %}</a>
-  </div>
-  {% endif %}
-  <div class="submit-row">
-    <label>&nbsp;</label><input type="submit" value="{% trans 'Log in' %}" />
-  </div>
-</form>
-
-<script type="text/javascript">
-document.getElementById('id_username').focus()
-</script>
-</div>
-{% endblock %}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml">
+    <head>
+        <meta charset="utf-8">
+            <title>Reminis</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                
+                <script type="text/javascript">
+                    FACEBOOK_APP_ID = '301406439948925';
+                    FACEBOOK_REDIRECT_URL = document.location.protocol + '//' + 'post';
+                    </script>
+                <script type="text/javascript" src="{{ STATIC_URL }}facebook/fb_utils.js"></script>
+                <script src="http://connect.facebook.net/en_US/all.js"></script>
+                
+                <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+                <style type="text/css">
+                    body {
+                        padding-top: 60px;
+                        padding-bottom: 40px;
+                    }
+                    .sidebar-nav {
+                        padding: 9px 0;
+                    }
+                    </style>
+                <link href="/static/css/bootstrap-responsive.css" rel="stylesheet" type="text/css"/>
+                
+                <script type="text/javascript">
+                    (function() {
+                     if (typeof window.janrain !== 'object') window.janrain = {};
+                     if (typeof window.janrain.settings !== 'object') window.janrain.settings = {};
+                     
+                     janrain.settings.tokenUrl = 'http://localhost:8000/post/';
+                     
+                     function isReady() { janrain.ready = true; };
+                     if (document.addEventListener) {
+                     document.addEventListener("DOMContentLoaded", isReady, false);
+                     } else {
+                     window.attachEvent('onload', isReady);
+                     }
+                     
+                     var e = document.createElement('script');
+                     e.type = 'text/javascript';
+                     e.id = 'janrainAuthWidget';
+                     
+                     if (document.location.protocol === 'https:') {
+                     e.src = 'https://rpxnow.com/js/lib/reminis/engage.js';
+                     } else {
+                     e.src = 'http://widget-cdn.rpxnow.com/js/lib/reminis/engage.js';
+                     }
+                     
+                     var s = document.getElementsByTagName('script')[0];
+                     s.parentNode.insertBefore(e, s);
+                     })();
+                    </script>
+                </head>
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="../home/">Reminis</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span9">
+                    <div class="hero-unit">
+                        <h1>Welcome to Reminis!</h1>
+                        <br>
+                        <!--<fb:login-button autologoutlink="true" scope="email,offline_access" size="large" onlogin="window.location.href='../post/'">Login with Facebook</fb:login-button>-->
+                        <!--<div id="janrainEngageEmbed"></div>-->
+                        <a class="login rpxnow btn btn-primary btn-large" href="https://reminis.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Flocalhost%3A8000%2Fsearch%2F">Login with Facebook &raquo;</a></li>                    </div>
+                </div><!--/span-->
+            </div><!--/row-->
+            
+            <hr>
+            
+            <footer>
+                <p>&copy; 2012 Nathan Chan</p>
+            </footer>
+            
+        </div><!--/.fluid-container-->
+        
+        <div id="fb-root"></div>
+        <script>
+            window.fbAsyncInit = function() {
+                FB.init({
+                        appId      : '301406439948925', // App ID
+                        channelUrl : '//localhost:8000/channel.html', // Channel File
+                        status     : true, // check login status
+                        cookie     : true, // enable cookies to allow the server to access the session
+                        xfbml      : true  // parse XFBML
+                        });
+                
+                // Additional initialization code here
+            };
+            
+            // Load the SDK Asynchronously
+            (function(d){
+             var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement('script'); js.id = id; js.async = true;
+             js.src = "//connect.facebook.net/en_US/all.js";
+             ref.parentNode.insertBefore(js, ref);
+             }(document));
+            
+            // listen for and handle auth.statusChange events
+            FB.Event.subscribe('auth.statusChange', function(response) {
+                               if (response.authResponse) {
+                               // user has auth'd your app and is logged into Facebook
+                               FB.api('/me', function(me){
+                                      if (me.name) {
+                                      document.getElementById('auth-displayname').innerHTML = me.name;
+                                      }
+                                      })
+                               document.getElementById('auth-loggedout').style.display = 'none';
+                               document.getElementById('auth-loggedin').style.display = 'block';
+                               } else {
+                               // user has not auth'd your app, or is not logged into Facebook
+                               document.getElementById('auth-loggedout').style.display = 'block';
+                               document.getElementById('auth-loggedin').style.display = 'none';
+                               }
+                               });
+            
+            // respond to clicks on the login and logout links
+            document.getElementById('auth-loginlink').addEventListener('click', function(){
+                                                                       FB.login();
+                                                                       });
+            document.getElementById('auth-logoutlink').addEventListener('click', function(){
+                                                                        FB.logout();
+                                                                        }); 
+            </script>
+        
+        <!-- RPX social login widget -->
+        <script>
+            var rpxJsHost = (("https:" == document.location.protocol) ? "https://" : "http://static.");
+            document.write(unescape("%3Cscript src='" + rpxJsHost +
+                                    "rpxnow.com/js/lib/rpx.js' type='text/javascript'%3E%3C/script%3E"));
+            </script>
+        <script>
+            RPXNOW.overlay = true;
+            RPXNOW.language_preference = 'en';
+            // Set default provider to Facebook
+            // https://rpxnow.com/docs#sign-in_default_provider
+            //RPXNOW.default_provider = 'facebook';
+            </script>
+        
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="/static/js/jquery.js"></script>
+        <script src="/static/js/bootstrap.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        <script src="/static/js/bootstrap-transition.js"></script>
+        <script src="/static/js/bootstrap-alert.js"></script>
+        <script src="/static/js/bootstrap-modal.js"></script>
+        <script src="/static/js/bootstrap-dropdown.js"></script>
+        <script src="/static/js/bootstrap-scrollspy.js"></script>
+        <script src="/static/js/bootstrap-tab.js"></script>
+        <script src="/static/js/bootstrap-tooltip.js"></script>
+        <script src="/static/js/bootstrap-popover.js"></script>
+        <script src="/static/js/bootstrap-button.js"></script>
+        <script src="/static/js/bootstrap-collapse.js"></script>
+        <script src="/static/js/bootstrap-carousel.js"></script>
+        <script src="/static/js/bootstrap-typeahead.js"></script>
+    </body>
+</html>
