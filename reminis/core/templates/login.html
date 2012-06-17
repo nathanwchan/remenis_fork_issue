@@ -1,57 +1,61 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml">
     <head>
         <meta charset="utf-8">
-            <title>Reminis</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                
-                <script type="text/javascript">
-                    FACEBOOK_APP_ID = '301406439948925';
-                    FACEBOOK_REDIRECT_URL = document.location.protocol + '//' + 'post';
-                    </script>
-                <script type="text/javascript" src="{{ STATIC_URL }}facebook/fb_utils.js"></script>
-                <script src="http://connect.facebook.net/en_US/all.js"></script>
-                
-                <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-                <style type="text/css">
-                    body {
-                        padding-top: 60px;
-                        padding-bottom: 40px;
-                    }
-                    .sidebar-nav {
-                        padding: 9px 0;
-                    }
-                    </style>
-                <link href="/static/css/bootstrap-responsive.css" rel="stylesheet" type="text/css"/>
-                
-                <script type="text/javascript">
-                    (function() {
-                     if (typeof window.janrain !== 'object') window.janrain = {};
-                     if (typeof window.janrain.settings !== 'object') window.janrain.settings = {};
-                     
-                     janrain.settings.tokenUrl = 'http://localhost:8000/post/';
-                     
-                     function isReady() { janrain.ready = true; };
-                     if (document.addEventListener) {
-                     document.addEventListener("DOMContentLoaded", isReady, false);
-                     } else {
-                     window.attachEvent('onload', isReady);
-                     }
-                     
-                     var e = document.createElement('script');
-                     e.type = 'text/javascript';
-                     e.id = 'janrainAuthWidget';
-                     
-                     if (document.location.protocol === 'https:') {
-                     e.src = 'https://rpxnow.com/js/lib/reminis/engage.js';
-                     } else {
-                     e.src = 'http://widget-cdn.rpxnow.com/js/lib/reminis/engage.js';
-                     }
-                     
-                     var s = document.getElementsByTagName('script')[0];
-                     s.parentNode.insertBefore(e, s);
-                     })();
-                    </script>
-                </head>
+        <title>Reminis</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+        <script type="text/javascript">
+            FACEBOOK_APP_ID = '301406439948925';
+            FACEBOOK_REDIRECT_URL = document.location.protocol + '//' + 'post';
+            </script>
+        <script type="text/javascript" src="{{ STATIC_URL }}facebook/fb_utils.js"></script>
+        <script src="http://connect.facebook.net/en_US/all.js"></script>
+        
+        <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+            .sidebar-nav {
+                padding: 9px 0;
+            }
+            </style>
+        <link href="/static/css/bootstrap-responsive.css" rel="stylesheet" type="text/css"/>
+        
+        <script type="text/javascript">
+            (function() {
+             if (typeof window.janrain !== 'object') window.janrain = {};
+             if (typeof window.janrain.settings !== 'object') window.janrain.settings = {};
+             
+             if ({{ debug }}) {
+             janrain.settings.tokenUrl = 'http://localhost:8000/home/';
+             } else {
+             janrain.settings.tokenUrl = 'http://warm-samurai-5146.herokuapp.com/home/';
+             }
+             
+             function isReady() { janrain.ready = true; };
+             if (document.addEventListener) {
+             document.addEventListener("DOMContentLoaded", isReady, false);
+             } else {
+             window.attachEvent('onload', isReady);
+             }
+             
+             var e = document.createElement('script');
+             e.type = 'text/javascript';
+             e.id = 'janrainAuthWidget';
+             
+             if (document.location.protocol === 'https:') {
+             e.src = 'https://rpxnow.com/js/lib/reminis/engage.js';
+             } else {
+             e.src = 'http://widget-cdn.rpxnow.com/js/lib/reminis/engage.js';
+             }
+             
+             var s = document.getElementsByTagName('script')[0];
+             s.parentNode.insertBefore(e, s);
+             })();
+        </script>
+    </head>
     <body>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
@@ -74,7 +78,7 @@
                         <br>
                         <!--<fb:login-button autologoutlink="true" scope="email,offline_access" size="large" onlogin="window.location.href='../post/'">Login with Facebook</fb:login-button>-->
                         <!--<div id="janrainEngageEmbed"></div>-->
-                        <a class="login rpxnow btn btn-primary btn-large" href="https://reminis.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Flocalhost%3A8000%2Fsearch%2F">Login with Facebook &raquo;</a></li>                    </div>
+                        <a class="login rpxnow btn btn-primary btn-large" href="https://reminis.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Flocalhost%3A8000%2Fhome%2F">Login with Facebook &raquo;</a></li>                    </div>
                 </div><!--/span-->
             </div><!--/row-->
             

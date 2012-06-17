@@ -14,58 +14,116 @@ from django_facebook import exceptions as facebook_exceptions, settings as faceb
 from django_facebook.api import get_persistent_graph, get_facebook_graph, FacebookUserConverter, require_persistent_graph
 from django_facebook.canvas import generate_oauth_url
 from django_facebook.connect import CONNECT_ACTIONS, connect_user
-from django_facebook.utils import next_redirect, get_registration_backend
+from django_facebook.utils import next_redirect, get_registration_backend, get_oauth_url
 from django_facebook.decorators import (facebook_required,
                                         facebook_required_lazy)
 from open_facebook.utils import send_warning
 from open_facebook.exceptions import OpenFacebookException
 
+import urllib, urllib2, json
+
 @csrf_exempt
 def login(request):
-    context = RequestContext(request)
-    graph = get_facebook_graph(request)
-    try:
-        facebook = FacebookUserConverter(graph).is_authenticated()
-        if facebook:
-            fb = require_persistent_graph(request)
-            name = fb.get('me')['name']
-            return render_to_response('home.html', locals())
-    except:
-        authenticated = False
+#    context = RequestContext(request)
+#    graph = get_facebook_graph(request)
+#    try:
+#        facebook = FacebookUserConverter(graph).is_authenticated()
+#        if facebook:
+#            fb = require_persistent_graph(request)
+#            name = fb.get('me')['name']
+#            return render_to_response('home.html', locals())
+#    except:
+#        authenticated = False
+#    else:
+#        authenticated = True
+#    return render_to_response('login.html', locals())
+    debug = settings.DEBUG
+    if 'token' in request.session:
+        return redirect('/home/')
     else:
-        authenticated = True
-    return render_to_response('login.html', locals())
+        return render_to_response('login.html', locals())
+
+def logout(request):
+    request.session.pop('token', None)
+    request.session.pop('auth_info', None)
+    request.session.pop('accessCredentials', None)
+    return redirect('/')
 
 @csrf_exempt
 def home(request):
-    context = RequestContext(request)
-    graph = get_facebook_graph(request)
-    try:
-        facebook = FacebookUserConverter(graph).is_authenticated()
-    except:
-        authenticated = False
+    if 'token' in request.session:
+        fullname = loadUsername(request)
+        return render_to_response('home.html', locals())
+    elif 'token' in request.POST and request.POST['token']:
+        request.session['token'] = request.POST['token']
+        
+        auth_info = getAuthInfo(request)
+        if auth_info <> False:
+            profile = auth_info['profile']
+            fullname = profile.get('displayName')
+            identifier = profile.get('identifier')
+            name = profile['name']
+            firstname = name.get('givenName')
+            lastname = name.get('familyName')
+            
+            request.session['auth_info'] = auth_info
+            
+            # Janrain Plus
+            request.session['accessCredentials'] = auth_info['accessCredentials']
+            
+            #facebookid = re.search(r'id=(\d+)', identifier).group(1)
+            facebookid = (request.session['accessCredentials']).get('uid')
+            
+            try:
+                user = User.objects.get(fbid=facebookid)
+            except User.DoesNotExist:
+                # save new user to user DB
+                user_to_save = User(fbid=facebookid,
+                              first_name=firstname,
+                              last_name=lastname,
+                              full_name=fullname
+                               )
+                user_to_save.save()
+            
+            return render_to_response('home.html', locals())
+        else:
+            return redirect('/')
     else:
-        authenticated = True
-        fb = require_persistent_graph(request)
-        name = fb.get('me')['name']
-    return render_to_response('home.html', locals())
-
-def logout(request):
-    return render_to_response('logout.html', locals())
+        return redirect('/')
+                
+#    if 'profile' in request.POST:
+#        if request.POST['profile']:
+#            profilename = request.POST['profile'].displayname
+#    context = RequestContext(request)
+#    graph = get_facebook_graph(request)
+#    try:
+#        facebook = FacebookUserConverter(graph)
+#        facebook.is_authenticated()
+#        user = _connect_user(request, facebook, overwrite=False)
+#        accesstoken = user.get_profile().access_token
+#    except:
+#        authenticated = False
+#    else:
+#        authenticated = True
+#        fb = require_persistent_graph(request)
+#        name = fb.get('me')['name']
+#    return render_to_response('home.html', locals())
 
 @csrf_exempt
-@facebook_required_lazy(canvas=True)
+#@facebook_required_lazy(canvas=True)
 def post(request): 
     errors = []
     
-    fb = require_persistent_graph(request)
-    authorid = fb.get('me')['id']
-    authorname = fb.get('me')['name']
-    
+#    fb = require_persistent_graph(request)
+#    authorid = fb.get('me')['id']
+#    authorname = fb.get('me')['name']
+    authorid = (request.session['accessCredentials']).get('uid')
+    authorname = loadUsername(request)
+
     story_date = datetime.datetime.now().strftime("%m/%d/%Y")
     
     if request.method == 'GET':
-            return render_to_response('post.html', 
+        return render_to_response('post.html', 
                                       locals(),
                                       RequestContext(request)
                                       )
@@ -89,6 +147,7 @@ def post(request):
             story_to_save.save()
 
             return redirect('/search/?q=' + authorid)
+        
 #            return render_to_response('post.html',
 #                                      locals(),
 #                                      RequestContext(request)
@@ -106,11 +165,16 @@ def post(request):
 
 @csrf_exempt
 def search(request):
+#    fb = require_persistent_graph(request)
+#    authorid = fb.get('me')['id']
+#    authorname = fb.get('me')['name']
+#    myfriends = fb.get('me/friends')['data']
+#    tagarray = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
     
-    fb = require_persistent_graph(request)
-    authorid = fb.get('me')['id']
-    authorname = fb.get('me')['name']
-    myfriends = fb.get('me/friends')['data']
+    authorid = (request.session['accessCredentials']).get('uid')
+    authorname = loadUsername(request)
+    
+    myfriends = getGraphForMe(request, 'friends', True)
     tagarray = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
     
     if 'q' in request.GET:
@@ -122,10 +186,10 @@ def search(request):
                 error = 'A user with that authorid doesn\'t exist.'
             else:
                 stories = Story.objects.filter(authorid = user)
-                try:
-                    search_authorname = fb.get(query)['name']
-                except Exception:
-                    error = 'User does not exist in Facebook.'
+                search_authorname = user.full_name
+#                (getGraphCustom(request, 'name'))['name']
+#                except Exception:
+#                    error = 'User does not exist in Facebook.'
             
             return render_to_response('search_results.html', locals())
         else:
@@ -133,3 +197,48 @@ def search(request):
             return render_to_response('search_form.html', locals())
     else:
         return render_to_response('search_form.html', locals())
+
+
+## UTILS
+
+def getAuthInfo(request):
+    api_params = {
+        'token': request.session['token'],
+        'apiKey': '5ab3ff51bb1b219c07e950e4d8b4dc1ad94496ad',
+        'format': 'json',
+    }
+    # make the api call
+    http_response = urllib2.urlopen('https://rpxnow.com/api/v2/auth_info', urllib.urlencode(api_params))
+    
+    # read the json response
+    auth_info_json = http_response.read()
+    
+    # process the json response
+    auth_info = json.loads(auth_info_json)
+
+    if auth_info['stat'] == 'ok':
+        return auth_info
+    else:
+        return False
+
+def getGraphData(request, url_to_open):
+    http_response = urllib2.urlopen(url_to_open)
+    graph_json = http_response.read()
+    graph = json.loads(graph_json)
+    return graph['data']
+
+def getGraphForMe(request, graph_string, access_token_needed=False):
+    url_to_open = 'https://graph.facebook.com/' + (request.session['accessCredentials']).get('uid') + '/' + graph_string
+    if access_token_needed:
+        url_to_open += '?access_token=' + (request.session['accessCredentials']).get('accessToken')
+    return getGraphData(request, url_to_open)
+
+def getGraphCustom(request, graph_string, access_token_needed=False):
+    url_to_open = 'https://graph.facebook.com/' + graph_string
+    if access_token_needed:
+        url_to_open += '?access_token=' + (request.session['accessCredentials']).get('accessToken')
+    return getGraphData(request, url_to_open)
+    
+def loadUsername(request):
+    user = User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
+    return user.full_name

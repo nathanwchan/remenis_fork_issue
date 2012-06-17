@@ -7,6 +7,8 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from reminis import settings
 
+admin.autodiscover()
+
 urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -26,8 +28,6 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += staticfiles_urlpatterns()
-
-admin.autodiscover()
 
 if not settings.DEBUG:
     urlpatterns += patterns('',
