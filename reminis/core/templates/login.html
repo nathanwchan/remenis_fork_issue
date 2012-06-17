@@ -78,7 +78,12 @@
                         <br>
                         <!--<fb:login-button autologoutlink="true" scope="email,offline_access" size="large" onlogin="window.location.href='../post/'">Login with Facebook</fb:login-button>-->
                         <!--<div id="janrainEngageEmbed"></div>-->
-                        <a class="login rpxnow btn btn-primary btn-large" href="https://reminis.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Flocalhost%3A8000%2Fhome%2F">Login with Facebook &raquo;</a></li>                    </div>
+                        {% if debug %}
+                        <a class="login rpxnow btn btn-primary btn-large" href="https://reminis.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Flocalhost%3A8000%2Fhome%2F">Login with Facebook &raquo;</a>
+                        {% else %}
+                        <a class="login rpxnow btn btn-primary btn-large" href="https://reminis.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Fwarm-samurai-5146.herokuapp.com%2Fhome%2F">Login with Facebook &raquo;</a>
+                        {% endif %}
+                    </div>
                 </div><!--/span-->
             </div><!--/row-->
             
