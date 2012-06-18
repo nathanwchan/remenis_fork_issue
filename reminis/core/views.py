@@ -55,6 +55,7 @@ def home(request):
 
     if 'token' in request.session:
         fullname = loadUsername(request)
+        userid = (request.session['accessCredentials']).get('uid')
         photourl = (request.session['profile']).get('photo')
         return render_to_response('home.html', locals())
     elif 'token' in request.POST and request.POST['token']:
@@ -74,14 +75,14 @@ def home(request):
             request.session['accessCredentials'] = auth_info['accessCredentials']
             
 #            identifier = profile.get('identifier')
-#            facebookid = re.search(r'id=(\d+)', identifier).group(1)
-            facebookid = (request.session['accessCredentials']).get('uid')
+#            userid = re.search(r'id=(\d+)', identifier).group(1)
+            userid = (request.session['accessCredentials']).get('uid')
             
             try:
-                user = User.objects.get(fbid=facebookid)
+                user = User.objects.get(fbid=userid)
             except User.DoesNotExist:
                 # save new user to user DB
-                user_to_save = User(fbid=facebookid,
+                user_to_save = User(fbid=userid,
                               first_name=firstname,
                               last_name=lastname,
                               full_name=fullname
@@ -123,6 +124,7 @@ def post(request):
 #    authorid = fb.get('me')['id']
 #    authorname = fb.get('me')['name']
     fullname = loadUsername(request)
+    userid = (request.session['accessCredentials']).get('uid')
 
     story_date = datetime.datetime.now().strftime("%m/%d/%Y")
     
@@ -178,6 +180,7 @@ def search(request):
     active_tab = "search"
     
     fullname = loadUsername(request)
+    userid = (request.session['accessCredentials']).get('uid')
     
     myfriends = getGraphForMe(request, 'friends', True)
     tagarray = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
