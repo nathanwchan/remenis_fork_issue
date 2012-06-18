@@ -69,7 +69,9 @@
                             <div class="span4">
                                 <!--{% csrf_token %}-->
                                 <form action="/post/" method="post" name="submitForm">
+                                    {% if debug %}
                                     <p>AuthorID: <input type="text" class="input-xlarge" name="authorid" value="{{ authorid }}"></p>
+                                    {% endif %}
                                     <p>Title: <input type="text" class="input-xlarge" name="title" value="{{ title }}" placeholder="(optional)"></p>
                                     <p>Tell us a story: <textarea name="story" class="input-xlarge" rows="10" cols="500"></textarea></p>
                                     <p>Date: <input type="text" class="input-large" name="story_date"  id="datepicker" value="{{ story_date }}"></p>

@@ -113,6 +113,7 @@ def home(request):
 #@facebook_required_lazy(canvas=True)
 def post(request): 
     errors = []
+    debug = settings.DEBUG
     
 #    fb = require_persistent_graph(request)
 #    authorid = fb.get('me')['id']
@@ -128,14 +129,17 @@ def post(request):
                                       RequestContext(request)
                                       )
     elif request.method == 'POST':
-        if not request.POST.get('authorid', ''):
-            errors.append('You must have an authorid.')
+        if 'authorid' in request.POST:
+            if not request.POST.get('authorid', ''):
+                errors.append('You must have an authorid.')
+            else:
+                try:
+                    user = User.objects.get(fbid=request.POST["authorid"])
+                except User.DoesNotExist:
+                    errors.append('A user with that authorid doesn\'t exist.')
         else:
-            try:
-                user = User.objects.get(fbid=request.POST["authorid"])
-            except User.DoesNotExist:
-                errors.append('A user with that authorid doesn\'t exist.')
-    
+            user = User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
+        
         if not request.POST.get('story', ''):
             errors.append('You must submit a story!')
         if not errors:
