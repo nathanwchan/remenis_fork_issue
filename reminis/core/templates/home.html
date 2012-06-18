@@ -1,84 +1,20 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml">
-    <head>
-        <meta charset="utf-8">
-        <title>Reminis</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <script type="text/javascript">
-            FACEBOOK_APP_ID = '301406439948925';
-            FACEBOOK_REDIRECT_URL = document.location.protocol + '//' + 'post';
-            </script>
-        <script type="text/javascript" src="{{ STATIC_URL }}facebook/fb_utils.js"></script>
-        <script src="http://connect.facebook.net/en_US/all.js"></script>
-            
-        <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-        <style type="text/css">
-            body {
-                padding-top: 60px;
-                padding-bottom: 40px;
-            }
-            .sidebar-nav {
-                padding: 9px 0;
-            }
-            </style>
-        <link href="/static/css/bootstrap-responsive.css" rel="stylesheet" type="text/css"/>
-    </head>
-    <body>
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container-fluid">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="../home/">Reminis</a>
-                    
-                    <div class="btn-group pull-right">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="icon-user"></i> {{ fullname }}
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="../search/?q={{ authorid }}">Profile</a></li>
-                            <li class="divider"></li>
-                            <li><a href="../logout/">Sign Out</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-collapse">
-                        <ul class="nav">
-                            <li class="active"><a href="../home/">Home</a></li>
-                            <li><a href="../post/">Post</a></li>
-                            <li><a href="../search/">Search</a></li>
-                        </ul>
-                    </div><!--/.nav-collapse -->
-                </div>
+{% extends "remenis_base_nav.html" %}
+
+        {% block content %}
+        <div class="span9">
+            <div class="hero-unit">
+                <h1><img src={{ photourl }} /> Hi, {{ fullname }}!</h1>
+                <!--<a id="logout" href="/" onclick='FB.Connect.ifUserConnected(null,function() { window.location = "/" }); FB.Connect.logoutAndRedirect("/"); return false;'>Sign out</a>
+                <a href="/" id="auth-logoutlink">logout [doesn't work!!!]</a>-->
+                <br>
+                <h3>What do you want to do?</h3><br>
+                <a rel=parent href="../post/" class="btn btn-primary btn-large">Post a story &raquo;</a>
+                <a rel=parent href="../search/" class="btn btn-primary btn-large">Search &raquo;</a>
             </div>
         </div>
+        {% endblock %}
         
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span9">
-                    <div class="hero-unit">
-                        <h1><img src={{ photourl }} /> Hi, {{ fullname }}!</h1>
-                        <!--<a id="logout" href="/" onclick='FB.Connect.ifUserConnected(null,function() { window.location = "/" }); FB.Connect.logoutAndRedirect("/"); return false;'>Sign out</a>
-                        <a href="/" id="auth-logoutlink">logout [doesn't work!!!]</a>-->
-                        <br>
-                        <h3>What do you want to do?</h3><br>
-                        <a rel=parent href="../post/" class="btn btn-primary btn-large">Post a story &raquo;</a>
-                        <a rel=parent href="../search/" class="btn btn-primary btn-large">Search &raquo;</a>
-                    </div>
-                </div><!--/span-->
-            </div><!--/row-->
-            
-            <hr>
-            
-            <footer>
-                <p>&copy; 2012 Nathan Chan</p>
-            </footer>
-            
-        </div><!--/.fluid-container-->
-
+        {% block load_javascript %}
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="/static/js/jquery.js"></script>
         <script src="/static/js/bootstrap.js"></script>
@@ -95,5 +31,4 @@
         <script src="/static/js/bootstrap-collapse.js"></script>
         <script src="/static/js/bootstrap-carousel.js"></script>
         <script src="/static/js/bootstrap-typeahead.js"></script>
-    </body>
-</html>
+        {% endblock %}

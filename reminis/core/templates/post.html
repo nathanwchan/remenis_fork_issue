@@ -1,96 +1,42 @@
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Reminis</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-            
+{% extends "remenis_base_nav.html" %}
+
+        {% block head_extra %}
         <link href="/static/css/calendar.css" rel="stylesheet" type="text/css" media="screen"/>
-        <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-        <style type="text/css">
-            body {
-                padding-top: 60px;
-                padding-bottom: 40px;
-            }
-            .sidebar-nav {
-                padding: 9px 0;
-            }
-         </style>
-        <link href="/static/css/bootstrap-responsive.css" rel="stylesheet" type="text/css"/>
         <link href="/static/css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" type="text/css"/>
-    </head>
-    <body>
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container-fluid">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="../home/">Reminis</a>
-                    <div class="btn-group pull-right">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="icon-user"></i> {{ authorname }}
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="../search/?q={{ authorid }}">Profile</a></li>
-                            <li><a href="#}">Settings</a></li>
-                            <li class="divider"></li>
-                            <li><a href="../logout/">Sign Out</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-collapse">
-                        <ul class="nav">
-                            <li><a href="../home/">Home</a></li>
-                            <li class="active"><a href="../post/">Post</a></li>
-                            <li><a href="../search/">Search</a></li>
-                        </ul>
-                    </div><!--/.nav-collapse -->
-                </div>
+        {% endblock %}
+        
+        {% block content %}
+        <div class="span9">
+            <div class="hero-unit">
+                <h1>Post a story!</h1>
+                <!--<p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>-->
+                {% if errors %}
+                <h2 style="color: red;">Errors!</h2>
+                <ul style="color: red;">
+                    {% for error in errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <div class="row-fluid">
+                    <div class="span4">
+                        <!--{% csrf_token %}-->
+                        <form action="/post/" method="post" name="submitForm">
+                            {% if debug %}
+                            <p>AuthorID: <input type="text" class="input-xlarge" name="authorid" value="{{ authorid }}"></p>
+                            {% endif %}
+                            <p>Title: <input type="text" class="input-xlarge" name="title" value="{{ title }}" placeholder="(optional)"></p>
+                            <p>Tell us a story: <textarea name="story" class="input-xlarge" rows="10" cols="500"></textarea></p>
+                            <p>Date: <input type="text" class="input-large" name="story_date"  id="datepicker" value="{{ story_date }}"></p>
+                            <input type="submit" name="submitButton" class="btn btn-large btn-primary" value="Submit &raquo;" onclick=submitPressed()>
+                        </form>
+                    </div><!--/span-->
+                </div><!--/row-->
             </div>
-        </div>
+        </div><!--/span-->
+        {% endblock %}
         
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span9">
-                    <div class="hero-unit">
-                        <h1>Post a story!</h1>
-                        <!--<p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>-->
-                        {% if errors %}
-                        <h2 style="color: red;">Errors!</h2>
-                        <ul style="color: red;">
-                            {% for error in errors %}
-                            <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                        <div class="row-fluid">
-                            <div class="span4">
-                                <!--{% csrf_token %}-->
-                                <form action="/post/" method="post" name="submitForm">
-                                    {% if debug %}
-                                    <p>AuthorID: <input type="text" class="input-xlarge" name="authorid" value="{{ authorid }}"></p>
-                                    {% endif %}
-                                    <p>Title: <input type="text" class="input-xlarge" name="title" value="{{ title }}" placeholder="(optional)"></p>
-                                    <p>Tell us a story: <textarea name="story" class="input-xlarge" rows="10" cols="500"></textarea></p>
-                                    <p>Date: <input type="text" class="input-large" name="story_date"  id="datepicker" value="{{ story_date }}"></p>
-                                    <input type="submit" name="submitButton" class="btn btn-large btn-primary" value="Submit &raquo;" onclick=submitPressed()>
-                                </form>
-                            </div><!--/span-->
-                        </div><!--/row-->
-                    </div>
-                </div><!--/span-->
-            </div><!--/row-->
-            
-            <hr>
-            
-            <footer>
-                <p>&copy; 2012 Nathan Chan</p>
-            </footer>
-            
-        </div><!--/.fluid-container-->
-        
+        {% block load_javascript %}
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="/static/js/jquery.js"></script>
         <script src="/static/js/bootstrap.js"></script>
@@ -109,9 +55,9 @@
         <script src="/static/js/bootstrap-typeahead.js"></script> 
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
         <script>
-        $(function() {
-                $( "#datepicker" ).datepicker();
-        });
+            $(function() {
+                    $( "#datepicker" ).datepicker();
+            });
         </script>
         <script language="JavaScript"> 
             function submitPressed() { 
@@ -120,5 +66,4 @@
                 document.submitForm.submit(); 
             } 
         </script>
-    </body>
-</html>
+        {% endblock %}

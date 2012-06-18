@@ -1,28 +1,6 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml">
-    <head>
-        <meta charset="utf-8">
-        <title>Reminis</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            
-        <script type="text/javascript">
-            FACEBOOK_APP_ID = '301406439948925';
-            FACEBOOK_REDIRECT_URL = document.location.protocol + '//' + 'post';
-            </script>
-        <script type="text/javascript" src="{{ STATIC_URL }}facebook/fb_utils.js"></script>
-        <script src="http://connect.facebook.net/en_US/all.js"></script>
-        
-        <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-        <style type="text/css">
-            body {
-                padding-top: 60px;
-                padding-bottom: 40px;
-            }
-            .sidebar-nav {
-                padding: 9px 0;
-            }
-            </style>
-        <link href="/static/css/bootstrap-responsive.css" rel="stylesheet" type="text/css"/>
-        
+{% extends "remenis_base.html" %}
+
+        {% block head_extra %}
         <script type="text/javascript">
             (function() {
              if (typeof window.janrain !== 'object') window.janrain = {};
@@ -55,8 +33,9 @@
              s.parentNode.insertBefore(e, s);
              })();
         </script>
-    </head>
-    <body>
+        {% endblock %}
+
+        {% block nav %}
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
@@ -69,95 +48,38 @@
                 </div>
             </div>
         </div>
-        
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span9">
-                    <div class="hero-unit">
-                        <h1>Welcome to <img src="../static/logo.png" width=400 /></h1>
-                        <br>
-                        <!--<fb:login-button autologoutlink="true" scope="email,offline_access" size="large" onlogin="window.location.href='../post/'">Login with Facebook</fb:login-button>-->
-                        <!--<div id="janrainEngageEmbed"></div>-->
-                        {% if debug %}
-                        <a class="login rpxnow btn btn-primary btn-large" href="https://reminis.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Flocalhost%3A8000%2Fhome%2F">Login with Facebook &raquo;</a>
-                        {% else %}
-                        <a class="login rpxnow btn btn-primary btn-large" href="https://reminis.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Fwarm-samurai-5146.herokuapp.com%2Fhome%2F">Login with Facebook &raquo;</a>
-                        {% endif %}
-                    </div>
-                </div><!--/span-->
-            </div><!--/row-->
-            
-            <hr>
-            
-            <footer>
-                <p>&copy; 2012 Nathan Chan</p>
-            </footer>
-            
-        </div><!--/.fluid-container-->
-        
-        <div id="fb-root"></div>
-        <script>
-            window.fbAsyncInit = function() {
-                FB.init({
-                        appId      : '301406439948925', // App ID
-                        channelUrl : '//localhost:8000/channel.html', // Channel File
-                        status     : true, // check login status
-                        cookie     : true, // enable cookies to allow the server to access the session
-                        xfbml      : true  // parse XFBML
-                        });
-                
-                // Additional initialization code here
-            };
-            
-            // Load the SDK Asynchronously
-            (function(d){
-             var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-             if (d.getElementById(id)) {return;}
-             js = d.createElement('script'); js.id = id; js.async = true;
-             js.src = "//connect.facebook.net/en_US/all.js";
-             ref.parentNode.insertBefore(js, ref);
-             }(document));
-            
-            // listen for and handle auth.statusChange events
-            FB.Event.subscribe('auth.statusChange', function(response) {
-                               if (response.authResponse) {
-                               // user has auth'd your app and is logged into Facebook
-                               FB.api('/me', function(me){
-                                      if (me.name) {
-                                      document.getElementById('auth-displayname').innerHTML = me.name;
-                                      }
-                                      })
-                               document.getElementById('auth-loggedout').style.display = 'none';
-                               document.getElementById('auth-loggedin').style.display = 'block';
-                               } else {
-                               // user has not auth'd your app, or is not logged into Facebook
-                               document.getElementById('auth-loggedout').style.display = 'block';
-                               document.getElementById('auth-loggedin').style.display = 'none';
-                               }
-                               });
-            
-            // respond to clicks on the login and logout links
-            document.getElementById('auth-loginlink').addEventListener('click', function(){
-                                                                       FB.login();
-                                                                       });
-            document.getElementById('auth-logoutlink').addEventListener('click', function(){
-                                                                        FB.logout();
-                                                                        }); 
-            </script>
-        
+        {% endblock %}
+
+        {% block content %}
+        <div class="span9">
+            <div class="hero-unit">
+                <h1>Welcome to <img src="../static/logo.png" width=400 /></h1>
+                <br>
+                <!--<fb:login-button autologoutlink="true" scope="email,offline_access" size="large" onlogin="window.location.href='../post/'">Login with Facebook</fb:login-button>-->
+                <!--<div id="janrainEngageEmbed"></div>-->
+                {% if debug %}
+                <a class="login rpxnow btn btn-primary btn-large" href="https://reminis.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Flocalhost%3A8000%2Fhome%2F">Login with Facebook &raquo;</a>
+                {% else %}
+                <a class="login rpxnow btn btn-primary btn-large" href="https://reminis.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Fwarm-samurai-5146.herokuapp.com%2Fhome%2F">Login with Facebook &raquo;</a>
+                {% endif %}
+            </div>
+        </div><!--/span-->
+        {% endblock %}
+
+        {% block load_javascript %}
         <!-- RPX social login widget -->
         <script>
             var rpxJsHost = (("https:" == document.location.protocol) ? "https://" : "http://static.");
             document.write(unescape("%3Cscript src='" + rpxJsHost +
                                     "rpxnow.com/js/lib/rpx.js' type='text/javascript'%3E%3C/script%3E"));
-            </script>
+        </script>
         <script>
             RPXNOW.overlay = true;
             RPXNOW.language_preference = 'en';
             // Set default provider to Facebook
             // https://rpxnow.com/docs#sign-in_default_provider
             //RPXNOW.default_provider = 'facebook';
-            </script>
+        </script>
         
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="/static/js/jquery.js"></script>
@@ -175,5 +97,4 @@
         <script src="/static/js/bootstrap-collapse.js"></script>
         <script src="/static/js/bootstrap-carousel.js"></script>
         <script src="/static/js/bootstrap-typeahead.js"></script>
-    </body>
-</html>
+        {% endblock %}

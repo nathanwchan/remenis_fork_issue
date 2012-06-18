@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Reminis</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+        {% block head_extra %}
+        {% endblock %}
+            
+        <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+            .sidebar-nav {
+                padding: 9px 0;
+            }
+        </style>
+        <link href="/static/css/bootstrap-responsive.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        {% block nav %}
+        {% endblock %}
+        
+        <div class="container-fluid">
+            <div class="row-fluid">
+                {% block content %}
+                {% endblock %}
+            </div>
+            <hr>
+            <footer>
+                <p>&copy; 2012 Nathan Chan</p>
+            </footer>
+        </div>
+        
+        {% block load_javascript %}
+        {% endblock %}
+    </body>
+</html>

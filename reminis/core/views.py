@@ -51,6 +51,8 @@ def logout(request):
 
 @csrf_exempt
 def home(request):
+    active_tab = "home"
+
     if 'token' in request.session:
         fullname = loadUsername(request)
         photourl = (request.session['profile']).get('photo')
@@ -115,11 +117,12 @@ def home(request):
 def post(request): 
     errors = []
     debug = settings.DEBUG
+    active_tab = "post"
     
 #    fb = require_persistent_graph(request)
 #    authorid = fb.get('me')['id']
 #    authorname = fb.get('me')['name']
-    authorname = loadUsername(request)
+    fullname = loadUsername(request)
 
     story_date = datetime.datetime.now().strftime("%m/%d/%Y")
     
@@ -149,6 +152,8 @@ def post(request):
                           story_date=datetime.datetime.strptime(request.POST["story_date"], '%m/%d/%Y') #datetime.datetime.now() - datetime.timedelta(days=365*random.random()))
                            )
             story_to_save.save()
+            
+            active_tab = "search"
             return redirect('/search/?q=' + user.fbid)
         
 #            return render_to_response('post.html',
@@ -158,7 +163,8 @@ def post(request):
                 
     return render_to_response('post.html', {
                               'errors': errors,
-                              'authorname': authorname,
+                              'active_tab': active_tab,
+                              'fullname': fullname,
                               'authorid': request.POST.get('authorid', ''),
                               'title': request.POST.get('title', ''),
                               'story': request.POST.get('story', ''),
@@ -169,13 +175,9 @@ def post(request):
 
 @csrf_exempt
 def search(request):
-#    fb = require_persistent_graph(request)
-#    authorid = fb.get('me')['id']
-#    authorname = fb.get('me')['name']
-#    myfriends = fb.get('me/friends')['data']
-#    tagarray = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    active_tab = "search"
     
-    authorname = loadUsername(request)
+    fullname = loadUsername(request)
     
     myfriends = getGraphForMe(request, 'friends', True)
     tagarray = [x['name'].encode('ASCII', 'ignore') for x in myfriends]

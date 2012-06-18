@@ -1,0 +1,31 @@
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="../home/">Reminis</a>
+            <div class="btn-group pull-right">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="icon-user"></i> {{ fullname }}
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="../search/?q={{ authorid }}">Profile</a></li>
+                    <li><a href="#}">Settings</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../logout/">Sign Out</a></li>
+                </ul>
+            </div>
+            <div class="nav-collapse">
+                <ul class="nav">
+                    <li {% ifequal active_tab "home" %}class="active"{% endifequal %}><a href="../home/">Home</a></li>
+                    <li {% ifequal active_tab "post" %}class="active"{% endifequal %}><a href="../post/">Post</a></li>
+                    <li {% ifequal active_tab "search" %}class="active"{% endifequal %}><a href="../search/">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
