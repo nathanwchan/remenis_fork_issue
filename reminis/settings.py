@@ -148,16 +148,16 @@ TEMPLATE_DIRS = (
     SITE_ROOT + '/templates',
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS = (              
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'reminis.core',              
-    'django.contrib.admin',
-    'django.contrib.admindocs',
+    'reminis.core',
+#    'django.contrib.admindocs',
     'django_facebook',
 #    'facebook',
 #    'facebook.modules.profile.page',
@@ -180,33 +180,15 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
 AUTH_PROFILE_MODULE = 'django_facebook.FacebookProfile'
 ACCOUNT_ACTIVATION_DAYS = 10
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
+#    'django.core.context_processors.debug',
+#    'django.core.context_processors.i18n',
+#    'django.core.context_processors.media',
     'django.core.context_processors.request',
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.static',
     'django.contrib.messages.context_processors.messages',
     'django_facebook.context_processors.facebook',
 )
-
-#FACEBOOK_APPS = {
-#    'name' : {
-#            'ID': '301406439948925',
-#            'SECRET': 'd4e5d448e3e40c2fb13e21d8b4ef40e4',
-#            'CANVAS-PAGE': 'https://apps.facebook.com/yourapp',
-#            'CANVAS-URL': '',
-#            'SECURE-CANVAS-URL': '',
-#            'REDIRECT-URL': 'mydomain.com/facebook/redirect/?next=%2F%2Fwww.facebook.com%2Fpages%2F',
-#            'DOMAIN' : 'localhost.local:8000',
-#            'NAMESPACE': 'mynamespace',
-#    }
-#}
-#
-#AUTHENTICATION_BACKENDS = (
-#    'django.contrib.auth.backends.ModelBackend',
-#    'facebook.backends.authentication.AuthenticationBackend',
-#)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
