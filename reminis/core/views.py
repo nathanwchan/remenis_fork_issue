@@ -45,7 +45,7 @@ def login(request):
 
 def logout(request):
     request.session.pop('token', None)
-    request.session.pop('auth_info', None)
+    request.session.pop('profile', None)
     request.session.pop('accessCredentials', None)
     return redirect('/')
 
@@ -53,6 +53,7 @@ def logout(request):
 def home(request):
     if 'token' in request.session:
         fullname = loadUsername(request)
+        photourl = (request.session['profile']).get('photo')
         return render_to_response('home.html', locals())
     elif 'token' in request.POST and request.POST['token']:
         request.session['token'] = request.POST['token']
@@ -60,18 +61,18 @@ def home(request):
         auth_info = getAuthInfo(request)
         if auth_info <> False:
             profile = auth_info['profile']
+            request.session['profile'] = profile
+            
             fullname = profile.get('displayName')
-            identifier = profile.get('identifier')
+            photourl = profile.get('photo')
             name = profile['name']
             firstname = name.get('givenName')
             lastname = name.get('familyName')
             
-            request.session['auth_info'] = auth_info
-            
-            # Janrain Plus
             request.session['accessCredentials'] = auth_info['accessCredentials']
             
-            #facebookid = re.search(r'id=(\d+)', identifier).group(1)
+#            identifier = profile.get('identifier')
+#            facebookid = re.search(r'id=(\d+)', identifier).group(1)
             facebookid = (request.session['accessCredentials']).get('uid')
             
             try:
