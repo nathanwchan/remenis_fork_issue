@@ -119,7 +119,6 @@ def post(request):
 #    fb = require_persistent_graph(request)
 #    authorid = fb.get('me')['id']
 #    authorname = fb.get('me')['name']
-    authorid = (request.session['accessCredentials']).get('uid')
     authorname = loadUsername(request)
 
     story_date = datetime.datetime.now().strftime("%m/%d/%Y")
@@ -150,8 +149,7 @@ def post(request):
                           story_date=datetime.datetime.strptime(request.POST["story_date"], '%m/%d/%Y') #datetime.datetime.now() - datetime.timedelta(days=365*random.random()))
                            )
             story_to_save.save()
-
-            return redirect('/search/?q=' + authorid)
+            return redirect('/search/?q=' + user.fbid)
         
 #            return render_to_response('post.html',
 #                                      locals(),
@@ -160,6 +158,7 @@ def post(request):
                 
     return render_to_response('post.html', {
                               'errors': errors,
+                              'authorname': authorname,
                               'authorid': request.POST.get('authorid', ''),
                               'title': request.POST.get('title', ''),
                               'story': request.POST.get('story', ''),
@@ -176,7 +175,6 @@ def search(request):
 #    myfriends = fb.get('me/friends')['data']
 #    tagarray = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
     
-    authorid = (request.session['accessCredentials']).get('uid')
     authorname = loadUsername(request)
     
     myfriends = getGraphForMe(request, 'friends', True)
