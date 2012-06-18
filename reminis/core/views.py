@@ -187,7 +187,7 @@ def search(request):
             try:
                 user = User.objects.get(fbid=query)
             except User.DoesNotExist:
-                error = 'A user with that authorid doesn\'t exist.'
+                error = 'A user with that authorid doesn\'t exist in Reminis.'
             else:
                 stories = Story.objects.filter(authorid = user)
                 search_authorname = user.full_name

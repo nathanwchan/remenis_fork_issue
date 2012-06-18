@@ -74,7 +74,7 @@
                             <input type="submit" class="btn btn-large" value="Search Again &raquo;">
                         </form>
                         
-                        <p style="color: green;">{{ authorname }}'s friends:</p>
+                        <p style="color: green;">[For testing] {{ authorname }}'s friends:</p>
                         <ul>
                             {% for friend in myfriends %}
                             <li><a rel=parent href=../search/?q={{ friend.id }}>{{ friend.name }}</a></li>
