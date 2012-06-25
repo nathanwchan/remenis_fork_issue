@@ -16,6 +16,8 @@ ADMINS = (
     ('Nathan Chan', 'nchan87+django@gmail.com'),
 )
 
+SITE_ROOT_URL = ''
+
 if DEBUG:
     SITE_ROOT_URL = 'http://localhost:8000' 
 else: 
