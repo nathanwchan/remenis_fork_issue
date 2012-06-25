@@ -3,9 +3,11 @@ import socket
 import os.path
 
 if socket.gethostname() == 'Nathans-MacBook-Air.local':
-    DEBUG = True
+    MY_DEBUG = True
 else:
-    DEBUG = False
+    MY_DEBUG = False
+
+DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -16,14 +18,14 @@ ADMINS = (
     ('Nathan Chan', 'nchan87+django@gmail.com'),
 )
 
-if DEBUG:
+if MY_DEBUG:
     SITE_ROOT_URL = 'http://localhost:8000' 
 else: 
     SITE_ROOT_URL = 'http://www.remenis.com'
     
 MANAGERS = ADMINS
 
-if not DEBUG:
+if not MY_DEBUG:
     import dj_database_url
     DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
 else:
