@@ -16,12 +16,10 @@ ADMINS = (
     ('Nathan Chan', 'nchan87+django@gmail.com'),
 )
 
-SITE_ROOT_URL = ''
-
 if DEBUG:
     SITE_ROOT_URL = 'http://localhost:8000' 
 else: 
-    SITE_ROOT_URL = 'http://remenis.com/'
+    SITE_ROOT_URL = 'http://www.remenis.com'
     
 MANAGERS = ADMINS
 
