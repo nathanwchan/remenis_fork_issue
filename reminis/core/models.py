@@ -5,6 +5,7 @@ class User(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=40)
     full_name = models.CharField(max_length=70)
+    email = models.EmailField(blank=True)
 
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)

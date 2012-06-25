@@ -21,7 +21,7 @@ SITE_ROOT_URL = ''
 if DEBUG:
     SITE_ROOT_URL = 'http://localhost:8000' 
 else: 
-    SITE_ROOT_URL = 'http://warm-samurai-5146.herokuapp.com/'
+    SITE_ROOT_URL = 'http://remenis.com/'
     
 MANAGERS = ADMINS
 
@@ -158,7 +158,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'reminis.core',
 #    'django.contrib.admindocs',
-    'django_facebook',
+#    'django_facebook',
+    'south',
 #    'facebook',
 #    'facebook.modules.profile.page',
 #    'facebook.modules.profile.user',

@@ -68,6 +68,7 @@ def home(request):
             
             fullname = profile.get('displayName')
             photourl = profile.get('photo')
+            email = profile.get('verifiedEmail')
             name = profile['name']
             firstname = name.get('givenName')
             lastname = name.get('familyName')
@@ -83,10 +84,11 @@ def home(request):
             except User.DoesNotExist:
                 # save new user to user DB
                 user_to_save = User(fbid=userid,
-                              first_name=firstname,
-                              last_name=lastname,
-                              full_name=fullname
-                               )
+                                    first_name=firstname,
+                                    last_name=lastname,
+                                    full_name=fullname,
+                                    email=email
+                                    )
                 user_to_save.save()
             
             return render_to_response('home.html', locals())
