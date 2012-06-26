@@ -37,7 +37,7 @@ def login(request):
 #    else:
 #        authenticated = True
 #    return render_to_response('login.html', locals())
-    debug = settings.DEBUG
+    debug = settings.MY_DEBUG
     if 'token' in request.session:
         return redirect('/home/')
     else:
@@ -119,7 +119,7 @@ def home(request):
 #@facebook_required_lazy(canvas=True)
 def post(request): 
     errors = []
-    debug = settings.DEBUG
+    debug = settings.MY_DEBUG
     active_tab = "post"
     
 #    fb = require_persistent_graph(request)
