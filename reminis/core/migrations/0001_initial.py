@@ -15,7 +15,6 @@ class Migration(SchemaMigration):
             ('first_name', self.gf('django.db.models.fields.CharField')(max_length=30)),
             ('last_name', self.gf('django.db.models.fields.CharField')(max_length=40)),
             ('full_name', self.gf('django.db.models.fields.CharField')(max_length=70)),
-            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, blank=True)),
         ))
         db.send_create_signal('core', ['User'])
 
@@ -66,7 +65,6 @@ class Migration(SchemaMigration):
         },
         'core.user': {
             'Meta': {'object_name': 'User'},
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'fbid': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'full_name': ('django.db.models.fields.CharField', [], {'max_length': '70'}),
