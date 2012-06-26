@@ -9,13 +9,22 @@ class User(models.Model):
 
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
+    
+    class Admin:
+        pass
 
 class Story(models.Model):
     authorid = models.ForeignKey(User)
     title = models.CharField(max_length=100, blank=True)
     story = models.CharField(max_length=500)
     story_date = models.DateField(blank=True)
-
+    
+    class Admin:
+        pass
+    
 class TaggedUser(models.Model):
     fbid = models.CharField(max_length=20)
     storyid = models.ForeignKey(Story)
+        
+    class Admin:
+        pass
