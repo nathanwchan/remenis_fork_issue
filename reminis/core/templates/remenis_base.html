@@ -31,10 +31,12 @@
                 {% block content %}
                 {% endblock %}
             </div>
+            {% block no_footer %}
             <hr>
             <footer>
                 <p>&copy; 2012 Nathan Chan</p>
             </footer>
+            {% endblock %}
         </div>
         
         {% block load_javascript %}
