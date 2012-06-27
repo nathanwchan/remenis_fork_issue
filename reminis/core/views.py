@@ -23,6 +23,10 @@ from open_facebook.exceptions import OpenFacebookException
 import urllib, urllib2, json
 
 @csrf_exempt
+def splash(request):
+    return render_to_response('splash.html', locals())
+    
+@csrf_exempt
 def login(request):
 #    context = RequestContext(request)
 #    graph = get_facebook_graph(request)

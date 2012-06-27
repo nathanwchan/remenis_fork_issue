@@ -1,0 +1,93 @@
+{% extends "remenis_base.html" %}
+
+        {% block head_extra %}
+        <script type="text/javascript">
+            (function() {
+             if (typeof window.janrain !== 'object') window.janrain = {};
+             if (typeof window.janrain.settings !== 'object') window.janrain.settings = {};
+             
+             if ({{ debug }}) {
+             janrain.settings.tokenUrl = 'http://localhost:8000/home/';
+             } else {
+             janrain.settings.tokenUrl = 'http://www.remenis.com/home/';
+             }
+             
+             function isReady() { janrain.ready = true; };
+             if (document.addEventListener) {
+             document.addEventListener("DOMContentLoaded", isReady, false);
+             } else {
+             window.attachEvent('onload', isReady);
+             }
+             
+             var e = document.createElement('script');
+             e.type = 'text/javascript';
+             e.id = 'janrainAuthWidget';
+             
+             if (document.location.protocol === 'https:') {
+             e.src = 'https://rpxnow.com/js/lib/reminis/engage.js';
+             } else {
+             e.src = 'http://widget-cdn.rpxnow.com/js/lib/reminis/engage.js';
+             }
+             
+             var s = document.getElementsByTagName('script')[0];
+             s.parentNode.insertBefore(e, s);
+             })();
+        </script>
+        {% endblock %}
+
+        {% block inside_body %}
+        background="../static/homepage_background.png"
+        {% endblock %}
+
+        {% block splash %}
+        <div style="text-align: center; margin-left: auto; margin-right: auto; background: url('../static/homepage_box.png'); width: 840px; height: 614px;">
+            <br><br><br><br><br>
+            <p style="font-size: 45px; color: #FFFFFF;">A collection of all your life stories.</p>
+            <br><br>
+            <p style="font-size: 30px; color: #FFFFFF; line-height:150%;">
+            Invite your friends to share their<br>favorite stories about <i>you</i>.
+            </p>
+            <br><br><br><br><br>
+            <p style="font-size: 30px; color: #808080; line-height:150%;">
+            Sign up now to get advanced notice and<br>become one of the private beta testers.
+            </p>
+            <br>
+            <form class="form-search" method="post" name="joinForm">
+                <input type="text" class="span3 input-large" name="email" placeholder="email address">
+                <button type="submit" class="btn btn-primary btn-medium">&nbsp;Join&nbsp;</button>
+            </form>
+        </div>
+        {% endblock %}
+
+        {% block load_javascript %}
+        <!-- RPX social login widget -->
+        <script>
+            var rpxJsHost = (("https:" == document.location.protocol) ? "https://" : "http://static.");
+            document.write(unescape("%3Cscript src='" + rpxJsHost +
+                                    "rpxnow.com/js/lib/rpx.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script>
+            RPXNOW.overlay = true;
+            RPXNOW.language_preference = 'en';
+            // Set default provider to Facebook
+            // https://rpxnow.com/docs#sign-in_default_provider
+            //RPXNOW.default_provider = 'facebook';
+        </script>
+        
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="/static/js/jquery.js"></script>
+        <script src="/static/js/bootstrap.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        <script src="/static/js/bootstrap-transition.js"></script>
+        <script src="/static/js/bootstrap-alert.js"></script>
+        <script src="/static/js/bootstrap-modal.js"></script>
+        <script src="/static/js/bootstrap-dropdown.js"></script>
+        <script src="/static/js/bootstrap-scrollspy.js"></script>
+        <script src="/static/js/bootstrap-tab.js"></script>
+        <script src="/static/js/bootstrap-tooltip.js"></script>
+        <script src="/static/js/bootstrap-popover.js"></script>
+        <script src="/static/js/bootstrap-button.js"></script>
+        <script src="/static/js/bootstrap-collapse.js"></script>
+        <script src="/static/js/bootstrap-carousel.js"></script>
+        <script src="/static/js/bootstrap-typeahead.js"></script>
+        {% endblock %}
