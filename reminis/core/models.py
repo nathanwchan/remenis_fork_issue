@@ -18,7 +18,7 @@ class Story(models.Model):
     title = models.CharField(max_length=100, blank=True)
     story = models.CharField(max_length=500)
     story_date = models.DateField(blank=True)
-    post_date = models.DateField(blank=True, null=True)
+    post_date = models.DateTimeField(blank=True, null=True)
     
     class Admin:
         pass
@@ -33,7 +33,7 @@ class TaggedUser(models.Model):
 class StoryComment(models.Model):
     storyid = models.ForeignKey(Story)
     comment = models.CharField(max_length=200)
-    post_date = models.DateField(blank=True, null=True)
+    post_date = models.DateTimeField(blank=True, null=True)
     
     class Admin:
         pass

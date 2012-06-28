@@ -140,46 +140,47 @@ def post(request):
                                       RequestContext(request)
                                       )
     elif request.method == 'POST':
-        if 'authorid' in request.POST:
-            if not request.POST.get('authorid', ''):
-                errors.append('You must have an authorid.')
-            else:
-                try:
-                    user = User.objects.get(fbid=request.POST["authorid"])
-                except User.DoesNotExist:
-                    errors.append('A user with that authorid doesn\'t exist.')
-        else:
-            user = User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
+#        if 'authorid' in request.POST:
+#            if not request.POST.get('authorid', ''):
+#                errors.append('You must have an authorid.')
+#            else:
+#                try:
+#                    user = User.objects.get(fbid=request.POST["authorid"])
+#                except User.DoesNotExist:
+#                    errors.append('A user with that authorid doesn\'t exist.')
+#        else:
+        user = User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
         
-        if not request.POST.get('story', ''):
-            errors.append('You must submit a story!')
-        if not errors:
-            story_to_save = Story(authorid=user,
-                          title=request.POST["title"],
-                          story=request.POST["story"],
-                          story_date=datetime.datetime.strptime(request.POST["story_date"], '%m/%d/%Y') #datetime.datetime.now() - datetime.timedelta(days=365*random.random()))
-                           )
-            story_to_save.save()
-            
-            active_tab = "search"
-            return redirect('/search/?q=' + user.fbid)
+#        if not request.POST.get('story', ''):
+#            errors.append('You must submit a story!')
+#        if not errors:
+        story_to_save = Story(authorid=user,
+                      title=request.POST["title"],
+                      story=request.POST["story"],
+                      story_date=datetime.datetime.strptime(request.POST["story_date"], '%m/%d/%Y'),
+                      post_date=datetime.datetime.now()
+                       )
+        story_to_save.save()
+        
+        active_tab = "search"
+        return redirect('/search/?q=' + user.fbid)
         
 #            return render_to_response('post.html',
 #                                      locals(),
 #                                      RequestContext(request)
 #                                      )
                 
-    return render_to_response('post.html', {
-                              'errors': errors,
-                              'active_tab': active_tab,
-                              'fullname': fullname,
-                              'authorid': request.POST.get('authorid', ''),
-                              'title': request.POST.get('title', ''),
-                              'story': request.POST.get('story', ''),
-                              'story_date': request.POST.get('story_date', ''),
-                              },
-                              RequestContext(request)
-                              )
+#    return render_to_response('post.html', {
+#                              'errors': errors,
+#                              'active_tab': active_tab,
+#                              'fullname': fullname,
+#                              'authorid': request.POST.get('authorid', ''),
+#                              'title': request.POST.get('title', ''),
+#                              'story': request.POST.get('story', ''),
+#                              'story_date': request.POST.get('story_date', ''),
+#                              },
+#                              RequestContext(request)
+#                              )
 
 @csrf_exempt
 def search(request):
@@ -197,7 +198,7 @@ def search(request):
             try:
                 user = User.objects.get(fbid=query)
             except User.DoesNotExist:
-                error = 'A user with that authorid doesn\'t exist in Reminis.'
+                error = 'A user with that authorid doesn\'t exist in Remenis.'
             else:
                 stories = Story.objects.filter(authorid = user)
                 search_authorname = user.full_name

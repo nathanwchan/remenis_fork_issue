@@ -8,28 +8,35 @@
         {% block content %}
         <div class="span9">
             <div class="hero-unit">
-                <h1>Post a story!</h1>
-                <!--<p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>-->
-                {% if errors %}
-                <h2 style="color: red;">Errors!</h2>
-                <ul style="color: red;">
-                    {% for error in errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
+<!--                <h1>Post a story!</h1>-->
+                
                 <div class="row-fluid">
                     <div class="span4">
-                        <!--{% csrf_token %}-->
-                        <form action="/post/" method="post" name="submitForm">
-                            {% if debug %}
-                            <p>AuthorID: <input type="text" class="input-xlarge" name="authorid" value="{{ authorid }}"></p>
-                            {% endif %}
-                            <p>Title: <input type="text" class="input-xlarge" name="title" value="{{ title }}" placeholder="(optional)"></p>
-                            <p>Tell us a story: <textarea name="story" class="input-xlarge" rows="10" cols="500"></textarea></p>
-                            <p>Date: <input type="text" class="input-large" name="story_date"  id="datepicker" value="{{ story_date }}"></p>
-                            <input type="submit" name="submitButton" class="btn btn-large btn-primary" value="Submit &raquo;" onclick=submitPressed()>
-                        </form>
+                        
+                        <div class="modal hide" id="myModal">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                                <h3>Post a story!</h3>
+                            </div>
+                            <form action="/post/" method="post" name="submitForm" style="margin-bottom:0;" onsubmit="return validateForm()">
+                                <div class="modal-body">
+                                    
+                                    <!--{% if debug %}
+                                    <p>AuthorID: <input type="text" class="input-xlarge" name="authorid" value="{{ authorid }}"></p>
+                                    {% endif %}-->
+                                    <p>Title: <input type="text" class="input-xlarge" name="title" value="{{ title }}" placeholder="(optional)"></p>
+                                    <p id="errortext" style="color: red;"></p>
+                                    <p>Tell us a story: <textarea name="story" class="input-xlarge" rows="10" cols="500"></textarea></p>
+                                    <p>Date: <input type="text" class="input-large" name="story_date"  id="datepicker" value="{{ story_date }}"></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="#" class="btn" data-dismiss="modal">Close</a>
+                                    <input name="submitButton" type="submit" class="btn btn-primary" style="width: 75px;" value="Submit &raquo;">
+                                </div>
+                            </form>
+                        </div>
+                            
+                        <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-large">Post &raquo;</a>
                     </div><!--/span-->
                 </div><!--/row-->
             </div>
@@ -58,12 +65,27 @@
             $(function() {
                     $( "#datepicker" ).datepicker();
             });
+            $('#myModal').on('hidden', function () {
+                             });
+            function modalSavePressed() {
+                
+                document.submitForm.story.value += "nathan ";
+            }
         </script>
-        <script language="JavaScript"> 
-            function submitPressed() { 
+        <script>
+            function validateForm() { 
                 document.submitForm.submitButton.disabled = true; 
                 //stuff goes here 
-                document.submitForm.submit(); 
-            } 
+                if (document.submitForm.story.value == "")
+                {
+                    document.getElementById('errortext').innerHTML = "You must input a story!";
+                    document.submitForm.submitButton.disabled = false;
+                    return false;
+                }
+                else
+                {
+                    document.submitForm.submit();
+                }
+            }
         </script>
         {% endblock %}
