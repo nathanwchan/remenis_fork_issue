@@ -13,17 +13,13 @@
                 <div class="row-fluid">
                     <div class="span4">
                         
-                        <div class="modal hide" id="myModal">
+                        <div class="modal hide fade" id="myModal" style="display: none;">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal">×</button>
                                 <h3>Post a story!</h3>
                             </div>
                             <form action="/post/" method="post" name="submitForm" style="margin-bottom:0;" onsubmit="return validateForm()">
                                 <div class="modal-body">
-                                    
-                                    <!--{% if debug %}
-                                    <p>AuthorID: <input type="text" class="input-xlarge" name="authorid" value="{{ authorid }}"></p>
-                                    {% endif %}-->
                                     <p>Title: <input type="text" class="input-xlarge" name="title" value="{{ title }}" placeholder="(optional)"></p>
                                     <p id="errortext" style="color: red;"></p>
                                     <p>Tell us a story: <textarea name="story" class="input-xlarge" rows="10" cols="500"></textarea></p>
@@ -46,20 +42,7 @@
         {% block load_javascript %}
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="/static/js/jquery.js"></script>
-        <script src="/static/js/bootstrap.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
-        <script src="/static/js/bootstrap-transition.js"></script>
-        <script src="/static/js/bootstrap-alert.js"></script>
-        <script src="/static/js/bootstrap-modal.js"></script>
-        <script src="/static/js/bootstrap-dropdown.js"></script>
-        <script src="/static/js/bootstrap-scrollspy.js"></script>
-        <script src="/static/js/bootstrap-tab.js"></script>
-        <script src="/static/js/bootstrap-tooltip.js"></script>
-        <script src="/static/js/bootstrap-popover.js"></script>
-        <script src="/static/js/bootstrap-button.js"></script>
-        <script src="/static/js/bootstrap-collapse.js"></script>
-        <script src="/static/js/bootstrap-carousel.js"></script>
-        <script src="/static/js/bootstrap-typeahead.js"></script> 
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
         <script>
             $(function() {
