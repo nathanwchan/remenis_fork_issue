@@ -155,9 +155,9 @@ def post(request):
 #            errors.append('You must submit a story!')
 #        if not errors:
         
+        date_month_int = 0
         if 'story_date_month' in request.POST:
             date_month_string = request.POST["story_date_month"]
-            date_month_int = 0
             if date_month_string == "Jan":
                 date_month_int = 1
             elif date_month_string == "Feb":
@@ -182,13 +182,11 @@ def post(request):
                 date_month_int = 11
             elif date_month_string == "Dec":
                 date_month_int = 12
-        else:
-            date_month_int = 0
             
+        date_day_int = 0
         if 'story_date_day' in request.POST:
-            date_day_int = request.POST["story_date_day"]
-        else:
-            date_day_int = 0
+            if request.POST["story_date_day"] != "---":
+                date_day_int = request.POST["story_date_day"]
             
         story_to_save = Story(authorid=user,
                       title=request.POST["title"],
