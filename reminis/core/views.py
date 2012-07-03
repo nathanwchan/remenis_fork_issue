@@ -154,10 +154,49 @@ def post(request):
 #        if not request.POST.get('story', ''):
 #            errors.append('You must submit a story!')
 #        if not errors:
+        
+        if 'story_date_month' in request.POST:
+            date_month_string = request.POST["story_date_month"]
+            date_month_int = 0
+            if date_month_string == "Jan":
+                date_month_int = 1
+            elif date_month_string == "Feb":
+                date_month_int = 2
+            elif date_month_string == "Mar":
+                date_month_int = 3
+            elif date_month_string == "Apr":
+                date_month_int = 4
+            elif date_month_string == "May":
+                date_month_int = 5
+            elif date_month_string == "Jun":
+                date_month_int = 6
+            elif date_month_string == "Jul":
+                date_month_int = 7
+            elif date_month_string == "Aug":
+                date_month_int = 8
+            elif date_month_string == "Sep":
+                date_month_int = 9
+            elif date_month_string == "Oct":
+                date_month_int = 10
+            elif date_month_string == "Nov":
+                date_month_int = 11
+            elif date_month_string == "Dec":
+                date_month_int = 12
+        else:
+            date_month_int = 0
+            
+        if 'story_date_day' in request.POST:
+            date_day_int = request.POST["story_date_day"]
+        else:
+            date_day_int = 0
+            
         story_to_save = Story(authorid=user,
                       title=request.POST["title"],
                       story=request.POST["story"],
-                      story_date=datetime.datetime.strptime(request.POST["story_date"], '%m/%d/%Y'),
+#                      story_date=datetime.datetime.strptime(request.POST["story_date"], '%m/%d/%Y'),
+                      story_date_year=request.POST["story_date_year"],
+                      story_date_month=date_month_int,
+                      story_date_day=date_day_int,
                       post_date=datetime.datetime.now()
                        )
         story_to_save.save()
@@ -191,6 +230,8 @@ def search(request):
     
     myfriends = getGraphForMe(request, 'friends', True)
     tagarray = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    tagarray_temp = [str.replace(tag, "'", "&#39;") if "'" in tag else tag for tag in tagarray]
+    tagarray_string =  str.replace(str(tagarray_temp), "'", "\"")
     
     if 'q' in request.GET:
         if request.GET['q']:

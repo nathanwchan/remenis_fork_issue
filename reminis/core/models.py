@@ -17,7 +17,9 @@ class Story(models.Model):
     authorid = models.ForeignKey(User)
     title = models.CharField(max_length=100, blank=True)
     story = models.CharField(max_length=500)
-    story_date = models.DateField(blank=True)
+    story_date_year = models.IntegerField(blank=True, null=True)
+    story_date_month = models.IntegerField(blank=True, null=True)
+    story_date_day = models.IntegerField(blank=True, null=True)
     post_date = models.DateTimeField(blank=True, null=True)
     
     class Admin:

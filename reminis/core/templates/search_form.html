@@ -21,16 +21,47 @@
                 <p style="color: red;">{{ error }}</p>
                 {% endif %}
                 <div class="row-fluid">
-                    <div class="span4 columns">
-                        <form action="" method="get">
+                    <div class="span6">
+                        <form name="searchForm" action="" method="get">
                             <p>Enter a User ID: <input type="text" class="input-xlarge" name="q"></p>
                             
                             <p>Testing Auto-complete - try typing in a friend's name<input id="tags"/></p>
-                            
+
+                            <form>
+                                <input id="searchBox" type="text" class="input-xlarge" data-provide="typeahead" data-items="6" data-source='{{ tagarray_string|safe }}'>
+                                <button type="button" style="margin-bottom: 7px;" onclick="addTaggedFriend()">+</button>
+                            </form>
+                            <p id="searchBoxError" style="color: red;"></p>
+                            <p id="searchBoxError2" style="color: green;"></p>
+                                
                             <input type="submit" class="btn btn-large" value="Search &raquo;">
                         </form>
+                    </div><!--/span-->
+                    <div class="span6">
+                        <p style="color: blue;">testing</p>
                     </div><!--/span-->
                 </div><!--/row-->
             </div>
         </div><!--/span-->
+        {% endblock %}
+
+        {% block load_javascript %}
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="/static/js/jquery.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        <script>
+            $('#searchBox').change(function() {
+                                   document.getElementById('searchBoxError').innerHTML += "blah ";
+                                   });
+
+            function addTaggedFriend() {
+                var allFriends = {{ tagarray|safe }};
+                if (allFriends.indexOf(document.searchForm.searchBox.value) != -1)
+                {
+                    document.getElementById('searchBoxError2').innerHTML += document.searchForm.searchBox.value + " " + allFriends.indexOf(document.searchForm.searchBox.value) + " ";
+                }
+            }
+//            document.searchForm.searchBox.data-source = {{ tagarray }};
+//            document.searchForm.nathan.value = {{ tagarray }};
+        </script>
         {% endblock %}

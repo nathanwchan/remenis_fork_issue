@@ -23,7 +23,14 @@
                                     <p>Title: <input type="text" class="input-xlarge" name="title" value="{{ title }}" placeholder="(optional)"></p>
                                     <p id="errortext" style="color: red;"></p>
                                     <p>Tell us a story: <textarea name="story" class="input-xlarge" rows="10" cols="500"></textarea></p>
-                                    <p>Date: <input type="text" class="input-large" name="story_date"  id="datepicker" value="{{ story_date }}"></p>
+                                    <!--<p>Date: <input id="datepicker" type="text" class="input-large" name="story_date" value="{{ story_date }}"></p>-->
+                                    <p>
+                                        <div id="date_div" style="font-size: 18;">
+                                            Date:
+                                            <select id="date_year_select" name="story_date_year" style="width: 100px;"></select>
+                                            <button id="add_month_button" type="button" style="margin-bottom: 7px;" onclick="addMonth()">+ add month</button>
+                                        </div>
+                                    </p>
                                 </div>
                                 <div class="modal-footer">
                                     <a href="#" class="btn" data-dismiss="modal">Close</a>
@@ -46,13 +53,84 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
         <script>
             $(function() {
-                    $( "#datepicker" ).datepicker();
+                              $( "#datepicker" ).datepicker();
+              
+                              var today = new Date();
+                              var currentYear = today.getFullYear();
+              
+                              for (i = currentYear; i >= 1900; i--)
+                              {
+                                  var newoption = document.createElement('option');
+                                  newoption.innerHTML = i;
+                                  document.getElementById("date_year_select").appendChild(newoption);
+                              }
             });
             $('#myModal').on('hidden', function () {
                              });
-            function modalSavePressed() {
+            
+            function addMonth()
+            {
+                var newselect = document.createElement('select');
+                newselect.id = "date_month_select";
+                newselect.setAttribute('name', "story_date_month");
+                newselect.setAttribute('style', "width: 100px; margin-right: 5px;");
+                newselect.setAttribute('onchange', "updateDays()");
+                newselect.innerHTML = "<option>---</option><option>Jan</option><option>Feb</option><option>Mar</option><option>Apr</option><option>May</option><option>Jun</option><option>Jul</option><option>Aug</option><option>Sep</option><option>Oct</option><option>Nov</option><option>Dec</option>";
+                document.getElementById("date_div").appendChild(newselect);
                 
-                document.submitForm.story.value += "nathan ";
+                var oldmonthbutton = document.getElementById('add_month_button');
+                document.getElementById("date_div").removeChild(oldmonthbutton);
+                
+                var newdaybutton = document.createElement('button');
+                newdaybutton.id = "add_day_button";
+                newdaybutton.setAttribute('type', "button");
+                newdaybutton.setAttribute('style', "margin-bottom: 7px;");
+                newdaybutton.setAttribute('onclick', "addDay()");
+                newdaybutton.innerHTML = "+ add day";
+                document.getElementById("date_div").appendChild(newdaybutton);
+            }
+            
+            function addDay()
+            {
+                var newselect = document.createElement('select');
+                newselect.id = "date_day_select";
+                newselect.setAttribute('name', "story_date_day");
+                newselect.setAttribute('style', "width: 100px;");
+                document.getElementById("date_div").appendChild(newselect);
+                updateDays();
+                
+                var olddaybutton = document.getElementById('add_day_button');
+                document.getElementById("date_div").removeChild(olddaybutton);
+            }
+            
+            function updateDays()
+            {
+                var monthselect = document.getElementById('date_month_select');
+                var dayselect = document.getElementById('date_day_select');
+                
+                var numdays = 0;
+                if (monthselect.value == "---")
+                {
+                    numdays = 0;
+                }
+                else if (monthselect.value == "Feb")
+                {
+                    numdays = 28;
+                }
+                else if (monthselect.value == "Apr" || monthselect.value == "Jun" || monthselect.value == "Sep" || monthselect.value == "Nov")
+                {
+                    numdays = 30;
+                }
+                else
+                {
+                    numdays = 31;
+                }
+                
+                dayselect.innerHTML = "<option>---</option>";
+                for (i = 1; i <= numdays; i++)
+                {
+                    dayselect.innerHTML += "<option>" + i + "</option>";
+                }
             }
         </script>
         <script>
