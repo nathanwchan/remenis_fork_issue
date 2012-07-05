@@ -22,8 +22,6 @@ urlpatterns = patterns('',
     url(r'^search/$', views.search),
     
     url(r'^logout/$', views.logout),
-    
-    (r'^facebook/', include('django_facebook.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()

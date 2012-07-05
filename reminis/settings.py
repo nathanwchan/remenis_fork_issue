@@ -37,16 +37,6 @@ else:
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-#        'NAME': SITE_ROOT + '/reminis.db',                      # Or path to database file if using sqlite3.
-#        'USER': '',                      # Not used with sqlite3.
-#        'PASSWORD': '',                  # Not used with sqlite3.
-#        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-#        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-#    }
-#}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -132,9 +122,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-#    'reminis.FacebookConnectMiddleware.FacebookConnectMiddleware',
-#    'facebook.middleware.SignedRequestMiddleware',
-#    'facebook.middleware.AppRequestMiddleware',
 )
 
 ROOT_URLCONF = 'reminis.urls'
@@ -155,29 +142,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'reminis.core',
-#    'django.contrib.admindocs',
-#    'django_facebook',
     'south',
-#    'facebook',
-#    'facebook.modules.profile.page',
-#    'facebook.modules.profile.user',
-#    'facebook.modules.profile.event',
-#    'facebook.modules.profile.application',
-#    'facebook.modules.connections.post',
 )
 
-FACEBOOK_APP_ID = '301406439948925'
-FACEBOOK_APP_SECRET = 'd4e5d448e3e40c2fb13e21d8b4ef40e4'
-FACEBOOK_STORE_LIKES = True
-FACEBOOK_STORE_FRIENDS = True
-FACEBOOK_LOGIN_DEFAULT_REDIRECT = '/facebook/connect/'
-FACEBOOK_REGISTRATION_BACKEND = 'django_facebook.registration_backends.UserenaBackend'
-
-AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
-                           'django_facebook.auth_backends.FacebookBackend',
-)
-AUTH_PROFILE_MODULE = 'django_facebook.FacebookProfile'
-ACCOUNT_ACTIVATION_DAYS = 10
 TEMPLATE_CONTEXT_PROCESSORS = (
 #    'django.core.context_processors.debug',
 #    'django.core.context_processors.i18n',
@@ -186,7 +153,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.static',
     'django.contrib.messages.context_processors.messages',
-    'django_facebook.context_processors.facebook',
 )
 
 # A sample logging configuration. The only tangible logging
