@@ -30,7 +30,7 @@
                                             </div>
                                         </div>
                                         <div class="span6">
-                                            <p style="color: blue;">tagged friends</p>
+                                            <input type="hidden" id="tagged-friends" name="tagged_friends">
                                             <table class="table table-unbordered" id="tagged-friends-table">
                                                 <tbody id="tagged-friends-body">
                                                     <tr id="{{ userid }}">
@@ -221,6 +221,15 @@
                 }
                 else
                 {
+                    var table = document.getElementById("tagged-friends-table");
+                    var rowCount = table.rows.length;
+                    var tagged_friends_array = [];
+                    for(var i=0; i<rowCount; i++)
+                    {
+                        var row = table.rows[i];
+                        tagged_friends_array.push(row.id);
+                    }
+                    document.getElementById('tagged-friends').value = tagged_friends_array;
                     document.submitForm.submit();
                 }
             }

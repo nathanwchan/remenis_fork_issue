@@ -3,33 +3,72 @@
         {% block content %}
         <div class="span9">
             <div class="hero-unit">
-                <p>You searched for stories by <strong>{{ search_authorname }}</strong></p>
-                <!--<p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>-->
+                <p>You searched for stories by <strong>{{ search_authorname }}</strong></p><br>
                 {% if error %}
-                <p style="color: red;">{{ error }}</p>
+                    <p style="color: red;">{{ error }}</p>
+                {% endif %}
+                
+                <p id="nate"></p>
+                
+                {% if stories_about_user %}
+                <p>Found {{ stories_about_user|length }} stories <strong>about</strong> {{ search_authorname }}.</p>
+                <ul>
+                    {% for story in stories_about_user %}
+                    <hr>
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <h2>{{ story.title }}</h2>
+                            <p>{{ story.story }}</p>
+                            <div id="date_div" style="font-size: 18;">
+                                <p><i>
+                                {{ story.story_date_year }}
+                                {% if story.story_date_month != 0 %}
+                                / {{ story.story_date_month }}
+                                {% endif %}
+                                {% if story.story_date_day != 0 %}
+                                / {{ story.story_date_day }}
+                                {% endif %}
+                                </i></p>
+                            </div>
+                        </div>
+                        <div class="span4">
+                            <table class="table table-unbordered" id="tagged-friends-table">
+                                {% for dic_storyid, dic_taggedusers in stories_dictionary.items %}
+                                    {% ifequal dic_storyid story.id %}
+                                        <tbody id="tagged-friends-body">
+                                            {% for tagged_user_id in dic_taggedusers %}
+                                            <tr id="{{ tagged_user_id }}">
+                                                <td width="35"><img id="{{ tagged_user_id }}" src="https://graph.facebook.com/{{ tagged_user_id }}/picture?type=square" height="30" onload="populateHover(this)" onmouseover="populateHover(this)" rel="popover" data-placement="top" /></td>
+                                                <td width="100">{{ tagged_user_id }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    {% endifequal %}
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <hr>
+                </ul>
                 {% else %}
-                    {% if stories %}
-                    <p>Found {{ stories|length }} stories.</p>
-                    <ul>
-                        {% for story in stories %}
-                        <li>{{ story.title }} - {{ story.story }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                    <p>No stories.</p>
-                    {% endif %}
+                <p>No stories.</p>
+                {% endif %}
+            
+                {% if stories_written_by_user %}
+                <p>Found {{ stories_written_by_user|length }} stories <strong>written by</strong> {{ search_authorname }}.</p>
+                <ul>
+                    {% for story in stories_written_by_user %}
+                    <li>{{ story.title }} - {{ story.story }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No stories.</p>
                 {% endif %}
                 
                 <form action="/search/" method="get">
                     <input type="submit" class="btn btn-large" value="Search Again &raquo;">
                 </form>
-                
-                <p style="color: green;">[For testing] {{ fullname }}'s friends:</p>
-                <ul>
-                    {% for friend in myfriends %}
-                    <li><a rel=parent href=../search/?q={{ friend.id }}>{{ friend.name }}</a></li>
-                    {% endfor %}
-                </ul>
             </div>
         </div><!--/span-->
         {% endblock %}
@@ -38,4 +77,30 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="/static/js/jquery.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
+        <script>
+            $(function() {
+              $('img[rel="popover"]').popover();
+              
+//              var table = document.getElementById("tagged-friends-table");
+//              var rowCount = table.rows.length;
+//              var tagged_friends_array = [];
+//              for(var i=0; i<rowCount; i++)
+//              {
+//                  var row = table.rows[i];
+//                  var fburl = "http://graph.facebook.com/" + row.id;
+//                  $.getJSON(fburl, function(data){
+//                            row.cells[0].childNodes[0].setAttribute("data-original-title", data["name"]);
+//                            });
+//              }
+            });
+            
+            function populateHover(image)
+            {
+                document.getElementById('nate').innerHTML += ".";
+                var fburl = "http://graph.facebook.com/" + image.id;
+                $.getJSON(fburl, function(data){
+                          image.setAttribute("data-original-title", data["name"]);
+                          });
+            }
+        </script>
         {% endblock %}

@@ -12,7 +12,11 @@ class StoryAdmin(admin.ModelAdmin):
     ordering = ('-post_date',)
     raw_id_fields = ('authorid',)
 
-admin.site.register(TaggedUser)
+class TaggedUserAdmin(admin.ModelAdmin):
+    list_display = ('fbid', 'storyid')
+    search_fields = ('fbid', 'storyid')
+    
+admin.site.register(TaggedUser, TaggedUserAdmin)
 admin.site.register(StoryComment)
 admin.site.register(User, UserAdmin)
 admin.site.register(Story, StoryAdmin)

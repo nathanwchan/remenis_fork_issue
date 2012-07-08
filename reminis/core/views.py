@@ -33,7 +33,7 @@ def home(request):
     active_tab = "home"
 
     if 'token' in request.session:
-        fullname = loadUsername(request)
+        fullname = getMyFullName(request)
         userid = (request.session['accessCredentials']).get('uid')
         photourl = (request.session['profile']).get('photo')
         return render_to_response('home.html', locals())
@@ -80,7 +80,7 @@ def post(request):
     debug = settings.DEBUG
     active_tab = "post"
     
-    fullname = loadUsername(request)
+    fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
     
     myfriends = getGraphForMe(request, 'friends', True)
@@ -151,7 +151,16 @@ def post(request):
                       story_date_day=date_day_int,
                       post_date=datetime.datetime.now()
                        )
+        
+        tagged_friends = (request.POST["tagged_friends"]).split(",")
+        
         story_to_save.save()
+        
+        for tagged_friend in tagged_friends:
+            taggedUser_to_save = TaggedUser(fbid=tagged_friend,
+                                            storyid=story_to_save
+                                            )
+            taggedUser_to_save.save()
         
         active_tab = "search"
         return redirect('/search/?q=' + user.fbid)
@@ -160,7 +169,7 @@ def post(request):
 def search(request):
     active_tab = "search"
     
-    fullname = loadUsername(request)
+    fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
     
     if 'q' in request.GET:
@@ -169,9 +178,18 @@ def search(request):
             try:
                 user = User.objects.get(fbid=query)
             except User.DoesNotExist:
-                error = 'A user with that authorid doesn\'t exist in Remenis.'
+                search_authorname = getUserFullName(request, query)
+                error = 'A user with that authorid doesn\'t exist in Remenis.  Would you like to invite them to join Reminis?'
             else:
-                stories = Story.objects.filter(authorid = user)
+                stories_about_user = [x.storyid for x in TaggedUser.objects.filter(fbid = user.fbid)]
+                stories_about_user_ids = [x.id for x in stories_about_user]
+                tagged_users = []
+                for story in stories_about_user:
+                    tagged_users_in_story = TaggedUser.objects.filter(storyid = story)
+                    tagged_users.append([int(x.fbid) for x in tagged_users_in_story])
+                stories_dictionary = dict(zip(stories_about_user_ids, tagged_users))
+                    
+                stories_written_by_user = Story.objects.filter(authorid = user)
                 search_authorname = user.full_name
             
             return render_to_response('search_results.html', locals())
@@ -221,7 +239,14 @@ def getGraphCustom(request, graph_string, access_token_needed=False):
     if access_token_needed:
         url_to_open += '?access_token=' + (request.session['accessCredentials']).get('accessToken')
     return getGraphData(request, url_to_open)
+
+def getUserFullName(request, fbid):
+    url_to_open = 'https://graph.facebook.com/' + fbid
+    http_response = urllib2.urlopen(url_to_open)
+    graph_json = http_response.read()
+    graph = json.loads(graph_json)
+    return graph['name']
     
-def loadUsername(request):
+def getMyFullName(request):
     user = User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
     return user.full_name
