@@ -38,7 +38,7 @@
                                         <tbody id="tagged-friends-body">
                                             {% for tagged_user_id in dic_taggedusers %}
                                             <tr id="{{ tagged_user_id }}">
-                                                <td width="35"><img id="{{ tagged_user_id }}" src="https://graph.facebook.com/{{ tagged_user_id }}/picture?type=square" height="30" onload="populateHover(this)" onmouseover="populateHover(this)" rel="popover" data-placement="right" /></td>
+                                                <td width="35"><img id="{{ tagged_user_id }}" src="https://graph.facebook.com/{{ tagged_user_id }}/picture?type=square" height="30" data-original-title="Loading data..." onload="populateHover(this)" onmouseover="populateHover(this)" rel="popover" data-placement="right" /></td>
                                                 <td width="100">{{ tagged_user_id }}</td>
                                             </tr>
                                             {% endfor %}
