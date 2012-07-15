@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 import datetime, random, re, logging
-from remenis.core.models import User, Story, TaggedUser
+from remenis.core.models import User, Story, TaggedUser, BetaEmail
 from remenis import settings
 
 from django.template import RequestContext
@@ -12,7 +12,17 @@ import urllib, urllib2, json
 
 @csrf_exempt
 def splash(request):
-    return render_to_response('splash.html', locals())
+    if request.method == 'POST':
+        try:
+            existing_email = BetaEmail.objects.get(email=request.POST["email"])
+        except BetaEmail.DoesNotExist:
+            email_to_save = BetaEmail(email=request.POST["email"],
+                                      submit_date=datetime.datetime.now()
+                                      )
+            email_to_save.save()
+        return render_to_response('thankyou.html', locals())
+    else:
+        return render_to_response('splash.html', locals())
     
 @csrf_exempt
 def login(request):
@@ -26,7 +36,7 @@ def logout(request):
     request.session.pop('token', None)
     request.session.pop('profile', None)
     request.session.pop('accessCredentials', None)
-    return redirect('/')
+    return redirect('/login/')
 
 @csrf_exempt
 def home(request):
@@ -70,9 +80,9 @@ def home(request):
             
             return render_to_response('home.html', locals())
         else:
-            return redirect('/')
+            return redirect('/login/')
     else:
-        return redirect('/')
+        return redirect('/login/')
 
 @csrf_exempt
 def post(request): 
