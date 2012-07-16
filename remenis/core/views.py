@@ -182,6 +182,18 @@ def search(request):
     fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
     
+    myfriends = getGraphForMe(request, 'friends', True)
+    
+    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array.append(str(fullname))
+    friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
+    friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
+    
+    friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_id_array.append(str(userid))
+    
+    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
+    
     if 'q' in request.GET:
         if request.GET['q']:
             query = request.GET['q']
@@ -204,7 +216,7 @@ def search(request):
             
             return render_to_response('search_results.html', locals())
         else:
-            error = 'Please submit a search term.'
+            error = 'Please submit a valid search term.'
             return render_to_response('search_form.html', locals())
     else:
         return render_to_response('search_form.html', locals())

@@ -3,16 +3,16 @@
         {% block content %}
         <div class="span9">
             <div class="hero-unit">
-                <h1>Search!</h1>
                 {% if error %}
                 <p style="color: red;">{{ error }}</p>
                 {% endif %}
                 <div class="row-fluid">
                     <div class="span6">
                         <form name="searchForm" action="" method="get">
-                            <p>Enter a User ID: <input type="text" class="input-xlarge" name="q"></p>
-                                
-                            <input type="submit" class="btn btn-large" value="Search &raquo;">
+                            <!--<p>Enter a User ID: <input type="text" class="input-xlarge" name="q"></p>-->
+                            <input type="hidden" id="search_friend_id" name="q">
+                            <input id="searchBox" type="text" class="input-xlarge" data-provide="typeahead" data-items="6" data-source='{{ friends_name_array_string|safe }}' placeholder="Search">    
+                            <!--<input type="submit" class="btn btn-large" value="Search &raquo;">-->
                         </form>
                     </div>
                 </div><!--/row-->
@@ -24,4 +24,20 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="/static/js/jquery.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
+        <script>
+            $('#searchBox').change(function()
+                 {
+                     var allFriendsDic = {{ friends_dictionary|safe }};
+                     
+                     for (var key in allFriendsDic)
+                     {
+                         if (allFriendsDic[key] == document.searchForm.searchBox.value)
+                         {
+                             document.getElementById('search_friend_id').value = key
+                             document.searchForm.submit();
+                             break;
+                         }
+                     }
+                 });
+        </script>
         {% endblock %}
