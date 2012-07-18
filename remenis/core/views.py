@@ -227,7 +227,7 @@ def search(request):
 def getAuthInfo(request):
     api_params = {
         'token': request.session['token'],
-        'apiKey': '5ab3ff51bb1b219c07e950e4d8b4dc1ad94496ad',
+        'apiKey': '7d0e7d31faa15fcd3e88e41908ae63c2d37cc5a5',
         'format': 'json',
     }
     # make the api call
