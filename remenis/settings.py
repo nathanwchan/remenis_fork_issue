@@ -53,6 +53,12 @@ LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
+EMAIL_USE_TLS       = True
+EMAIL_HOST          = 'smtp.gmail.com'
+EMAIL_HOST_USER     = 'support@remenis.com'
+EMAIL_HOST_PASSWORD = 'Stories20!2'
+EMAIL_PORT          = 587
+
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
