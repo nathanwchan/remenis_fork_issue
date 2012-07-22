@@ -42,6 +42,32 @@ def logout(request):
 def home(request):
     active_tab = "home"
 
+    fullname = getMyFullName(request)
+    userid = (request.session['accessCredentials']).get('uid')
+    
+    myfriends = getGraphForMe(request, 'friends', True)
+    
+    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array.append(str(fullname))
+    friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
+    friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
+    
+    friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_id_array.append(str(userid))
+    
+    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
+
+    if 'q' in request.GET:
+        if request.GET['q']:
+            query = request.GET['q']
+            try:
+                user = User.objects.get(fbid=query)
+            except User.DoesNotExist:
+                return redirect('/searcherror/?error=2')
+            return redirect('/' + query)
+        else:
+            return redirect('/searcherror/?error=1')
+    
     if 'token' in request.session:
         fullname = getMyFullName(request)
         userid = (request.session['accessCredentials']).get('uid')
@@ -85,6 +111,91 @@ def home(request):
         return redirect('/login/')
 
 @csrf_exempt
+def profile(request, profileid=""):  
+    fullname = getMyFullName(request)
+    userid = (request.session['accessCredentials']).get('uid')
+    
+    myfriends = getGraphForMe(request, 'friends', True)
+    
+    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array.append(str(fullname))
+    friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
+    friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
+    
+    friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_id_array.append(str(userid))
+    
+    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
+
+    if 'q' in request.GET:
+        active_tab = "none"
+        if request.GET['q']:
+            query = request.GET['q']
+            return redirect('/' + query)
+        else:
+            return redirect('/searcherror/?error=1')
+    elif profileid == "":
+        profileid = userid
+    elif not profileid in friends_id_array:
+        return redirect('/searcherror/?error=3')
+    
+    if profileid == userid:
+        active_tab = "profile"
+    
+    try:    
+        user = User.objects.get(fbid=profileid)
+    except User.DoesNotExist:
+        stories_written_by_user = []
+        search_authorname = getUserFullName(profileid)
+    else:    
+        stories_written_by_user = Story.objects.filter(authorid = user)
+        search_authorname = user.full_name
+    
+    stories_about_user = [x.storyid for x in TaggedUser.objects.filter(fbid = profileid)]
+    stories_about_user.extend(stories_written_by_user)
+    stories_about_user = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True)
+    stories_about_user_ids = [x.id for x in stories_about_user]
+    tagged_users = []
+    for story in stories_about_user:
+        tagged_users_in_story = TaggedUser.objects.filter(storyid = story)
+        tagged_users.append([int(x.fbid) for x in tagged_users_in_story])
+    stories_dictionary = dict(zip(stories_about_user_ids, tagged_users))
+    
+    return render_to_response('profile.html', locals())
+
+@csrf_exempt
+def searcherror(request):
+    fullname = getMyFullName(request)
+    userid = (request.session['accessCredentials']).get('uid')
+    
+    myfriends = getGraphForMe(request, 'friends', True)
+    
+    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array.append(str(fullname))
+    friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
+    friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
+    
+    friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_id_array.append(str(userid))
+    
+    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
+
+    if 'q' in request.GET:
+        if request.GET['q']:
+            query = request.GET['q']
+            try:
+                user = User.objects.get(fbid=query)
+            except User.DoesNotExist:
+                return redirect('/searcherror/?error=2')
+            return redirect('/' + query)
+        else:
+            return redirect('/searcherror/?error=1')
+
+    if 'error' in request.GET and request.GET['error']:
+        error = getErrorMessage(request.GET['error'])
+    return render_to_response('search_form.html', locals())
+
+@csrf_exempt
 def post(request): 
     errors = []
     debug = settings.DEBUG
@@ -104,6 +215,17 @@ def post(request):
     friends_id_array.append(str(userid))
     
     friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
+
+    if 'q' in request.GET:
+        if request.GET['q']:
+            query = request.GET['q']
+            try:
+                user = User.objects.get(fbid=query)
+            except User.DoesNotExist:
+                return redirect('/searcherror/?error=2')
+            return redirect('/' + query)
+        else:
+            return redirect('/searcherror/?error=1')
     
 ### HANDLE DUPLICATE NAMES 
 #    import collections
@@ -171,58 +293,19 @@ def post(request):
                                             storyid=story_to_save
                                             )
             taggedUser_to_save.save()
-        
-        active_tab = "search"
-        return redirect('/search/?q=' + user.fbid)
 
-@csrf_exempt
-def search(request):
-    active_tab = "search"
-    
-    fullname = getMyFullName(request)
-    userid = (request.session['accessCredentials']).get('uid')
-    
-    myfriends = getGraphForMe(request, 'friends', True)
-    
-    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
-    friends_name_array.append(str(fullname))
-    friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
-    friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
-    
-    friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
-    friends_id_array.append(str(userid))
-    
-    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
-    
-    if 'q' in request.GET:
-        if request.GET['q']:
-            query = request.GET['q']
-            try:
-                user = User.objects.get(fbid=query)
-            except User.DoesNotExist:
-                search_authorname = getUserFullName(request, query)
-                error = 'A user with that authorid doesn\'t exist in Remenis.  Would you like to invite them to join Remenis?'
-            else:
-                stories_about_user = [x.storyid for x in TaggedUser.objects.filter(fbid = user.fbid)]
-                stories_about_user_ids = [x.id for x in stories_about_user]
-                tagged_users = []
-                for story in stories_about_user:
-                    tagged_users_in_story = TaggedUser.objects.filter(storyid = story)
-                    tagged_users.append([int(x.fbid) for x in tagged_users_in_story])
-                stories_dictionary = dict(zip(stories_about_user_ids, tagged_users))
-                    
-                stories_written_by_user = Story.objects.filter(authorid = user)
-                search_authorname = user.full_name
-            
-            return render_to_response('search_results.html', locals())
-        else:
-            error = 'Please submit a valid search term.'
-            return render_to_response('search_form.html', locals())
-    else:
-        return render_to_response('search_form.html', locals())
+        return redirect('/' + user.fbid)
 
 
 ## UTILS
+    
+def getErrorMessage(errorid):
+    if errorid == '1':
+        return 'Please submit a valid search term.'
+    if errorid == '2':
+        return 'User has not registered for Remenis.  Would you like to invite?'
+    if errorid == '3':
+        return 'User is not your Facebook friend.'
 
 def getAuthInfo(request):
     api_params = {
@@ -262,7 +345,7 @@ def getGraphCustom(request, graph_string, access_token_needed=False):
         url_to_open += '?access_token=' + (request.session['accessCredentials']).get('accessToken')
     return getGraphData(request, url_to_open)
 
-def getUserFullName(request, fbid):
+def getUserFullName(fbid):
     url_to_open = 'https://graph.facebook.com/' + fbid
     http_response = urllib2.urlopen(url_to_open)
     graph_json = http_response.read()

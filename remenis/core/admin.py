@@ -2,7 +2,7 @@ from django.contrib import admin
 from models import User, Story, TaggedUser, StoryComment, BetaEmail
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'first_name', 'last_name', 'full_name', 'email')
+    list_display = ('id', 'fbid', 'first_name', 'last_name', 'full_name', 'email')
     search_fields = ('first_name', 'last_name', 'full_name', 'email')
 
 class StoryAdmin(admin.ModelAdmin):

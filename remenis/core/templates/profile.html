@@ -3,11 +3,8 @@
         {% block content %}
         <div class="span9">
             <div class="hero-unit">
-                <p>You searched for stories by <strong>{{ search_authorname }}</strong></p><br>
-                {% if error %}
-                    <p style="color: red;">{{ error }}</p>
-                {% endif %}
-                
+                <h2>{{ search_authorname }}</h2>
+                <br>                
                 <p id="nate"></p>
                 
                 {% if stories_about_user %}
@@ -17,7 +14,7 @@
                     <hr>
                     <div class="row-fluid">
                         <div class="span6">
-                            <h2>{{ story.title }}</h2>
+                            <h3>{{ story.authorid }} wrote {{ story.title }}</h3>
                             <p>{{ story.story }}</p>
                             <div id="date_div" style="font-size: 18;">
                                 <p><i>
@@ -37,9 +34,12 @@
                                     {% ifequal dic_storyid story.id %}
                                         <tbody id="tagged-friends-body">
                                             {% for tagged_user_id in dic_taggedusers %}
-                                            <tr id="{{ tagged_user_id }}">
-                                                <td width="35"><img id="{{ tagged_user_id }}" src="https://graph.facebook.com/{{ tagged_user_id }}/picture?type=square" height="30" data-original-title="Loading data..." onload="populateHover(this)" onmouseover="populateHover(this)" rel="popover" data-placement="right" /></td>
-                                                <td width="100">{{ tagged_user_id }}</td>
+                                            <tr id="{{ tagged_user_id }}" onclick="document.location='?q={{ tagged_user_id }}';">
+                                                <td width="30">
+                                                    <img id="{{ tagged_user_id }}" src="https://graph.facebook.com/{{ tagged_user_id }}/picture?type=square" height="30" onload="populateHover(this)" />
+                                                    <!--data-original-title="Loading data..." onmouseover="populateHover(this)" rel="popover" data-placement="right"-->
+                                                </td>
+                                                <td width="100"><p id="p{{ tagged_user_id }}"></p></td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
@@ -74,9 +74,7 @@
         {% endblock %}
 
         {% block load_javascript %}
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="/static/js/jquery.js"></script>
-        <script src="/static/js/bootstrap.min.js"></script>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
         <script>
             $(function() {
               $('img[rel="popover"]').popover();
@@ -94,12 +92,21 @@
 //              }
             });
             
+//            function populateHover(image)
+//            {
+//                document.getElementById('nate').innerHTML += ".";
+//                var fburl = "http://graph.facebook.com/" + image.id;
+//                $.getJSON(fburl, function(data){
+//                          image.setAttribute("data-original-title", data["name"]);
+//                          });
+//            }
             function populateHover(image)
             {
-                document.getElementById('nate').innerHTML += ".";
                 var fburl = "http://graph.facebook.com/" + image.id;
+                //alert(fburl);
                 $.getJSON(fburl, function(data){
-                          image.setAttribute("data-original-title", data["name"]);
+                          document.getElementById('nate').innerHTML += "-";
+                          document.getElementById('p' + image.id).innerHTML = data["name"];
                           });
             }
         </script>
