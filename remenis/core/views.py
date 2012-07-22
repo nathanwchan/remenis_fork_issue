@@ -42,42 +42,10 @@ def logout(request):
 
 @csrf_exempt
 def home(request):
-    if not 'token' in request.session:
-        return redirect('/login/')
-    
-    active_tab = "home"
-
-    fullname = getMyFullName(request)
-    userid = (request.session['accessCredentials']).get('uid')
-    
-    myfriends = getGraphForMe(request, 'friends', True)
-    
-    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
-    friends_name_array.append(str(fullname))
-    friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
-    friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
-    
-    friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
-    friends_id_array.append(str(userid))
-    
-    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
-
-    if 'q' in request.GET:
-        if request.GET['q']:
-            query = request.GET['q']
-            try:
-                user = User.objects.get(fbid=query)
-            except User.DoesNotExist:
-                return redirect('/searcherror/?error=2')
-            return redirect('/' + query)
-        else:
-            return redirect('/searcherror/?error=1')
-    
     if 'token' in request.session:
         fullname = getMyFullName(request)
         userid = (request.session['accessCredentials']).get('uid')
         photourl = (request.session['profile']).get('photo')
-        return render_to_response('home.html', locals())
     elif 'token' in request.POST and request.POST['token']:
         request.session['token'] = request.POST['token']
         
@@ -108,12 +76,39 @@ def home(request):
                                     email=email
                                     )
                 user_to_save.save()
-            
-            return render_to_response('home.html', locals())
         else:
             return redirect('/login/')
     else:
         return redirect('/login/')
+    
+    fullname = getMyFullName(request)
+    userid = (request.session['accessCredentials']).get('uid')
+    
+    myfriends = getGraphForMe(request, 'friends', True)
+    
+    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array.append(str(fullname))
+    friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
+    friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
+    
+    friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_id_array.append(str(userid))
+    
+    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
+
+    if 'q' in request.GET:
+        if request.GET['q']:
+            query = request.GET['q']
+            try:
+                user = User.objects.get(fbid=query)
+            except User.DoesNotExist:
+                return redirect('/searcherror/?error=2')
+            return redirect('/' + query)
+        else:
+            return redirect('/searcherror/?error=1')
+    
+    active_tab = "home"
+    return render_to_response('home.html', locals())
 
 @csrf_exempt
 def profile(request, profileid=""):

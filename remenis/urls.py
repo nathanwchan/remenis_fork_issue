@@ -19,7 +19,6 @@ urlpatterns = patterns('',
     url(r'^profile/$', views.profile),
     url(r'^login/$', views.login),
     url(r'^home/$', views.home),
-    url(r'^post/$', views.post),
     url(r'^searcherror/$', views.searcherror),
     
     url(r'^logout/$', views.logout),
