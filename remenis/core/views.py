@@ -42,6 +42,9 @@ def logout(request):
 
 @csrf_exempt
 def home(request):
+    if not 'token' in request.session:
+        return redirect('/login/')
+    
     active_tab = "home"
 
     fullname = getMyFullName(request)
@@ -113,7 +116,10 @@ def home(request):
         return redirect('/login/')
 
 @csrf_exempt
-def profile(request, profileid=""):  
+def profile(request, profileid=""):
+    if not 'token' in request.session:
+        return redirect('/login/')
+    
     fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
     
@@ -169,6 +175,9 @@ def profile(request, profileid=""):
 
 @csrf_exempt
 def searcherror(request):
+    if not 'token' in request.session:
+        return redirect('/login/')
+    
     fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
     
@@ -201,8 +210,9 @@ def searcherror(request):
 
 @csrf_exempt
 def post(request): 
-    errors = []
-    debug = settings.DEBUG
+    if not 'token' in request.session:
+        return redirect('/login/')
+    
     active_tab = "post"
     
     fullname = getMyFullName(request)
