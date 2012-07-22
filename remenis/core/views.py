@@ -9,6 +9,8 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 
 import urllib, urllib2, json
+from operator import itemgetter
+from itertools import groupby
 
 @csrf_exempt
 def splash(request):
@@ -152,7 +154,9 @@ def profile(request, profileid=""):
         search_authorname = user.full_name
     
     stories_about_user = [x.storyid for x in TaggedUser.objects.filter(fbid = profileid)]
-    stories_about_user = list(set(stories_about_user.extend(stories_written_by_user))) # add stories written by user and remove duplicates
+    for story_written_by_user in stories_written_by_user:
+        if not story_written_by_user in stories_about_user:
+            stories_about_user.append(story_written_by_user)
     stories_about_user = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True) # sort by post date
     stories_about_user_ids = [x.id for x in stories_about_user]
     tagged_users = []
