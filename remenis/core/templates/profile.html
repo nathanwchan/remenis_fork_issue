@@ -54,17 +54,6 @@
                 {% else %}
                 <p>No stories.</p>
                 {% endif %}
-            
-                {% if stories_written_by_user %}
-                <p>Found {{ stories_written_by_user|length }} stories <strong>written by</strong> {{ search_authorname }}.</p>
-                <ul>
-                    {% for story in stories_written_by_user %}
-                    <li>{{ story.title }} - {{ story.story }}</li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p>No stories.</p>
-                {% endif %}
                 
                 <form action="/search/" method="get">
                     <input type="submit" class="btn btn-large" value="Search Again &raquo;">

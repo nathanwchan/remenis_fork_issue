@@ -152,8 +152,8 @@ def profile(request, profileid=""):
         search_authorname = user.full_name
     
     stories_about_user = [x.storyid for x in TaggedUser.objects.filter(fbid = profileid)]
-    stories_about_user.extend(stories_written_by_user)
-    stories_about_user = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True)
+    stories_about_user = list(set(stories_about_user.extend(stories_written_by_user))) # add stories written by user and remove duplicates
+    stories_about_user = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True) # sort by post date
     stories_about_user_ids = [x.id for x in stories_about_user]
     tagged_users = []
     for story in stories_about_user:
