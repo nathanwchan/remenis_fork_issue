@@ -224,17 +224,6 @@ def post(request):
     friends_id_array.append(str(userid))
     
     friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
-
-    if 'q' in request.GET:
-        if request.GET['q']:
-            query = request.GET['q']
-            try:
-                user = User.objects.get(fbid=query)
-            except User.DoesNotExist:
-                return redirect('/searcherror/?error=2')
-            return redirect('/' + query)
-        else:
-            return redirect('/searcherror/?error=1')
     
 ### HANDLE DUPLICATE NAMES 
 #    import collections
@@ -244,10 +233,7 @@ def post(request):
 #        for name in friends_name_array:
     
     if request.method == 'GET':
-        return render_to_response('post.html', 
-                                      locals(),
-                                      RequestContext(request)
-                                      )
+        return redirect('/home/')
     elif request.method == 'POST':
         user = User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
         
