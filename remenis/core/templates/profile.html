@@ -14,7 +14,8 @@
         {% for story in stories_about_user %}
 
         <div class="row-fluid">
-            <table class="table table-bordered span8" style="margin-bottom: 40px">
+            <a class="span1" href="../{{ story.authorid.fbid }}" style="margin-top: 10px; margin-right: -10px;"><img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" height="50" width="50" style="border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; -webkit-border-radius: 5px;" /></a>
+            <table class="table table-bordered span7" style="margin-bottom: 40px">
                 <tr><td>
                     <p><strong>{{ story.authorid }}</strong><span style="color: grey;"> wrote </span><strong style="color: blue;">{{ story.title }}</strong></p>
                 </td></tr>
@@ -37,16 +38,16 @@
             <table>
             <div class="span4">
                 <p>In This Story</p>
-                <table class="table table-unbordered span4" id="tagged-friends-table">
+                <table class="table table-unbordered table-condensed span4" id="tagged-friends-table">
                     {% for dic_storyid, dic_taggedusers in stories_dictionary.items %}
                         {% ifequal dic_storyid story.id %}
                             <tbody id="tagged-friends-body">
                                 {% for tagged_user_id in dic_taggedusers %}
-                                <tr id="{{ tagged_user_id }}" >
+                                <tr id="{{ tagged_user_id }}">
                                     <td width="30">
-                                        <a href="../{{ tagged_user_id }}"><img id="{{ tagged_user_id }}" src="https://graph.facebook.com/{{ tagged_user_id }}/picture?type=square" height="30" width="30" onload="populateHover(this)"/></a>
+                                        <a href="../{{ tagged_user_id }}"><img id="{{ tagged_user_id }}" src="https://graph.facebook.com/{{ tagged_user_id }}/picture?type=square" height="30" width="30" onload="populateHover(this)" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/></a>
                                     </td>
-                                    <td width="100"><p id="p{{ tagged_user_id }}"></p></td>
+                                    <td><p id="p{{ tagged_user_id }}"></p></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
