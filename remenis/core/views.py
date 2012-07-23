@@ -99,10 +99,6 @@ def home(request):
     if 'q' in request.GET:
         if request.GET['q']:
             query = request.GET['q']
-            try:
-                user = User.objects.get(fbid=query)
-            except User.DoesNotExist:
-                return redirect('/searcherror/?error=2')
             return redirect('/' + query)
         else:
             return redirect('/searcherror/?error=1')
@@ -140,7 +136,9 @@ def profile(request, profileid=""):
     elif profileid == "":
         profileid = userid
     elif not profileid in friends_id_array:
-        return redirect('/searcherror/?error=3')
+        not_friend = True
+        search_authorname = getUserFullName(profileid)
+        return render_to_response('profile.html', locals())    
     
     if profileid == userid:
         active_tab = "profile"
@@ -191,10 +189,6 @@ def searcherror(request):
     if 'q' in request.GET:
         if request.GET['q']:
             query = request.GET['q']
-            try:
-                user = User.objects.get(fbid=query)
-            except User.DoesNotExist:
-                return redirect('/searcherror/?error=2')
             return redirect('/' + query)
         else:
             return redirect('/searcherror/?error=1')
@@ -345,7 +339,10 @@ def getUserFullName(fbid):
     http_response = urllib2.urlopen(url_to_open)
     graph_json = http_response.read()
     graph = json.loads(graph_json)
-    return graph['name']
+    if not graph == False:
+        return graph['name']
+    else:
+        return ""
     
 def getMyFullName(request):
     user = User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))

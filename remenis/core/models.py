@@ -16,7 +16,7 @@ class User(models.Model):
 class Story(models.Model):
     authorid = models.ForeignKey(User)
     title = models.CharField(max_length=100, blank=True)
-    story = models.CharField(max_length=500)
+    story = models.TextField()
     story_date_year = models.IntegerField(blank=True, null=True)
     story_date_month = models.IntegerField(blank=True, null=True)
     story_date_day = models.IntegerField(blank=True, null=True)
@@ -34,7 +34,7 @@ class TaggedUser(models.Model):
 
 class StoryComment(models.Model):
     storyid = models.ForeignKey(Story)
-    comment = models.CharField(max_length=200)
+    comment = models.TextField()
     post_date = models.DateTimeField(blank=True, null=True)
     
     class Admin:
