@@ -2,9 +2,9 @@ from django.db import models
 
 class User(models.Model):
     fbid = models.CharField(max_length=20)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=40)
-    full_name = models.CharField(max_length=70)
+    first_name = models.CharField(max_length=50, blank=True)
+    last_name = models.CharField(max_length=50, blank=True)
+    full_name = models.CharField(max_length=100)
     email = models.EmailField(blank=True, null=True)
     is_registered = models.BooleanField()
 

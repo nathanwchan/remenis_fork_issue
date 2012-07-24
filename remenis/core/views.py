@@ -77,6 +77,15 @@ def home(request):
                                     is_registered=True
                                     )
                 user_to_save.save()
+            else:
+                if user.is_registered == False: # user has already been tagged in a story, but this is their first time logging into Remenis
+                    user.fbid = userid
+                    user.first_name = firstname
+                    user.last_name = lastname
+                    user.full_name = fullname
+                    user.email = email
+                    user.is_registered = True
+                    user.save()                    
         else:
             return redirect('/login/')
     else:
@@ -218,7 +227,8 @@ def post(request):
     friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
     friends_id_array.append(str(userid))
     
-    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
+    friends_dictionary_temp = dict(zip(friends_id_array, friends_name_array))
+    friends_dictionary = json.dumps(friends_dictionary_temp)
     
 ### HANDLE DUPLICATE NAMES 
 #    import collections
@@ -283,6 +293,14 @@ def post(request):
                                             storyid=story_to_save
                                             )
             taggedUser_to_save.save()
+            try:    
+                user = User.objects.get(fbid=tagged_friend)
+            except User.DoesNotExist:
+                user_to_save = User(fbid=tagged_friend,
+                                    full_name=friends_dictionary_temp[tagged_friend],
+                                    is_registered=False
+                                    )
+                user_to_save.save()
 
         return redirect('/' + user.fbid)
 
