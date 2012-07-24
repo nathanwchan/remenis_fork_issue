@@ -3,9 +3,9 @@
         {% block content %}
 
         {% if not_friend %}
-        <p><a href="http://www.facebook.com/{{ profileid }}">{{ search_authorname }}</a> is not your Facebook friend.</p>
+        <p><a href="http://www.facebook.com/{{ profileid }}">{{ profile_name }}</a> is not your Facebook friend.</p>
         {% else %}
-        <h2>{{ search_authorname }}</h2>
+        <h2>{{ profile_name }}</h2>
         <br>                
         <p id="nate"></p>
 

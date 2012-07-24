@@ -147,7 +147,7 @@ def profile(request, profileid=""):
         profileid = userid
     elif not profileid in friends_id_array:
         not_friend = True
-        search_authorname = getUserFullName(profileid)
+        profile_name = getUserFullName(profileid)
         return render_to_response('profile.html', locals())    
     
     if profileid == userid:
@@ -157,10 +157,10 @@ def profile(request, profileid=""):
         user = User.objects.get(fbid=profileid)
     except User.DoesNotExist:
         stories_written_by_user = []
-        search_authorname = getUserFullName(profileid)
+        profile_name = getUserFullName(profileid)
     else:    
         stories_written_by_user = Story.objects.filter(authorid = user)
-        search_authorname = user.full_name
+        profile_name = user.full_name
     
     stories_about_user = [x.storyid for x in TaggedUser.objects.filter(fbid = profileid)]
     for story_written_by_user in stories_written_by_user:
