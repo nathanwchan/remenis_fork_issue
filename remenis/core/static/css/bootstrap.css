@@ -1559,6 +1559,10 @@ table {
   padding: 4px 5px;
 }
 
+.table-borderless td, th {
+  border: 0 !important;
+}
+ 
 .table-bordered {
   border: 1px solid #dddddd;
   border-collapse: separate;

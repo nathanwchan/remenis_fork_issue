@@ -37,18 +37,23 @@
                 </td></tr>
             <table>
             <div class="span4">
-                <p>In This Story</p>
-                <table class="table table-unbordered table-condensed span4" id="tagged-friends-table">
+                <table class="table table-borderless table-condensed span4" id="tagged-friends-table" style="margin-top: -30px;">
                     {% for dic_storyid, dic_taggedusers in stories_dictionary.items %}
                         {% ifequal dic_storyid story.id %}
                             <tbody id="tagged-friends-body">
+                                <tr><td><p>In This Story</p></td></tr>
                                 {% for tagged_user in dic_taggedusers %}
-                                <tr id="{{ tagged_user.fbid }}">
-                                    <td width="30">
-                                        <a href="../{{ tagged_user.fbid }}"><img id="{{ tagged_user.fbid }}" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/></a>
+                                <tr>
+                                    <td>
+                                        <p>
+                                            <a href="../{{ tagged_user.fbid }}"><img id="{{ tagged_user.fbid }}" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/>
+                                            </a>
+                                            &nbsp;{{ tagged_user.full_name }}
+                                        </p>
                                     </td>
-                                    <td><p id="p{{ tagged_user_id }}">{{ tagged_user.full_name }}</p></td>
                                 </tr>
+                                {% empty %}
+                                <tr><td>none</td></tr>
                                 {% endfor %}
                             </tbody>
                         {% endifequal %}
