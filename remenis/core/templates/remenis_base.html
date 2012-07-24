@@ -43,7 +43,7 @@
                 <div class="modal-body">
                     <div class="row-fluid">
                         <div class="span6">
-                            <p>Title:<br><input type="text" class="input-xlarge" name="title" value="{{ title }}" placeholder="(optional)"></p>
+                            <p>Title:<br><input type="text" class="input-xlarge" name="title" value="{{ title }}" placeholder="(optional)" autocomplete="off"></p>
                             <p>Tell us a story:<br><textarea name="story" class="input-xlarge" rows="6" cols="500"></textarea></p>
                             <p>Who was in the story?<br><input id="tagged_friend_searchBox" type="text" class="input-xlarge" data-provide="typeahead" data-items="6" data-source='{{ friends_name_array_string|safe }}' placeholder="enter friend's name" autocomplete="off"></p>
                             <div id="post_date_div" style="font-size: 18;">

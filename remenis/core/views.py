@@ -170,8 +170,19 @@ def profile(request, profileid=""):
     stories_about_user_ids = [x.id for x in stories_about_user]
     tagged_users = []
     for story in stories_about_user:
-        tagged_users_in_story = TaggedUser.objects.filter(storyid = story)
-        tagged_users.append([int(x.fbid) for x in tagged_users_in_story])
+        tagged_user_objects_in_story = TaggedUser.objects.filter(storyid = story)
+        tagged_users_in_story = []
+        for tagged_user_object_in_story in tagged_user_objects_in_story:
+            try:
+                tagged_user = User.objects.get(fbid=tagged_user_object_in_story.fbid)
+            except User.DoesNotExist:
+                tagged_users_in_story.append(User(fbid=tagged_user_object_in_story.fbid,
+                                    full_name="Unknown",
+                                    is_registered=False
+                                    ))
+            else:
+                tagged_users_in_story.append(tagged_user)
+        tagged_users.append(tagged_users_in_story)
     stories_dictionary = dict(zip(stories_about_user_ids, tagged_users))
     
     return render_to_response('profile.html', locals())

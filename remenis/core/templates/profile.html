@@ -42,12 +42,12 @@
                     {% for dic_storyid, dic_taggedusers in stories_dictionary.items %}
                         {% ifequal dic_storyid story.id %}
                             <tbody id="tagged-friends-body">
-                                {% for tagged_user_id in dic_taggedusers %}
-                                <tr id="{{ tagged_user_id }}">
+                                {% for tagged_user in dic_taggedusers %}
+                                <tr id="{{ tagged_user.fbid }}">
                                     <td width="30">
-                                        <a href="../{{ tagged_user_id }}"><img id="{{ tagged_user_id }}" src="https://graph.facebook.com/{{ tagged_user_id }}/picture?type=square" height="30" width="30" onload="populateHover(this)" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/></a>
+                                        <a href="../{{ tagged_user.fbid }}"><img id="{{ tagged_user.fbid }}" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/></a>
                                     </td>
-                                    <td><p id="p{{ tagged_user_id }}"></p></td>
+                                    <td><p id="p{{ tagged_user_id }}">{{ tagged_user.full_name }}</p></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -63,43 +63,4 @@
 
         {% endif %}
 
-        {% endblock %}
-
-        {% block load_javascript %}
-        <script src="http://code.jquery.com/jquery-latest.js"></script>
-        <script>
-            $(function() {
-              $('img[rel="popover"]').popover();
-              
-//              var table = document.getElementById("tagged-friends-table");
-//              var rowCount = table.rows.length;
-//              var tagged_friends_array = [];
-//              for(var i=0; i<rowCount; i++)
-//              {
-//                  var row = table.rows[i];
-//                  var fburl = "http://graph.facebook.com/" + row.id;
-//                  $.getJSON(fburl, function(data){
-//                            row.cells[0].childNodes[0].setAttribute("data-original-title", data["name"]);
-//                            });
-//              }
-            });
-            
-//            function populateHover(image)
-//            {
-//                document.getElementById('nate').innerHTML += ".";
-//                var fburl = "http://graph.facebook.com/" + image.id;
-//                $.getJSON(fburl, function(data){
-//                          image.setAttribute("data-original-title", data["name"]);
-//                          });
-//            }
-            function populateHover(image)
-            {
-                var fburl = "http://graph.facebook.com/" + image.id;
-                //alert(fburl);
-                $.getJSON(fburl, function(data){
-                          document.getElementById('nate').innerHTML += "-";
-                          document.getElementById('p' + image.id).innerHTML = data["name"];
-                          });
-            }
-        </script>
         {% endblock %}
