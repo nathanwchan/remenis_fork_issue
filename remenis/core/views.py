@@ -73,7 +73,8 @@ def home(request):
                                     first_name=firstname,
                                     last_name=lastname,
                                     full_name=fullname,
-                                    email=email
+                                    email=email,
+                                    is_registered=True
                                     )
                 user_to_save.save()
         else:
@@ -102,7 +103,7 @@ def home(request):
             return redirect('/' + query)
         else:
             return redirect('/searcherror/?error=1')
-    
+        
     active_tab = "home"
     return render_to_response('home.html', locals())
 
