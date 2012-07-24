@@ -17,7 +17,7 @@
             <a class="span1" href="../{{ story.authorid.fbid }}" style="margin-top: 10px; margin-right: -10px;"><img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" height="50" width="50" style="border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; -webkit-border-radius: 5px;" /></a>
             <table class="table table-bordered span7" style="margin-bottom: 40px">
                 <tr><td>
-                    <p><strong>{{ story.authorid }}</strong><span style="color: grey;"> wrote </span><strong style="color: blue;">{{ story.title }}</strong></p>
+                    <p><strong>{{ story.authorid.full_name }}</strong><span style="color: grey;"> wrote </span><strong style="color: blue;">{{ story.title }}</strong></p>
                 </td></tr>
                 <tr><td>
                     <p style="color: grey;">{{ story.story }}</p>
