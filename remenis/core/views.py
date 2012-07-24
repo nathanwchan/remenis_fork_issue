@@ -177,7 +177,7 @@ def profile(request, profileid=""):
                 tagged_user = User.objects.get(fbid=tagged_user_object_in_story.fbid)
             except User.DoesNotExist:
                 tagged_users_in_story.append(User(fbid=tagged_user_object_in_story.fbid,
-                                    full_name="Unknown",
+                                    full_name="",
                                     is_registered=False
                                     ))
             else:
