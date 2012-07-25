@@ -16,11 +16,13 @@
         {% block no_footer %}
         {% endblock %}
 
-        {% block load_javascript %}
+        {% block load_javascript2 %}
         <script>
-            $(function() {
-                window.close();
-                });
+            $(document).ready(function(){
+                              document.close();
+                              self.close();
+                              window.close();
+                              });
         </script>
         {% endblock %}
 
