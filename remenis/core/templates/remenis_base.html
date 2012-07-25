@@ -194,7 +194,7 @@
                                      });
             
             $(".test_class").click(function(){
-                                    FB.init({appId: '297031353727647', frictionlessRequests: true, xfbml: true, cookie: true});
+                                    FB.init({appId: '297031353727647', xfbml: true, cookie: true});
 
                                     FB.ui({
                                           method: 'send',
@@ -204,9 +204,6 @@
                                           redirect_uri: 'http://www.remenis.com/messagesent/',
                                           picture: 'http://www.remenis.com/static/remenis_logo.png',
                                           description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper lectus in lorem blandit sodales. Morbi diam turpis, vulputate a placerat ac, rutrum id nulla.',
-                                          },
-                                          function(response) {
-                                          window.close();
                                           });
                                     });
 
