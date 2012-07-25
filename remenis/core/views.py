@@ -256,64 +256,105 @@ def post(request):
         date_month_int = 0
         if 'story_date_month' in request.POST:
             date_month_string = request.POST["story_date_month"]
-            if date_month_string == "Jan":
-                date_month_int = 1
-            elif date_month_string == "Feb":
-                date_month_int = 2
-            elif date_month_string == "Mar":
-                date_month_int = 3
-            elif date_month_string == "Apr":
-                date_month_int = 4
-            elif date_month_string == "May":
-                date_month_int = 5
-            elif date_month_string == "Jun":
-                date_month_int = 6
-            elif date_month_string == "Jul":
-                date_month_int = 7
-            elif date_month_string == "Aug":
-                date_month_int = 8
-            elif date_month_string == "Sep":
-                date_month_int = 9
-            elif date_month_string == "Oct":
-                date_month_int = 10
-            elif date_month_string == "Nov":
-                date_month_int = 11
-            elif date_month_string == "Dec":
-                date_month_int = 12
-            
+            date_month_int = convertMonthToInt(date_month_string)
+
         date_day_int = 0
         if 'story_date_day' in request.POST:
             if request.POST["story_date_day"] != "---":
                 date_day_int = request.POST["story_date_day"]
+        
+        story = Story()
+        newstory = False
+        if request.POST["storyid_for_edit"] != "":
+            try:
+                story = Story.objects.get(id=int(request.POST["storyid_for_edit"]))
+            except Story.DoesNotExist:
+                newstory = True
+            else:
+                story.title = request.POST["title"]
+                story.story = request.POST["story"]
+                story.story_date_year = request.POST["story_date_year"]
+                story.story_date_month = date_month_int
+                story.story_date_day = date_day_int
+                story.post_date = datetime.datetime.now()
+                story.save()
+        else:
+            newstory = True
             
-        story_to_save = Story(authorid=user,
-                      title=request.POST["title"],
-                      story=request.POST["story"],
-                      story_date_year=request.POST["story_date_year"],
-                      story_date_month=date_month_int,
-                      story_date_day=date_day_int,
-                      post_date=datetime.datetime.now()
-                       )
+        if newstory: 
+            story = Story(authorid=user,
+                          title=request.POST["title"],
+                          story=request.POST["story"],
+                          story_date_year=request.POST["story_date_year"],
+                          story_date_month=date_month_int,
+                          story_date_day=date_day_int,
+                          post_date=datetime.datetime.now()
+                          )
+            story.save()
+
+        tagged_friends = request.POST["tagged_friends"]
+        if tagged_friends == "":
+            tagged_friends = []
+        else:
+            tagged_friends = tagged_friends.split(",")
         
-        tagged_friends = (request.POST["tagged_friends"]).split(",")
-        
-        story_to_save.save()
+        if not newstory: # editing story
+            existing_tagged_users = [x.fbid for x in TaggedUser.objects.filter(storyid = story)]
+            for existing_tagged_user in existing_tagged_users:
+                if not existing_tagged_user in tagged_friends:
+                    TaggedUser.objects.filter(storyid = story).filter(fbid = existing_tagged_user).delete()
         
         for tagged_friend in tagged_friends:
-            taggedUser_to_save = TaggedUser(fbid=tagged_friend,
-                                            storyid=story_to_save
-                                            )
-            taggedUser_to_save.save()
-            try:    
-                user = User.objects.get(fbid=tagged_friend)
-            except User.DoesNotExist:
-                user_to_save = User(fbid=tagged_friend,
-                                    full_name=friends_dictionary_temp[tagged_friend],
-                                    is_registered=False
-                                    )
-                user_to_save.save()
+            save_new_tagged_user = False
+            if not newstory:
+                try:
+                    tagged_user_temp = TaggedUser.objects.get(fbid=tagged_friend, storyid=story)
+                except TaggedUser.DoesNotExist:
+                    save_new_tagged_user = True
+            
+            if newstory or save_new_tagged_user:
+                taggedUser_to_save = TaggedUser(fbid=tagged_friend,
+                                                storyid=story
+                                                )
+                taggedUser_to_save.save()
+            
+                try:    
+                    user_temp = User.objects.get(fbid=tagged_friend)
+                except User.DoesNotExist:
+                    user_to_save = User(fbid=tagged_friend,
+                                        full_name=friends_dictionary_temp[tagged_friend],
+                                        is_registered=False
+                                        )
+                    user_to_save.save()
 
-        return redirect('/' + user.fbid)
+        return redirect('/profile/')
+
+@csrf_exempt
+def delete(request):
+    if request.method == 'POST':
+        if 'storyid_for_delete' in request.POST and request.POST["storyid_for_delete"] != "":
+            Story.objects.get(id=int(request.POST["storyid_for_delete"])).delete()
+            # note: also deletes all TaggedUsers of this Story (and should also delete StoryComment once implemented)
+    return redirect('/profile/')
+    
+@csrf_exempt
+def story(request, storyid=""):
+    try:
+        story = Story.objects.get(id=int(storyid))
+    except Story.DoesNotExist:
+        return HttpResponse(False)
+    else:
+        tagged_users = [int(x.fbid) for x in TaggedUser.objects.filter(storyid = story)]
+        # remove post date (can't json serialize post_date)
+        story_for_json = {'title': story.title,
+                          'story': story.story,
+                          'story_date_year': story.story_date_year,
+                          'story_date_month': story.story_date_month,
+                          'story_date_day': story.story_date_day,
+                          'is_private': story.is_private,
+                          'tagged_users': json.dumps(tagged_users)
+                          }
+        return HttpResponse(json.dumps(story_for_json))
 
 
 ## UTILS
@@ -377,3 +418,17 @@ def getUserFullName(fbid):
 def getMyFullName(request):
     user = User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
     return user.full_name
+
+monthDictionary = {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"}
+
+def convertMonthToString(month_int):
+    if monthDictionary.has_key(month_int):
+        return monthDictionary[month_int]
+    else:
+        return "---"
+
+def convertMonthToInt(month_string):
+    for key in monthDictionary:
+        if monthDictionary[key] == month_string:
+            return key
+    return 0
