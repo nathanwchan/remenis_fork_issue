@@ -114,6 +114,9 @@
                             <li {% ifequal active_tab "post" %}class="active"{% endifequal %}>
                                 <a data-toggle="modal" href="#post"><i class="icon-pencil" style="margin-right: 6px"></i>Post</a>
                             </li>
+                            <li {% ifequal active_tab "test" %}class="active"{% endifequal %}>
+                                <a data-toggle="modal" class="test_class" href="#test"><i class="icon-signal" style="margin-right: 6px"></i>Test</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -141,6 +144,8 @@
         <script src="/static/js/jquery.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+        <script src="http://connect.facebook.net/en_US/all.js"></script>
+        
         <script>
             $('#searchBox').change(function()
                 {
@@ -187,6 +192,24 @@
             $(".delete_story").click(function(){
                                      $("#storyid_for_delete").val($(this).data('id'));
                                      });
+            
+            $(".test_class").click(function(){
+                                    FB.init({appId: '297031353727647', frictionlessRequests: true, xfbml: true, cookie: true});
+
+                                    FB.ui({
+                                          method: 'send',
+                                          to: 100003196376938,
+                                          name: 'Give the gift of a memory!',
+                                          link: 'http://www.remenis.com',
+                                          redirect_uri: 'http://www.remenis.com/messagesent/',
+                                          picture: 'http://www.remenis.com/static/remenis_logo.png',
+                                          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper lectus in lorem blandit sodales. Morbi diam turpis, vulputate a placerat ac, rutrum id nulla.',
+                                          },
+                                          function(response) {
+                                          window.close();
+                                          });
+                                    });
+
             
             function deleteFormSubmitted()
             {

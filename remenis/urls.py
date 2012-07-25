@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^post/$', views.post),
     url(r'^delete/$', views.delete),
     url(r'^searcherror/$', views.searcherror),
+    url(r'^messagesent/$', views.messagesent),
     url(r'^story/(\d+)/$', views.story),
     
     url(r'^logout/$', views.logout),

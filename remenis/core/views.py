@@ -356,6 +356,8 @@ def story(request, storyid=""):
                           }
         return HttpResponse(json.dumps(story_for_json))
 
+def messagesent(request):
+    return render_to_response('messagesent.html', locals())
 
 ## UTILS
     
