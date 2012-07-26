@@ -48,7 +48,7 @@
                 </td></tr>
             <table>
             <div class="span4">
-                <table class="table table-borderless table-condensed span4" id="tagged-friends-table" style="margin-top: -30px;">
+                <table class="table table-borderless table-condensed span4" id="tagged-friends-table">
                     {% for dic_storyid, dic_taggedusers in stories_dictionary.items %}
                         {% ifequal dic_storyid story.id %}
                             <tbody id="tagged-friends-body">
@@ -57,7 +57,7 @@
                                 <tr>
                                     <td>
                                         <p>
-                                            <a href="../{{ tagged_user.fbid }}"><img id="{{ tagged_user.fbid }}" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/>
+                                            <a href="../{{ tagged_user.fbid }}"><img id="{{ tagged_user.fbid }}" src="https://graph.facebook.com/508314289/picture?type=square" height="30" width="30" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/>
                                             </a>
                                             &nbsp;&nbsp;{{ tagged_user.full_name }}
                                         </p>
