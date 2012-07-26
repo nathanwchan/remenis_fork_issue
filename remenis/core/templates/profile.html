@@ -69,17 +69,11 @@
                                     {% endifequal %}
                                 {% endfor %}
                                 </span>
-                                    
-                                {% if story.id in liked_story_ids %}
-                                <a class="btn btn-medium" href="../like/{{ story.id }}" type="button" disabled="true" style="margin-left: -4px;">
-                                    <i class="icon-ok"></i>
-                                </a>
-                                {% else %}
-                                <a class="btn btn-medium" href="../like/{{ story.id }}" type="button" style="margin-left: -4px;">
+                                
+                                <button class="btn btn-medium" onclick="location.href='../like/{{ story.id }}'" {% if story.id in liked_story_ids %} disabled="disabled" {% endif %} style="margin-left: -4px;">
                                     <i class="icon-heart"></i>
-                                </a>
-                                {% endif %}
-                                    
+                                </button>
+                                
                                 <a class="btn btn-medium" type="button" style="margin-left: -4px;"><i class="icon-bookmark"></i></a>
                                 <a class="btn btn-medium" type="button" style="margin-left: -4px;"><i class="icon-share-alt"></i></a>
                             </div>
