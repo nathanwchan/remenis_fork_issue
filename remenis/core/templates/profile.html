@@ -70,7 +70,7 @@
                                 {% endfor %}
                                 </span>
                                 
-                                <button class="btn btn-medium" onclick="location.href='../like/{{ story.id }}'" style="margin-left: -4px;" rel="popover" data-original-title="Like me!" data-content="pretty please..." data-placement="top"
+                                <button class="btn btn-medium" onclick="location.href='../like/{{ story.id }}'" style="margin-left: -4px;"
                                     {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
                                     <i class="icon-heart"></i>
                                 </button>
