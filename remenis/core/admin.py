@@ -16,13 +16,17 @@ class TaggedUserAdmin(admin.ModelAdmin):
     list_display = ('fbid', 'storyid')
     search_fields = ('fbid', 'storyid')
     
+class StoryCommentAdmin(admin.ModelAdmin):
+    list_display = ('storyid', 'authorid', 'comment', 'post_date')
+    search_fields = ('storyid', 'authorid', 'comment', 'post_date')
+    
 class BetaEmailAdmin(admin.ModelAdmin):
     list_display = ('email', 'submit_date')
     date_hierarchy = 'submit_date'
     ordering = ('-submit_date',)
     
 admin.site.register(TaggedUser, TaggedUserAdmin)
-admin.site.register(StoryComment)
+admin.site.register(StoryComment, StoryCommentAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Story, StoryAdmin)
 admin.site.register(BetaEmail, BetaEmailAdmin)

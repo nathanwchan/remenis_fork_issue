@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 import datetime, random, re, logging
-from remenis.core.models import User, Story, TaggedUser, BetaEmail
+from remenis.core.models import User, Story, StoryComment, TaggedUser, BetaEmail
 from remenis import settings
 
 from django.template import RequestContext
@@ -169,6 +169,7 @@ def profile(request, profileid=""):
     stories_about_user = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True) # sort by post date
     stories_about_user_ids = [x.id for x in stories_about_user]
     tagged_users = []
+    story_comments = []
     for story in stories_about_user:
         tagged_user_objects_in_story = TaggedUser.objects.filter(storyid = story)
         tagged_users_in_story = []
@@ -183,7 +184,9 @@ def profile(request, profileid=""):
             else:
                 tagged_users_in_story.append(tagged_user)
         tagged_users.append(tagged_users_in_story)
-    stories_dictionary = dict(zip(stories_about_user_ids, tagged_users))
+        story_comments.append(StoryComment.objects.filter(storyid = story))
+    stories_tagged_users_dictionary = dict(zip(stories_about_user_ids, tagged_users))
+    stories_comments_dictionary = dict(zip(stories_about_user_ids, story_comments))
     
     return render_to_response('profile.html', locals())
 
@@ -335,6 +338,17 @@ def delete(request):
         if 'storyid_for_delete' in request.POST and request.POST["storyid_for_delete"] != "":
             Story.objects.get(id=int(request.POST["storyid_for_delete"])).delete()
             # note: also deletes all TaggedUsers of this Story (and should also delete StoryComment once implemented)
+    return redirect('/profile/')
+
+@csrf_exempt
+def comment(request):
+    if request.method == 'POST':
+        comment_to_save = StoryComment(storyid=Story.objects.get(id=int(request.POST["storyid"])),
+                                       authorid=User.objects.get(fbid=(request.session['accessCredentials']).get('uid')),
+                                       comment=request.POST["comment"],
+                                       post_date=datetime.datetime.now()
+                                       )
+        comment_to_save.save()
     return redirect('/profile/')
     
 @csrf_exempt

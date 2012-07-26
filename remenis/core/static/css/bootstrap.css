@@ -2692,6 +2692,12 @@ button.close {
   margin-top: 1px;
 }
 
+.btn-medium {
+  padding: 7px 12px;
+  font-size: 11px;
+  line-height: 18px;
+}
+
 .btn-small {
   padding: 5px 9px;
   font-size: 11px;

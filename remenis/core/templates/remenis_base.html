@@ -427,6 +427,15 @@
                 }
             }
         </script>
+        
+        <script>
+            $('.comment_text_box').keydown(function(event){
+                                           if(event.keyCode == 13)
+                                           {
+                                                document.commentForm.submit();
+                                           }
+                                           });
+        </script>
         {% block load_javascript2 %}
         {% endblock %}
     </body>

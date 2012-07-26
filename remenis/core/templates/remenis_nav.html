@@ -20,12 +20,12 @@
                     <li><a href="../logout">Sign Out</a></li>
                 </ul>
             </div>
-            <form name="searchForm" class="navbar-form pull-right" action="" method="get">
+            <form name="searchForm" class="navbar-search pull-right" action="" method="get">
                 <input type="hidden" id="search_friend_id" name="q">
-                <!--<div class="input-append">-->
-                    <input id="searchBox" type="text" class="input-xlarge" data-provide="typeahead" data-items="6" data-source='{{ friends_name_array_string|safe }}' placeholder="Search" autocomplete="off">
-                    <!--<span class="add-on" style="margin:0px 0px 0px -3px;"><i class="icon-search"></i></span>
-                </div>-->
+                <div class="input-append">
+                    <input id="searchBox" type="text" class="search-query" data-provide="typeahead" data-items="6" data-source='{{ friends_name_array_string|safe }}' placeholder="Search for friend" autocomplete="off">
+                    <span class="add-on" style="margin-left: -3px;"><i class="icon-search"></i></span>
+                </div>
             </form>
         </div>
     </div>
