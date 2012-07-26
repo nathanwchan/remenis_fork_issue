@@ -123,6 +123,7 @@ def profile(request, profileid=""):
     
     fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
+    logged_in_user = User.objects.get(fbid=userid)
     
     myfriends = getGraphForMe(request, 'friends', True)
     
@@ -170,6 +171,7 @@ def profile(request, profileid=""):
     stories_about_user_ids = [x.id for x in stories_about_user]
     tagged_users = []
     story_comments = []
+    story_likes = []
     for story in stories_about_user:
         tagged_user_objects_in_story = TaggedUser.objects.filter(storyid = story)
         tagged_users_in_story = []
@@ -185,8 +187,12 @@ def profile(request, profileid=""):
                 tagged_users_in_story.append(tagged_user)
         tagged_users.append(tagged_users_in_story)
         story_comments.append(StoryComment.objects.filter(storyid = story))
+        story_likes.append(StoryLike.objects.filter(storyid = story))
     stories_tagged_users_dictionary = dict(zip(stories_about_user_ids, tagged_users))
     stories_comments_dictionary = dict(zip(stories_about_user_ids, story_comments))
+    stories_likes_dictionary = dict(zip(stories_about_user_ids, story_likes))
+    
+    liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
     
     return render_to_response('profile.html', locals())
 
@@ -349,16 +355,25 @@ def comment(request):
                                        post_date=datetime.datetime.now()
                                        )
         comment_to_save.save()
-    return redirect('/profile/')
+    return redirect('/profile#' + request.POST["storyid"])
     
 @csrf_exempt
-def like(request):
-    if request.method == 'POST':
-        like_to_save = StoryLike(storyid=Story.objects.get(id=int(request.POST["storyid"])),
-                                 authorid=User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
-                                 )
-        like_to_save.save()
-    return redirect('/profile/')
+def like(request, storyid=""):
+    try:
+        story = Story.objects.get(id=int(storyid))
+    except Story.DoesNotExist:
+        return redirect('/profile/')
+    else:
+        try:
+            like = StoryLike.objects.get(storyid=story,
+                                         authorid=User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
+                                         )
+        except StoryLike.DoesNotExist:    
+            like_to_save = StoryLike(storyid=story,
+                                     authorid=User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
+                                     )
+            like_to_save.save()
+    return redirect('/profile#' + storyid)
 
 @csrf_exempt
 def story(request, storyid=""):
