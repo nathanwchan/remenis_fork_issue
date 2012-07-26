@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import User, Story, TaggedUser, StoryComment, BetaEmail
+from models import User, Story, TaggedUser, StoryComment, StoryLike, BetaEmail
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'fbid', 'first_name', 'last_name', 'full_name', 'email', 'is_registered')
@@ -20,6 +20,10 @@ class StoryCommentAdmin(admin.ModelAdmin):
     list_display = ('storyid', 'authorid', 'comment', 'post_date')
     search_fields = ('storyid', 'authorid', 'comment', 'post_date')
     
+class StoryLikeAdmin(admin.ModelAdmin):
+    list_display = ('storyid', 'authorid')
+    search_fields = ('storyid', 'authorid')
+    
 class BetaEmailAdmin(admin.ModelAdmin):
     list_display = ('email', 'submit_date')
     date_hierarchy = 'submit_date'
@@ -27,6 +31,7 @@ class BetaEmailAdmin(admin.ModelAdmin):
     
 admin.site.register(TaggedUser, TaggedUserAdmin)
 admin.site.register(StoryComment, StoryCommentAdmin)
+admin.site.register(StoryLike, StoryLikeAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Story, StoryAdmin)
 admin.site.register(BetaEmail, BetaEmailAdmin)

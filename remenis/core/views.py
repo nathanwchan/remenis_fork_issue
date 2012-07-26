@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 import datetime, random, re, logging
-from remenis.core.models import User, Story, StoryComment, TaggedUser, BetaEmail
+from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, BetaEmail
 from remenis import settings
 
 from django.template import RequestContext
@@ -351,6 +351,15 @@ def comment(request):
         comment_to_save.save()
     return redirect('/profile/')
     
+@csrf_exempt
+def like(request):
+    if request.method == 'POST':
+        like_to_save = StoryLike(storyid=Story.objects.get(id=int(request.POST["storyid"])),
+                                 authorid=User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
+                                 )
+        like_to_save.save()
+    return redirect('/profile/')
+
 @csrf_exempt
 def story(request, storyid=""):
     try:

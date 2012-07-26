@@ -34,26 +34,27 @@
         {% block splash %}
         {% endblock %}
         
+        <!--post modal-->
         <div class="modal hide fade" id="post" style="display: none; width: 700px;">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
                 <h2>Post a story!</h2>
             </div>
-            <form action="/post/" method="post" name="submitForm" style="margin-bottom:0;" onsubmit="return validateForm()">
+            <form action="/post/" method="post" name="submitForm" style="margin-bottom:0;" onsubmit="return validateSubmitForm(this)">
                 <input type="hidden" id="storyid_for_edit" name="storyid_for_edit">
                 <div class="modal-body">
                     <div class="row-fluid">
                         <div class="span6">
-                            <p>Title:<br><input id="title_for_edit" type="text" class="input-xlarge" name="title" placeholder="(optional)" autocomplete="off"></p>
-                            <p>Tell us a story:<br><textarea id="story_for_edit" name="story" class="input-xlarge" rows="6" cols="500"></textarea></p>
-                            <p>Who was in the story?<br><input id="tagged_friend_searchBox" type="text" class="input-xlarge" data-provide="typeahead" data-items="6" data-source='{{ friends_name_array_string|safe }}' placeholder="enter friend's name" autocomplete="off"></p>
-                            <div id="post_date_div" style="font-size: 18;">
+                            <p>Title:<br><input id="title_for_edit" type="text" class="span11" name="title" placeholder="(optional)" autocomplete="off"></p>
+                            <p>Tell us a story:<br><textarea id="story_for_edit" name="story" class="span11" rows="6"></textarea></p>
                             <p>Date:</p>
+                            <div id="post_date_div" style="font-size: 18;">
                             <select id="date_year_select" name="story_date_year" style="width: 100px;"></select>
                             <button id="add_month_button" type="button" style="margin-bottom: 7px;" onclick="addMonth()">+ add month</button>
                             </div>
                         </div>
                         <div class="span6">
+                            <p>Who was in the story?<br><input id="tagged_friend_searchBox" type="text" class="input-xlarge" data-provide="typeahead" data-items="6" data-source='{{ friends_name_array_string|safe }}' placeholder="enter friend's name" autocomplete="off"></p>
                             <h3>tagged friends</h3>
                             <input type="hidden" id="post-tagged-friends" name="tagged_friends">
                             <table class="table table-unbordered" id="post-tagged-friends-table">
@@ -82,6 +83,7 @@
             </form>
         </div>
         
+        <!--delete modal-->
         <div class="modal hide fade" id="delete" style="display: none; width: 400px;">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
@@ -146,6 +148,18 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
         <script src="http://connect.facebook.net/en_US/all.js"></script>
         
+        <!--utils-->
+        <script>
+            var preventSubmit = function(event) {
+                if(event.keyCode == 13)
+                {
+                    event.preventDefault();
+                    return false;
+                }
+            }
+        </script>
+        
+        <!--javascript for search-->
         <script>
             $('#searchBox').change(function()
                 {
@@ -163,6 +177,7 @@
                 });
         </script>
         
+        <!--javascript for post-->
         <script>
             $(function() {
               var today = new Date();
@@ -183,6 +198,9 @@
                           window.location.reload();
 //                          }
                              });
+            
+            $("#title_for_edit").keypress(preventSubmit);
+            $("#tagged_friend_searchBox").keypress(preventSubmit);
             
             $(".edit_story").click(function(){
                                    $("#storyid_for_edit").val($(this).data('id'));
@@ -333,6 +351,7 @@
             }
         </script>
         
+        <!--javascript for tagged user in post-->
         <script>
             $('#tagged_friend_searchBox').change(function()
                                                  {
@@ -401,40 +420,41 @@
             }
         </script>
         
+        <!--javascript for validating post-->
         <script>
-            function validateForm()
+            function validateSubmitForm(form)
             { 
-                document.submitForm.submitButton.disabled = true; 
-                //stuff goes here 
-                if (document.submitForm.story.value == "")
+                form.submitButton.disabled = true;
+                if (form.story.value == "")
                 {
                     document.getElementById('post_errortext').innerHTML = "You must input a story!";
-                    document.submitForm.submitButton.disabled = false;
+                    form.submitButton.disabled = false;
                     return false;
                 }
-                else
+                
+                var table = document.getElementById("post-tagged-friends-table");
+                var rowCount = table.rows.length;
+                var tagged_friends_array = [];
+                for(var i=0; i<rowCount; i++)
                 {
-                    var table = document.getElementById("post-tagged-friends-table");
-                    var rowCount = table.rows.length;
-                    var tagged_friends_array = [];
-                    for(var i=0; i<rowCount; i++)
-                    {
-                        var row = table.rows[i];
-                        tagged_friends_array.push(row.id);
-                    }
-                    document.getElementById('post-tagged-friends').value = tagged_friends_array;
-                    document.submitForm.submit();
+                    var row = table.rows[i];
+                    tagged_friends_array.push(row.id);
                 }
+                document.getElementById('post-tagged-friends').value = tagged_friends_array;
+                return true;
             }
         </script>
         
+        <!--javascript for comment-->
         <script>
-            $('.comment_text_box').keydown(function(event){
-                                           if(event.keyCode == 13)
-                                           {
-                                                document.commentForm.submit();
-                                           }
-                                           });
+            function validateCommentForm(form)
+            {
+                if (form.comment.value == "")
+                {
+                    return false;
+                }
+                return true;
+            }
         </script>
         {% block load_javascript2 %}
         {% endblock %}
