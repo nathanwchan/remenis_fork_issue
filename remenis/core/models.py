@@ -36,7 +36,7 @@ class TaggedUser(models.Model):
 
 class StoryComment(models.Model):
     storyid = models.ForeignKey(Story)
-    authorid = models.ForeignKey(User)
+    authorid = models.ForeignKey(User, blank=True, null=True)
     comment = models.TextField()
     post_date = models.DateTimeField(blank=True, null=True)
     

@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'StoryComment.authorid'
         db.add_column('core_storycomment', 'authorid',
-                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.User'], null=True, blank=True),
+                      self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['core.User'], null=True, blank=True),
                       keep_default=False)
 
 
@@ -40,7 +40,7 @@ class Migration(SchemaMigration):
         },
         'core.storycomment': {
             'Meta': {'object_name': 'StoryComment'},
-            'authorid': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.User']", 'null': 'True', 'blank': 'True'}),
+            'authorid': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['core.User']", 'null': 'True', 'blank': 'True'}),
             'comment': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'post_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
