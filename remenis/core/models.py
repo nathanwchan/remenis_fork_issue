@@ -30,6 +30,7 @@ class Story(models.Model):
 class TaggedUser(models.Model):
     fbid = models.CharField(max_length=20)
     storyid = models.ForeignKey(Story)
+    taggeduserid = models.ForeignKey(User, blank=True, null=True)
         
     class Admin:
         pass

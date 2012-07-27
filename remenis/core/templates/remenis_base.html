@@ -3,7 +3,7 @@
         <meta charset="utf-8">
         <title>Remenis</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            
+        
         {% block head_extra %}
         {% endblock %}
             
@@ -48,9 +48,14 @@
                             <p>Title:<br><input id="title_for_edit" type="text" class="span11" name="title" placeholder="(optional)" autocomplete="off"></p>
                             <p>Tell us a story:<br><textarea id="story_for_edit" name="story" class="span11" rows="6"></textarea></p>
                             <p>Date:</p>
-                            <div id="post_date_div" style="font-size: 18;">
+                            <div id="post_date_div" style="font-size: 18; margin-top: -8px;">
                             <select id="date_year_select" name="story_date_year" style="width: 100px;"></select>
                             <button id="add_month_button" type="button" style="margin-bottom: 7px;" onclick="addMonth()">+ add month</button>
+                            </div>
+                            <div style="margin-top: 10px;">
+                            <label class="checkbox span2" id="checkbox_label" rel="tooltip" title="Only the friends tagged in this story will be able to view it.">
+                                <input id="private_checkbox" name="private" type="checkbox"> Private
+                            </label>
                             </div>
                         </div>
                         <div class="span6">
@@ -134,7 +139,7 @@
             <br><br><br>
             <hr>
             <footer>
-                <p>&copy; 2012 Nathan Chan</p>
+                <p>&nbsp;&nbsp;&nbsp;&copy; 2012 Nathan Chan</p>
             </footer>
             {% endblock %}
         </div>
@@ -199,6 +204,7 @@
 //                          }
                              });
             
+            $("#checkbox_label").tooltip()
             $("#title_for_edit").keypress(preventSubmit);
             $("#tagged_friend_searchBox").keypress(preventSubmit);
             

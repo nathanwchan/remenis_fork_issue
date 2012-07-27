@@ -163,7 +163,7 @@ def profile(request, profileid=""):
         stories_written_by_user = Story.objects.filter(authorid = user)
         profile_name = user.full_name
     
-    stories_about_user = [x.storyid for x in TaggedUser.objects.filter(fbid = profileid)]
+    stories_about_user = [x.storyid for x in TaggedUser.objects.filter(taggeduserid=user)]
     for story_written_by_user in stories_written_by_user:
         if not story_written_by_user in stories_about_user:
             stories_about_user.append(story_written_by_user)
@@ -173,18 +173,7 @@ def profile(request, profileid=""):
     story_comments = []
     story_likes = []
     for story in stories_about_user:
-        tagged_user_objects_in_story = TaggedUser.objects.filter(storyid = story)
-        tagged_users_in_story = []
-        for tagged_user_object_in_story in tagged_user_objects_in_story:
-            try:
-                tagged_user = User.objects.get(fbid=tagged_user_object_in_story.fbid)
-            except User.DoesNotExist:
-                tagged_users_in_story.append(User(fbid=tagged_user_object_in_story.fbid,
-                                    full_name="",
-                                    is_registered=False
-                                    ))
-            else:
-                tagged_users_in_story.append(tagged_user)
+        tagged_users_in_story = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
         tagged_users.append(tagged_users_in_story)
         story_comments.append(StoryComment.objects.filter(storyid = story))
         story_likes.append(StoryLike.objects.filter(storyid = story))
@@ -311,30 +300,23 @@ def post(request):
             existing_tagged_users = [x.fbid for x in TaggedUser.objects.filter(storyid = story)]
             for existing_tagged_user in existing_tagged_users:
                 if not existing_tagged_user in tagged_friends:
-                    TaggedUser.objects.filter(storyid = story).filter(fbid = existing_tagged_user).delete()
+                    TaggedUser.objects.filter(storyid = story).filter(taggeduserid=User.objects.get(fbid=existing_tagged_user)).delete()
         
         for tagged_friend in tagged_friends:
-            save_new_tagged_user = False
-            if not newstory:
-                try:
-                    tagged_user_temp = TaggedUser.objects.get(fbid=tagged_friend, storyid=story)
-                except TaggedUser.DoesNotExist:
-                    save_new_tagged_user = True
+            try:    
+                tagged_user = User.objects.get(fbid=tagged_friend)
+            except User.DoesNotExist:
+                tagged_user = User(fbid=tagged_friend,
+                                    full_name=friends_dictionary_temp[tagged_friend],
+                                    is_registered=False
+                                    )
+                tagged_user.save()
             
-            if newstory or save_new_tagged_user:
-                taggedUser_to_save = TaggedUser(fbid=tagged_friend,
-                                                storyid=story
-                                                )
-                taggedUser_to_save.save()
-            
-                try:    
-                    user_temp = User.objects.get(fbid=tagged_friend)
-                except User.DoesNotExist:
-                    user_to_save = User(fbid=tagged_friend,
-                                        full_name=friends_dictionary_temp[tagged_friend],
-                                        is_registered=False
-                                        )
-                    user_to_save.save()
+            try:
+                tagged_user_temp = TaggedUser.objects.get(storyid=story, taggeduserid=tagged_user)
+            except TaggedUser.DoesNotExist:
+                tagged_user_to_save = TaggedUser(storyid=story, taggeduserid=tagged_user)
+                tagged_user_to_save.save()
 
         return redirect('/profile/')
 

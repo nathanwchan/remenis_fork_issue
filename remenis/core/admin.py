@@ -13,16 +13,34 @@ class StoryAdmin(admin.ModelAdmin):
     raw_id_fields = ('authorid',)
 
 class TaggedUserAdmin(admin.ModelAdmin):
-    list_display = ('fbid', 'storyid')
-    search_fields = ('fbid', 'storyid')
+    list_display = ('story_id', 'tagged_user_name')
+    search_fields = ('story_id', 'tagged_user_name')
+    
+    def story_id(self, instance):
+        return instance.storyid.id
+    
+    def tagged_user_name(self, instance):
+        return instance.taggeduserid.full_name
     
 class StoryCommentAdmin(admin.ModelAdmin):
-    list_display = ('storyid', 'authorid', 'comment', 'post_date')
-    search_fields = ('storyid', 'authorid', 'comment', 'post_date')
+    list_display = ('story_id', 'author_name', 'comment', 'post_date')
+    search_fields = ('story_id', 'author_name', 'comment', 'post_date')
+    
+    def story_id(self, instance):
+        return instance.storyid.id
+    
+    def author_name(self, instance):
+        return instance.authorid.full_name
     
 class StoryLikeAdmin(admin.ModelAdmin):
-    list_display = ('storyid', 'authorid')
-    search_fields = ('storyid', 'authorid')
+    list_display = ('story_id', 'author_name')
+    search_fields = ('story_id', 'author_name')
+    
+    def story_id(self, instance):
+        return instance.storyid.id
+    
+    def author_name(self, instance):
+        return instance.authorid.full_name
     
 class BetaEmailAdmin(admin.ModelAdmin):
     list_display = ('email', 'submit_date')
