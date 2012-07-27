@@ -6,11 +6,14 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ('first_name', 'last_name', 'full_name', 'email')
 
 class StoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'authorid', 'title', 'story', 'story_date_year', 'story_date_month', 'story_date_day', 'post_date', 'is_private')
+    list_display = ('id', 'author_name', 'title', 'story', 'story_date_year', 'story_date_month', 'story_date_day', 'post_date', 'is_private')
     list_filter = ('authorid',)
     date_hierarchy = 'post_date'
     ordering = ('-post_date',)
     raw_id_fields = ('authorid',)
+    
+    def author_name(self, instance):
+        return instance.authorid.full_name
 
 class TaggedUserAdmin(admin.ModelAdmin):
     list_display = ('story_id', 'tagged_user_name')
