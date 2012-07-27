@@ -28,7 +28,6 @@ class Story(models.Model):
         pass
     
 class TaggedUser(models.Model):
-    fbid = models.CharField(max_length=20)
     storyid = models.ForeignKey(Story)
     taggeduserid = models.ForeignKey(User, blank=True, null=True)
         
