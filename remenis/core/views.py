@@ -344,7 +344,7 @@ def delete(request):
         if 'storyid_for_delete' in request.POST and request.POST["storyid_for_delete"] != "":
             Story.objects.get(id=int(request.POST["storyid_for_delete"])).delete()
             # note: also deletes all TaggedUsers of this Story (and should also delete StoryComment once implemented)
-    return redirect('/profile/')
+    return redirect(request.META["HTTP_REFERER"])
 
 @csrf_exempt
 def comment(request):
@@ -355,14 +355,14 @@ def comment(request):
                                        post_date=datetime.datetime.now()
                                        )
         comment_to_save.save()
-    return redirect('/profile#' + request.POST["storyid"])
+    return redirect(request.META["HTTP_REFERER"] + '#' + request.POST["storyid"])
     
 @csrf_exempt
 def like(request, storyid=""):
     try:
         story = Story.objects.get(id=int(storyid))
     except Story.DoesNotExist:
-        return redirect('/profile/')
+        return redirect(request.META["HTTP_REFERER"])
     else:
         try:
             like = StoryLike.objects.get(storyid=story,
@@ -373,7 +373,7 @@ def like(request, storyid=""):
                                      authorid=User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
                                      )
             like_to_save.save()
-    return redirect('/profile#' + storyid)
+    return redirect(request.META["HTTP_REFERER"] + '#' + storyid)
 
 @csrf_exempt
 def story(request, storyid=""):
