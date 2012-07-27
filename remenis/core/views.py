@@ -297,7 +297,7 @@ def post(request):
             tagged_friends = tagged_friends.split(",")
         
         if not newstory: # editing story
-            existing_tagged_users = [x.fbid for x in TaggedUser.objects.filter(storyid = story)]
+            existing_tagged_users = [x.taggeduserid.fbid for x in TaggedUser.objects.filter(storyid = story)]
             for existing_tagged_user in existing_tagged_users:
                 if not existing_tagged_user in tagged_friends:
                     TaggedUser.objects.filter(storyid = story).filter(taggeduserid=User.objects.get(fbid=existing_tagged_user)).delete()
@@ -364,7 +364,7 @@ def story(request, storyid=""):
     except Story.DoesNotExist:
         return HttpResponse(False)
     else:
-        tagged_users = [int(x.fbid) for x in TaggedUser.objects.filter(storyid = story)]
+        tagged_users = [int(x.taggeduserid.fbid) for x in TaggedUser.objects.filter(storyid = story)]
         # remove post date (can't json serialize post_date)
         story_for_json = {'title': story.title,
                           'story': story.story,
