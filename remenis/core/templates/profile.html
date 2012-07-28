@@ -6,10 +6,7 @@
         <p><a href="http://www.facebook.com/{{ profileid }}">{{ profile_name }}</a> is not your Facebook friend.</p>
         {% else %}
         <h2>{{ profile_name }}</h2>
-        <br>                
-        <p id="nate"></p>
-
-        <p>Found {{ stories_about_user|length }} stories.</p>
+        <br>
 
         {% for story in stories_about_user %}
         
