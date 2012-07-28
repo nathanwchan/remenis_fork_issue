@@ -48,7 +48,7 @@
                             <p>Title:<br><input id="title_for_edit" type="text" class="span11" name="title" placeholder="(optional)" autocomplete="off"></p>
                             <p>Tell us a story:<br><textarea id="story_for_edit" name="story" class="span11" rows="6"></textarea></p>
                             <p>Date:</p>
-                            <div id="post_date_div" style="font-size: 18; margin-top: -8px;">
+                            <div id="post_date_div" style="margin-top: -8px;">
                             <select id="date_year_select" name="story_date_year" style="width: 100px;"></select>
                             <button id="add_month_button" type="button" style="margin-bottom: 7px;" onclick="addMonth()">+ add month</button>
                             </div>
@@ -139,7 +139,10 @@
             <br><br><br>
             <hr>
             <footer>
-                <p>&nbsp;&nbsp;&nbsp;&copy; 2012 Nathan Chan</p>
+                <div class="row-fluid">
+                    <!--<div class="span10 fb-like fb_edge_widget_with_comment fb_iframe_widget" data-href="http://www.dailykhan.org" data-send="true" data-width="450" data-show-faces="true"><span style="height: 64px; width: 450px; "><iframe id="f21d88676" name="f1d56864a4" scrolling="no" style="border: none; overflow: hidden; height: 64px; width: 450px; " title="Like this content on Facebook." class="fb_ltr " src="http://www.facebook.com/plugins/like.php?api_key=275815892495010&amp;channel_url=http%3A%2F%2Fstatic.ak.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D9%23cb%3Df212e2e5ec%26origin%3Dhttp%253A%252F%252Fwww.remenis.com%252Ff35b03d754%26domain%3Dwww.remenis.com%26relation%3Dparent.parent&amp;extended_social_context=false&amp;href=http%3A%2F%2Fwww.remenis.com&amp;layout=standard&amp;locale=en_US&amp;node_type=link&amp;sdk=joey&amp;send=true&amp;show_faces=true&amp;width=450"></iframe></span></div>-->
+                    <p class="span2">&nbsp;&nbsp;&nbsp;&copy; 2012 Nathan Chan</p>
+                </div>
             </footer>
             {% endblock %}
         </div>
