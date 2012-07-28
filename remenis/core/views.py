@@ -37,14 +37,14 @@ def login(request):
             if request.GET['story']:
                 subsite = "story%2F"
                 story_id = request.GET['story'] + "%2F"
-                
-        return render_to_response('login.html', locals())
+                return render_to_response('login_story.html', locals())            
+    return render_to_response('login.html', locals())
 
 def logout(request):
     request.session.pop('token', None)
     request.session.pop('profile', None)
     request.session.pop('accessCredentials', None)
-    return redirect('/login/?story=111')
+    return redirect('/login/')
 
 @csrf_exempt
 def home(request):
@@ -321,7 +321,10 @@ def like(request, storyid=""):
 @csrf_exempt
 def story(request, storyid=""):
     if not saveSessionAndRegisterUser(request):
-        return redirect('/login/')
+        if not storyid == "":
+            return redirect('/login/?story=' + storyid)
+        else:
+            return redirect('/login/')
     
     try:
         story = Story.objects.get(id=int(storyid))
