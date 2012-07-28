@@ -298,6 +298,9 @@ def comment(request):
                                        post_date=datetime.datetime.now()
                                        )
         comment_to_save.save()
+        
+    if "story" in request.META["HTTP_REFERER"]:
+        return redirect(request.META["HTTP_REFERER"])
     return redirect(request.META["HTTP_REFERER"] + '#' + request.POST["storyid"])
     
 @csrf_exempt
@@ -316,6 +319,9 @@ def like(request, storyid=""):
                                      authorid=User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
                                      )
             like_to_save.save()
+            
+    if "story" in request.META["HTTP_REFERER"]:
+        return redirect(request.META["HTTP_REFERER"])
     return redirect(request.META["HTTP_REFERER"] + '#' + storyid)
 
 @csrf_exempt
@@ -325,6 +331,39 @@ def story(request, storyid=""):
             return redirect('/login/?story=' + storyid)
         else:
             return redirect('/login/')
+    
+    fullname = getMyFullName(request)
+    userid = (request.session['accessCredentials']).get('uid')
+    logged_in_user = User.objects.get(fbid=userid)
+    
+    myfriends = getGraphForMe(request, 'friends', True)
+    
+    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array.append(str(fullname))
+    friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
+    friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
+    
+    friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_id_array.append(str(userid))
+    
+    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
+    
+    try:
+        story = Story.objects.get(id=int(storyid))
+    except Story.DoesNotExist:
+        story = False
+    else:
+        story_tagged_users = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
+        story_comments = StoryComment.objects.filter(storyid = story)
+        story_likes = StoryLike.objects.filter(storyid = story)
+        liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
+        
+    return render_to_response('story.html', locals())
+
+@csrf_exempt
+def api_story(request, storyid=""):
+    if not saveSessionAndRegisterUser(request):
+        return HttpResponse("Not accessible.")
     
     try:
         story = Story.objects.get(id=int(storyid))

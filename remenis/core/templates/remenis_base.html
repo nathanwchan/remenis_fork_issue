@@ -113,10 +113,10 @@
                     <div class="sidebar-nav-fixed span2">
                         <ul class="nav nav-list">
                             <li {% ifequal active_tab "home" %}class="active"{% endifequal %}>
-                                <a href="../home"><i class="icon-home" style="margin-right: 6px"></i>Home</a>
+                                <a href="/home"><i class="icon-home" style="margin-right: 6px"></i>Home</a>
                             </li>
                             <li {% ifequal active_tab "profile" %}class="active"{% endifequal %}>
-                                <a href="../profile"><i class="icon-user" style="margin-right: 6px"></i>Profile</a>
+                                <a href="/profile"><i class="icon-user" style="margin-right: 6px"></i>Profile</a>
                             </li>
                             <li {% ifequal active_tab "post" %}class="active"{% endifequal %}>
                                 <a data-toggle="modal" href="#post"><i class="icon-pencil" style="margin-right: 6px"></i>Post</a>
@@ -239,7 +239,7 @@
             
             function populateEditStory(storyid)
             {
-                $.getJSON('/story/' + storyid, function(jsonString)
+                $.getJSON('/api/story/' + storyid, function(jsonString)
                           {
                           $("#title_for_edit").val(jsonString['title']);
                           $("#story_for_edit").val(jsonString['story']);

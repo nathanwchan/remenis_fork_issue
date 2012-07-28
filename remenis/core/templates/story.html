@@ -1,18 +1,11 @@
 {% extends "remenis_base_nav.html" %}
 
         {% block content %}
-
-        {% if not_friend %}
-        <p><a href="http://www.facebook.com/{{ profileid }}">{{ profile_name }}</a> is not your Facebook friend.</p>
-        {% else %}
-        <h2>{{ profile_name }}</h2>
-        <br>                
-        <p id="nate"></p>
-
-        <p>Found {{ stories_about_user|length }} stories.</p>
-
-        {% for story in stories_about_user %}
         
+        <br>
+        {% if not story %}
+        <p>Invalid story ID</p>
+        {% else %}
         <a name="{{ story.id }}" style="position:absolute; margin-top: -70px"></a>
         <div class="row-fluid">
             <a class="span1" href="/{{ story.authorid.fbid }}" style="margin-top: 10px; margin-right: -10px;"><img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" height="50" width="50" style="border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; -webkit-border-radius: 5px;" /></a>
@@ -63,11 +56,7 @@
                                         -o-transform: rotate(270deg);
                                         -ms-transform: rotate(270deg);
                                         transform: rotate(270deg);">
-                                {% for dic_storyid, dic_storylikes in stories_likes_dictionary.items %}
-                                    {% ifequal dic_storyid story.id %}
-                                        {{ dic_storylikes.count }}
-                                    {% endifequal %}
-                                {% endfor %}
+                                {{ story_likes.count }}
                                 </span>
                                 
                                 <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -4px;"
@@ -81,52 +70,40 @@
                         </form>
                     </div>
                 </td></tr>
-                {% for dic_storyid, dic_storycomments in stories_comments_dictionary.items %}
-                    {% ifequal dic_storyid story.id %}
-                        {% for story_comment in dic_storycomments %}
-                        <tr style="background-color: #F0F0F0;"><td>
-                            <a href="/{{ story_comment.authorid.fbid }}"><img id="{{ story_comment.authorid.fbid }}" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/>
-                            </a>
-                            &nbsp;&nbsp;<strong>{{ story_comment.authorid.full_name }}</strong>
-                            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ story_comment.comment }}
-                        </td></tr>
-                        {% empty %}
-                        <tr><td>&nbsp;no comments</td></tr>
-                        {% endfor %}
-                    {% endifequal %}
+                {% for story_comment in story_comments %}
+                <tr style="background-color: #F0F0F0;"><td>
+                    <a href="/{{ story_comment.authorid.fbid }}"><img id="{{ story_comment.authorid.fbid }}" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/>
+                    </a>
+                    &nbsp;&nbsp;<strong>{{ story_comment.authorid.full_name }}</strong>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ story_comment.comment }}
+                </td></tr>
+                {% empty %}
+                <tr><td>&nbsp;no comments</td></tr>
                 {% endfor %}
             <table>
             <!--tagged user div-->
             <div class="span4">
                 <table class="table table-borderless table-condensed span4" id="tagged-friends-table" style="margin-top: -30px; margin-left: 20px;">
-                    {% for dic_storyid, dic_taggedusers in stories_tagged_users_dictionary.items %}
-                        {% ifequal dic_storyid story.id %}
-                            <tbody id="tagged-friends-body">
-                                <tr><td><p>In This Story</p></td></tr>
-                                {% for tagged_user in dic_taggedusers %}
-                                <tr>
-                                    <td>
-                                        <p>
-                                            <a href="/{{ tagged_user.fbid }}"><img id="{{ tagged_user.fbid }}" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/>
-                                            </a>
-                                            &nbsp;&nbsp;{{ tagged_user.full_name }}
-                                        </p>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr><td>none</td></tr>
-                                {% endfor %}
-                            </tbody>
-                        {% endifequal %}
-                    {% endfor %}
+                    <tbody id="tagged-friends-body">
+                        <tr><td><p>In This Story</p></td></tr>
+                        {% for tagged_user in story_tagged_users %}
+                        <tr>
+                            <td>
+                                <p>
+                                    <a href="/{{ tagged_user.fbid }}"><img id="{{ tagged_user.fbid }}" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/>
+                                    </a>
+                                    &nbsp;&nbsp;{{ tagged_user.full_name }}
+                                </p>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td>none</td></tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
                 <br><br><br>
-            </div>                
-        {% empty %}
-        <p>No stories.</p>
-        {% endfor %}
+            </div>
         </div>
-
         {% endif %}
 
         {% endblock %}
