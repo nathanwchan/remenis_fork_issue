@@ -27,26 +27,6 @@
         </div>
         {% endblock %}
 
-        {% block load_javascript %}
-        <!-- RPX social login widget -->
-        <script>
-            var rpxJsHost = (("https:" == document.location.protocol) ? "https://" : "http://static.");
-            document.write(unescape("%3Cscript src='" + rpxJsHost +
-                                    "rpxnow.com/js/lib/rpx.js' type='text/javascript'%3E%3C/script%3E"));
-        </script>
-        <script>
-            RPXNOW.overlay = true;
-            RPXNOW.language_preference = 'en';
-            // Set default provider to Facebook
-            // https://rpxnow.com/docs#sign-in_default_provider
-            //RPXNOW.default_provider = 'facebook';
-        </script>
-        
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="/static/js/jquery.js"></script>
-        <script src="/static/js/bootstrap.min.js"></script>
-        {% endblock %}
-
         {% block no_sidebar %}
         {% endblock %}
 

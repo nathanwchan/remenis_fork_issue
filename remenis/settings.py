@@ -17,9 +17,9 @@ ADMINS = (
 )
 
 if DEBUG:
-    SITE_ROOT_URL = 'http://localhost:8000' 
+    SITE_ROOT_URL = 'http://localhost:8000/' 
 else: 
-    SITE_ROOT_URL = 'http://www.remenis.com'
+    SITE_ROOT_URL = 'http://www.remenis.com/'
     
 MANAGERS = ADMINS
 

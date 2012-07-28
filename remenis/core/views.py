@@ -28,71 +28,32 @@ def splash(request):
     
 @csrf_exempt
 def login(request):
-    debug = settings.DEBUG
     if 'token' in request.session:
         return redirect('/home/')
     else:
+        token_url = urllib.quote_plus(settings.SITE_ROOT_URL)
+        subsite = "home%2F"
+        if 'story' in request.GET:
+            if request.GET['story']:
+                subsite = "story%2F"
+                story_id = request.GET['story'] + "%2F"
+                
         return render_to_response('login.html', locals())
 
 def logout(request):
     request.session.pop('token', None)
     request.session.pop('profile', None)
     request.session.pop('accessCredentials', None)
-    return redirect('/login/')
+    return redirect('/login/?story=111')
 
 @csrf_exempt
 def home(request):
-    if 'token' in request.session:
-        fullname = getMyFullName(request)
-        userid = (request.session['accessCredentials']).get('uid')
-        photourl = (request.session['profile']).get('photo')
-    elif 'token' in request.POST and request.POST['token']:
-        request.session['token'] = request.POST['token']
-        
-        auth_info = getAuthInfo(request)
-        if auth_info <> False:
-            profile = auth_info['profile']
-            request.session['profile'] = profile
-            
-            fullname = profile.get('displayName')
-            photourl = profile.get('photo')
-            email = profile.get('verifiedEmail')
-            name = profile['name']
-            firstname = name.get('givenName')
-            lastname = name.get('familyName')
-            
-            request.session['accessCredentials'] = auth_info['accessCredentials']
-            
-            userid = (request.session['accessCredentials']).get('uid')
-            
-            try:
-                user = User.objects.get(fbid=userid)
-            except User.DoesNotExist:
-                # save new user to user DB
-                user_to_save = User(fbid=userid,
-                                    first_name=firstname,
-                                    last_name=lastname,
-                                    full_name=fullname,
-                                    email=email,
-                                    is_registered=True
-                                    )
-                user_to_save.save()
-            else:
-                if user.is_registered == False: # user has already been tagged in a story, but this is their first time logging into Remenis
-                    user.fbid = userid
-                    user.first_name = firstname
-                    user.last_name = lastname
-                    user.full_name = fullname
-                    user.email = email
-                    user.is_registered = True
-                    user.save()                    
-        else:
-            return redirect('/login/')
-    else:
+    if not saveSessionAndRegisterUser(request):
         return redirect('/login/')
-    
+
     fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
+    photourl = (request.session['profile']).get('photo')
     
     myfriends = getGraphForMe(request, 'friends', True)
     
@@ -118,7 +79,7 @@ def home(request):
 
 @csrf_exempt
 def profile(request, profileid=""):
-    if not 'token' in request.session:
+    if not saveSessionAndRegisterUser(request):
         return redirect('/login/')
     
     fullname = getMyFullName(request)
@@ -187,7 +148,7 @@ def profile(request, profileid=""):
 
 @csrf_exempt
 def searcherror(request):
-    if not 'token' in request.session:
+    if not saveSessionAndRegisterUser(request):
         return redirect('/login/')
     
     fullname = getMyFullName(request)
@@ -218,7 +179,7 @@ def searcherror(request):
 
 @csrf_exempt
 def post(request): 
-    if not 'token' in request.session:
+    if not saveSessionAndRegisterUser(request):
         return redirect('/login/')
     
     active_tab = "post"
@@ -359,6 +320,9 @@ def like(request, storyid=""):
 
 @csrf_exempt
 def story(request, storyid=""):
+    if not saveSessionAndRegisterUser(request):
+        return redirect('/login/')
+    
     try:
         story = Story.objects.get(id=int(storyid))
     except Story.DoesNotExist:
@@ -380,7 +344,56 @@ def messagesent(request):
     return render_to_response('messagesent.html', locals())
 
 ## UTILS
-    
+
+def saveSessionAndRegisterUser(request):
+    if 'token' in request.session:
+        return True # already logged in
+    elif 'token' in request.POST and request.POST['token']: # just logged in
+        request.session['token'] = request.POST['token']
+        
+        auth_info = getAuthInfo(request)
+        if auth_info <> False:
+            profile = auth_info['profile']
+            request.session['profile'] = profile
+            
+            fullname = profile.get('displayName')
+            photourl = profile.get('photo')
+            email = profile.get('verifiedEmail')
+            name = profile['name']
+            firstname = name.get('givenName')
+            lastname = name.get('familyName')
+            
+            request.session['accessCredentials'] = auth_info['accessCredentials']
+            
+            userid = (request.session['accessCredentials']).get('uid')
+            
+            try:
+                user = User.objects.get(fbid=userid)
+            except User.DoesNotExist:
+                # save new user to user DB
+                user_to_save = User(fbid=userid,
+                                    first_name=firstname,
+                                    last_name=lastname,
+                                    full_name=fullname,
+                                    email=email,
+                                    is_registered=True
+                                    )
+                user_to_save.save()
+            else:
+                if user.is_registered == False: # user has already been tagged in a story, but this is their first time logging into Remenis
+                    user.fbid = userid
+                    user.first_name = firstname
+                    user.last_name = lastname
+                    user.full_name = fullname
+                    user.email = email
+                    user.is_registered = True
+                    user.save()
+            return True # login successful
+        else:
+            return False # something in auth from rpxnow failed
+    else:
+        return False # weird case
+
 def getErrorMessage(errorid):
     if errorid == '1':
         return 'Please submit a valid search term.'
