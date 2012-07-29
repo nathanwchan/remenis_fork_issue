@@ -16,38 +16,44 @@
             <!--story table-->
             <table class="table table-bordered span7" style="margin-bottom: 40px;">
                 <tr><td>
-                    <p>
-                        <a href="/{{ story.authorid.fbid }}"><strong>{{ story.authorid.full_name }}</strong></a>
-                        <span style="color: grey;"> wrote </span>
-                        <a href="/story/{{ story.id }}"><strong style="color: blue;">{{ story.title }}</strong></a>
-                    </p>
-                    {% if story.authorid.fbid == userid %}
-                    <div class="btn-group pull-right" style="margin-top: -30px;">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a data-toggle="modal" data-id="{{ story.id }}" class="edit_story" href="#post">Edit Story</a></li>
-                            <li><a data-toggle="modal" data-id="{{ story.id }}" class="delete_story" href="#delete">Delete Story</a></li>
-                        </ul>
+                    <div>
+                        <p class="span10">
+                            <a href="/{{ story.authorid.fbid }}"><strong>{{ story.authorid.full_name }}</strong></a>
+                            <span style="color: grey;"> wrote </span>
+                            <a href="/story/{{ story.id }}"><strong style="color: blue;">{{ story.title }}</strong></a>
+                        </p>
+                        <p align="right" {% if story.authorid.fbid == userid %} style="color: grey; font-size: 12; margin-right: 32px;" {% endif %} onload="setPostDate(this)">
+                            {% for dic_storyid, dic_storypostdate in stories_post_date_dictionary.items %}
+                                {% ifequal dic_storyid story.id %}
+                                    {{ dic_storypostdate }}
+                                {% endifequal %}
+                            {% endfor %}
+                        </p>
+                        {% if story.authorid.fbid == userid %}
+                        <div class="btn-group pull-right" style="margin-top: -30px;">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a data-toggle="modal" data-id="{{ story.id }}" class="edit_story" href="#post">Edit Story</a></li>
+                                <li><a data-toggle="modal" data-id="{{ story.id }}" class="delete_story" href="#delete">Delete Story</a></li>
+                            </ul>
+                        </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
                 </td></tr>
                 <tr><td>
-                    <p style="color: grey;">{{ story.story }}</p>
-                </td></tr>
-                <tr><td>
-                    <div id="date_div" style="color: grey">
-                        <p><i>
-                            {{ story.story_date_year }}
+                    <p style="color: grey;">{{ story.story }} &nbsp;
+                        <i style="color: #CFCFCF">
                             {% if story.story_date_month != 0 %}
-                            / {{ story.story_date_month }}
+                            {{ story.story_date_month }} / 
                             {% endif %}
                             {% if story.story_date_day != 0 %}
-                            / {{ story.story_date_day }}
+                            {{ story.story_date_day }} / 
                             {% endif %}
-                        </i></p>
-                    </div>
+                            {{ story.story_date_year }}
+                        </i>
+                    </p>
                 </td></tr>
                 <!--comment form table row-->
                 <tr><td>
@@ -75,9 +81,12 @@
                                     {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
                                     <i class="icon-heart"></i>
                                 </button>
-                                
-                                <button class="btn btn-medium" type="button" style="margin-left: -4px;" rel="popover" data-original-title="Bookmark" data-content="coming soon..." data-placement="top"><i class="icon-bookmark"></i></button>
-                                <button class="btn btn-medium" type="button" style="margin-left: -4px;" rel="popover" data-original-title="Share" data-content="coming soon..." data-placement="top"><i class="icon-share-alt"></i></button>
+                                <button class="btn btn-medium" type="button" style="margin-left: -4px;" rel="popover" data-original-title="Bookmark" data-content="coming soon..." data-placement="top">
+                                    <i class="icon-bookmark"></i>
+                                </button>
+                                <button class="btn btn-medium" type="button" style="margin-left: -4px;" rel="popover" data-original-title="Share" data-content="coming soon..." data-placement="top">
+                                    <i class="icon-share-alt"></i>
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -97,13 +106,16 @@
                     {% endifequal %}
                 {% endfor %}
             <table>
+                
             <!--tagged user div-->
             <div class="span4">
                 <table class="table table-borderless table-condensed span4" id="tagged-friends-table" style="margin-top: -30px; margin-left: 20px;">
                     {% for dic_storyid, dic_taggedusers in stories_tagged_users_dictionary.items %}
                         {% ifequal dic_storyid story.id %}
                             <tbody id="tagged-friends-body">
-                                <tr><td><p>In This Story</p></td></tr>
+                                <tr><td>
+                                    <p>In This Story</p>
+                                </tr>
                                 {% for tagged_user in dic_taggedusers %}
                                 <tr>
                                     <td>

@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 import datetime, random, re, logging
+from datetime import timedelta
 from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, BetaEmail
 from remenis import settings
 
@@ -134,14 +135,17 @@ def profile(request, profileid=""):
     tagged_users = []
     story_comments = []
     story_likes = []
+    story_post_date = []
     for story in stories_about_user:
         tagged_users_in_story = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
         tagged_users.append(tagged_users_in_story)
         story_comments.append(StoryComment.objects.filter(storyid = story))
         story_likes.append(StoryLike.objects.filter(storyid = story))
+        story_post_date.append(getStoryPostDate(story.post_date))
     stories_tagged_users_dictionary = dict(zip(stories_about_user_ids, tagged_users))
     stories_comments_dictionary = dict(zip(stories_about_user_ids, story_comments))
     stories_likes_dictionary = dict(zip(stories_about_user_ids, story_likes))
+    stories_post_date_dictionary = dict(zip(stories_about_user_ids, story_post_date))
     
     liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
     
@@ -522,3 +526,18 @@ def convertMonthToInt(month_string):
         if monthDictionary[key] == month_string:
             return key
     return 0
+
+def getStoryPostDate(post_datetime):
+    now = datetime.datetime.now()
+    timedelta = now - post_datetime
+    
+    if timedelta.days >= 365:
+        return str(post_datetime.day) + " " + convertMonthToString(post_datetime.month) + " " + str(post_datetime.year)[2:]
+    elif timedelta.days >= 1:
+        return str(post_datetime.day) + " " + convertMonthToString(post_datetime.month)
+    elif timedelta.seconds >= 3600: # greater than 1 hour ago
+        return str(timedelta.seconds / 3600) + "h"
+    elif timedelta.seconds >= 60: # greater than 1 minute ago
+        return str(timedelta.seconds / 60) + "m"
+    else:
+        return str(timedelta.seconds) + "s"
