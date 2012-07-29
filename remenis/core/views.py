@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
-import datetime, random, re, logging
+import datetime, random, re, logging, operator
 from datetime import timedelta
 from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, BetaEmail
 from remenis import settings
@@ -121,18 +121,16 @@ def profile(request, profileid=""):
     except User.DoesNotExist:
         stories_written_by_user = []
         profile_name = getUserFullName(profileid)
-        stories_about_user = []
+        stories_about_user_all = []
     else:    
         stories_written_by_user = Story.objects.filter(authorid = user)
         profile_name = user.full_name
-        stories_about_user = [x.storyid for x in TaggedUser.objects.filter(taggeduserid=user)]
+        stories_about_user_all = [x.storyid for x in TaggedUser.objects.filter(taggeduserid=user)]
     
     # aggregate stories written by and about user together, removing duplicates 
     for story_written_by_user in stories_written_by_user:
-        if not story_written_by_user in stories_about_user:
-            stories_about_user.append(story_written_by_user)
-            
-    stories_about_user_all = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True) # sort by post date
+        if not story_written_by_user in stories_about_user_all:
+            stories_about_user_all.append(story_written_by_user)
 
     # exclude private stories
     if profileid == userid:
@@ -142,7 +140,16 @@ def profile(request, profileid=""):
         for story in stories_about_user_all:
             if not story.is_private or userid in [x.taggeduserid.fbid for x in TaggedUser.objects.filter(storyid = story)]:
                 stories_about_user.append(story)
-        
+    
+    if 'display' in request.GET and request.GET['display']:
+        display = request.GET['display']
+        if display == "timeline":
+            stories_about_user = sorted(stories_about_user, key=operator.attrgetter('story_date_year', 'story_date_month', 'story_date_day'), reverse=True) # sort by story date
+            profile_html_page = "profile_timeline.html"
+        else: # default or recent
+            stories_about_user = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True) # sort by post date
+            profile_html_page = "profile_recent.html"
+    
     stories_about_user_ids = [x.id for x in stories_about_user]
     tagged_users = []
     story_comments = []
@@ -161,7 +168,13 @@ def profile(request, profileid=""):
     
     liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
     
-    return render_to_response('profile.html', locals())
+    if 'display' in request.GET and request.GET['display']:
+        display = request.GET['display']
+        if display == "recent":
+            return render_to_response('profile_recent.html', locals())
+        elif display == "timeline":
+            return render_to_response('profile_timeline.html', locals())
+    return render_to_response('profile_recent.html', locals())
 
 @csrf_exempt
 def searcherror(request):
@@ -310,7 +323,7 @@ def delete(request):
     if request.method == 'POST':
         if 'storyid_for_delete' in request.POST and request.POST["storyid_for_delete"] != "":
             Story.objects.get(id=int(request.POST["storyid_for_delete"])).delete()
-            # note: also deletes all TaggedUsers of this Story (and should also delete StoryComment once implemented)
+            # note: also deletes all TaggedUsers, StoryComments and StoryLikes of this Story
     return redirect(request.META["HTTP_REFERER"])
 
 @csrf_exempt

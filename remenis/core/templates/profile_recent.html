@@ -7,6 +7,15 @@
         {% else %}
         <h2>{{ profile_name }}</h2>
         <br>
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="?display=recent">Most Recent</a>
+            </li>
+            <li>
+                <a href="?display=timeline">Timeline</a>
+            </li>
+        </ul>
+        <br>
 
         {% for story in stories_about_user %}
         
@@ -62,7 +71,8 @@
                             <input type="hidden" name="storyid" value="{{ story.id }}">
                             <div class="input-append">
                                 <img src="/static/remenis_logo.png" width=40 style="margin-left: 2px; margin-right: 5px;"/>
-                                <input name="comment" type="text" class="span7 comment_text_box" size="16" placeholder="write a comment..." autocomplete="off">
+
+                                <input name="comment" type="text" class="input-xlarge comment_text_box" size="16" placeholder="write a comment..." autocomplete="off">
                                     
                                 <span class="add-on" style="font-size: 10; width: 18px; margin-left: -6px; margin-right: -2px; background-color: #258EAA; color: white;
                                         -webkit-transform: rotate(270deg);
