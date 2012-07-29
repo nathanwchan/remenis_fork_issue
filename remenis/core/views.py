@@ -390,6 +390,18 @@ def messagesent(request):
 
 def saveSessionAndRegisterUser(request):
     if 'token' in request.session:
+        userid = (request.session['accessCredentials']).get('uid')
+        try:
+            user = User.objects.get(fbid=userid)
+        except User.DoesNotExist:
+            request.session.pop('token', None)
+            request.session.pop('profile', None)
+            request.session.pop('accessCredentials', None)
+            return False # something wrong - clear session
+        else:
+            user.last_date = datetime.datetime.now()
+            user.page_views += 1
+            user.save()
         return True # already logged in
     elif 'token' in request.POST and request.POST['token']: # just logged in
         request.session['token'] = request.POST['token']

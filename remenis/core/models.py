@@ -7,6 +7,8 @@ class User(models.Model):
     full_name = models.CharField(max_length=100)
     email = models.EmailField(blank=True, null=True)
     is_registered = models.BooleanField()
+    last_date = models.DateTimeField(blank=True, null=True)
+    page_views = models.IntegerField(default=0)
 
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
