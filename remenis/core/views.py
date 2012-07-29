@@ -111,7 +111,7 @@ def profile(request, profileid=""):
     elif not profileid in friends_id_array:
         not_friend = True
         profile_name = getUserFullName(profileid)
-        return render_to_response('profile.html', locals())    
+        return render_to_response('profile_recent.html', locals())    
     
     if profileid == userid:
         active_tab = "profile"
