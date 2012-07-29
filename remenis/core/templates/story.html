@@ -4,7 +4,7 @@
         
         <br>
         {% if not story %}
-        <p>Story doesn't exist</p>
+        <p>{{ error }}</p>
         {% else %}
         <a name="{{ story.id }}" style="position:absolute; margin-top: -70px"></a>
         <div class="row-fluid">

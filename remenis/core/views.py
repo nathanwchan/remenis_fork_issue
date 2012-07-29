@@ -126,11 +126,23 @@ def profile(request, profileid=""):
         stories_written_by_user = Story.objects.filter(authorid = user)
         profile_name = user.full_name
         stories_about_user = [x.storyid for x in TaggedUser.objects.filter(taggeduserid=user)]
-        
+    
+    # aggregate stories written by and about user together, removing duplicates 
     for story_written_by_user in stories_written_by_user:
         if not story_written_by_user in stories_about_user:
             stories_about_user.append(story_written_by_user)
-    stories_about_user = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True) # sort by post date
+            
+    stories_about_user_all = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True) # sort by post date
+
+    # exclude private stories
+    if profileid == userid:
+        stories_about_user = stories_about_user_all
+    else:
+        stories_about_user = []
+        for story in stories_about_user_all:
+            if not story.is_private or userid in [x.taggeduserid.fbid for x in TaggedUser.objects.filter(storyid = story)]:
+                stories_about_user.append(story)
+        
     stories_about_user_ids = [x.id for x in stories_about_user]
     tagged_users = []
     story_comments = []
@@ -371,36 +383,51 @@ def story(request, storyid=""):
         story = Story.objects.get(id=int(storyid))
     except Story.DoesNotExist:
         story = False
+        error = "Story doesn't exist."
     else:
+        # Check if you have access to this story
         story_tagged_users = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
-        story_comments = StoryComment.objects.filter(storyid = story)
-        story_likes = StoryLike.objects.filter(storyid = story)
-        story_post_date = getStoryPostDate(story.post_date)
-        liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
+        # - check if private story
+        if story.is_private and userid != story.authorid.fbid and not userid in [x.fbid for x in story_tagged_users]:
+            story = False
+            error = "You do not have access to this story."
+        else:
+            story_comments = StoryComment.objects.filter(storyid = story)
+            story_likes = StoryLike.objects.filter(storyid = story)
+            story_post_date = getStoryPostDate(story.post_date)
+            liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
         
     return render_to_response('story.html', locals())
 
 @csrf_exempt
 def api_story(request, storyid=""):
     if not saveSessionAndRegisterUser(request):
-        return HttpResponse("Not accessible.")
+        return HttpResponse(False)
+    
+    userid = (request.session['accessCredentials']).get('uid')
     
     try:
         story = Story.objects.get(id=int(storyid))
     except Story.DoesNotExist:
         return HttpResponse(False)
     else:
+        # Check if you have access to this story
         tagged_users = [int(x.taggeduserid.fbid) for x in TaggedUser.objects.filter(storyid = story)]
-        # remove post date (can't json serialize post_date)
-        story_for_json = {'title': story.title,
-                          'story': story.story,
-                          'story_date_year': story.story_date_year,
-                          'story_date_month': story.story_date_month,
-                          'story_date_day': story.story_date_day,
-                          'is_private': story.is_private,
-                          'tagged_users': json.dumps(tagged_users)
-                          }
-        return HttpResponse(json.dumps(story_for_json))
+        # - check if private story
+        if story.is_private and userid != story.authorid.fbid and not userid in tagged_users:
+            return HttpResponse(False)
+        else:
+            # remove post date (can't json serialize post_date)
+            story_for_json = {'title': story.title,
+                              'story': story.story,
+                              'story_date_year': story.story_date_year,
+                              'story_date_month': story.story_date_month,
+                              'story_date_day': story.story_date_day,
+                              'is_private': story.is_private,
+                              'tagged_users': json.dumps(tagged_users)
+                              }
+            return HttpResponse(json.dumps(story_for_json))
+    return HttpResponse(False)
 
 def messagesent(request):
     return render_to_response('messagesent.html', locals())
