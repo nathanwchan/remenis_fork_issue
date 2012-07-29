@@ -353,6 +353,13 @@ def story(request, storyid=""):
     
     friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
     
+    if 'q' in request.GET:
+        if request.GET['q']:
+            query = request.GET['q']
+            return redirect('/' + query)
+        else:
+            return redirect('/searcherror/?error=1')
+        
     try:
         story = Story.objects.get(id=int(storyid))
     except Story.DoesNotExist:
