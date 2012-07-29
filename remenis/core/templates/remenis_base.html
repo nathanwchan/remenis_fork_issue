@@ -2,7 +2,14 @@
     <head>
         <meta charset="utf-8">
         <title>Remenis</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" type="image/ico" href="/static/remenis_logo.png" />
+        <meta property="og:title" content="Remenis"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="http://www.remenis.com"/>
+        <meta property="og:image" content="http://www.remenis.com/static/remenis_logo.png"/>
+        <meta property="og:site_name" content="Remenis"/>
+        <meta property="og:description" content="A collection of all your life stories."/>
         
         {% block head_extra %}
         {% endblock %}
@@ -33,6 +40,16 @@
         
         {% block splash %}
         {% endblock %}
+        
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+                 var js, fjs = d.getElementsByTagName(s)[0];
+                 if (d.getElementById(id)) return;
+                 js = d.createElement(s); js.id = id;
+                 js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=297031353727647";
+                 fjs.parentNode.insertBefore(js, fjs);
+                 }(document, 'script', 'facebook-jssdk'));
+        </script>
         
         <!--post modal-->
         <div class="modal hide fade" id="post" style="display: none; width: 700px;">
@@ -67,7 +84,7 @@
                                     <tr id="{{ userid }}">
                                         <td width="35"><img src="https://graph.facebook.com/{{ userid }}/picture?type=square" height="30"/></td>
                                         <td width="150">{{ fullname }}</td>
-                                        <td width="20"><img src="http://www.clker.com/cliparts/0/7/e/a/12074327311562940906milker_X_icon.svg.hi.png" height="15" id="{{ userid }}" onclick="removeTaggedFriend(this)"/></td>
+                                        <td width="20"><img src="/static/img/x.png" height="15" id="{{ userid }}" onclick="removeTaggedFriend(this)"/></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -114,7 +131,7 @@
                 <h2>Share!</h2>
             </div>
             <div class="modal-body">
-                <button class="btn btn-primary btn-large">Post to your wall &raquo;</button>
+                <button class="btn btn-primary btn-large" onclick="SharePostToWall()">Post to your wall &raquo;</button>
                 <br><br>
                 <button class="btn btn-primary btn-large">Post to your friends' walls &raquo;</button>
                 <br><br>
@@ -159,8 +176,8 @@
             <hr>
             <footer>
                 <div class="row-fluid">
-                    <!--<div class="span10 fb-like fb_edge_widget_with_comment fb_iframe_widget" data-href="http://www.dailykhan.org" data-send="true" data-width="450" data-show-faces="true"><span style="height: 64px; width: 450px; "><iframe id="f21d88676" name="f1d56864a4" scrolling="no" style="border: none; overflow: hidden; height: 64px; width: 450px; " title="Like this content on Facebook." class="fb_ltr " src="http://www.facebook.com/plugins/like.php?api_key=275815892495010&amp;channel_url=http%3A%2F%2Fstatic.ak.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D9%23cb%3Df212e2e5ec%26origin%3Dhttp%253A%252F%252Fwww.remenis.com%252Ff35b03d754%26domain%3Dwww.remenis.com%26relation%3Dparent.parent&amp;extended_social_context=false&amp;href=http%3A%2F%2Fwww.remenis.com&amp;layout=standard&amp;locale=en_US&amp;node_type=link&amp;sdk=joey&amp;send=true&amp;show_faces=true&amp;width=450"></iframe></span></div>-->
-                    <p class="span2">&nbsp;&nbsp;&nbsp;&copy; 2012 Nathan Chan</p>
+                    <div class="span9 fb-like" data-href="http://www.remenis.com" data-send="true" data-width="450" data-show-faces="true" data-font="lucida grande" style="margin-left: 20px;"></div>
+                    <p align="right">&copy; 2012 Nathan Chan &nbsp;&nbsp;&nbsp;</p>
                 </div>
             </footer>
             {% endblock %}
@@ -177,6 +194,8 @@
         
         <!--utils-->
         <script>
+            FB.init({appId: '297031353727647', xfbml: true, cookie: true});
+            
             var preventSubmit = function(event) {
                 if(event.keyCode == 13)
                 {
@@ -207,6 +226,29 @@
                 }
                 
                 return false;
+            }
+        </script>
+        
+        <!--javascript for share-->
+        <script>
+            function SharePostToWall()
+            {
+                // calling the API ...
+                var obj = {
+                    method: 'feed',
+                    name: 'Give the gift of a memory!',
+                    link: 'http://www.remenis.com',
+                    redirect_uri: 'http://www.remenis.com/messagesent/',
+                    caption: 'remenis caption',
+                    picture: 'http://www.remenis.com/static/remenis_logo.png',
+                    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper lectus in lorem blandit sodales. Morbi diam turpis, vulputate a placerat ac, rutrum id nulla.',
+                };
+                
+                function callback(response) {
+                    document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+                }
+                
+                FB.ui(obj, callback);
             }
         </script>
         
@@ -272,7 +314,7 @@
                                      });
             
             $(".test_class").click(function(){
-                                    FB.init({appId: '297031353727647', xfbml: true, cookie: true});
+
 
                                     FB.ui({
                                           method: 'send',
@@ -443,7 +485,7 @@
                             $('#post-tagged-friends-body').append("<tr id=\"" + key + "\"><td width=\"35\">" +
                                                              "<img src=\"https://graph.facebook.com/" + key + "/picture?type=square\" height=\"30\"/>" +
                                                              "</td><td width=\"150\">" + allFriendsDic[key] +
-                                                             "</td><td width=\"20\">" + "<img src=\"http://www.clker.com/cliparts/0/7/e/a/12074327311562940906milker_X_icon.svg.hi.png\" height=\"15\" id=\"" + key + "\" onclick=\"removeTaggedFriend(this)\"/>" +
+                                                             "</td><td width=\"20\">" + "<img src=\"/static/img/x.png\" height=\"15\" id=\"" + key + "\" onclick=\"removeTaggedFriend(this)\"/>" +
                                                              "</td></tr>");
                         }
                         document.submitForm.tagged_friend_searchBox.value = "";
