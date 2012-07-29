@@ -239,8 +239,6 @@
                               popupWindow = window.open(url,'popUpWindow','height=350,width=700,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
                               });
                 }
-
-                
             }
             
             function PostToYourWall()
@@ -265,34 +263,22 @@
             
             function SendAMessage(storyid)
             {
-                var storyid = document.getElementById('storyid_for_share').value;
-                if (storyid != "")
+                if (storyid == "")
                 {
-                    $.getJSON('/api/story/' + storyid, function(jsonString)
-                           {
-                              FB.ui({
-                                    method: 'send',
-                                    //                                          to: 100003196376938,
-                                    name: 'Check out this story on Remenis!',
-                                    link: 'http://www.remenis.com/story/' + storyid,
-                                    redirect_uri: 'http://www.remenis.com/messagesent/',
-                                    picture: 'http://www.remenis.com/static/remenis_logo.png',
-                                    description: jsonString['title'] + ": " + jsonString['story'],
-                                    });
-                           });
+                    alert(storyid);
+                    storyid = document.getElementById('storyid_for_share').value;
                 }
-                else
-                {
-                    FB.ui({
-                          method: 'send',
-                          //                                          to: 100003196376938,
-                          name: 'Give the gift of a memory!',
-                          link: 'http://www.remenis.com',
-                          redirect_uri: 'http://www.remenis.com/messagesent/',
-                          picture: 'http://www.remenis.com/static/remenis_logo.png',
-                          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper lectus in lorem blandit sodales. Morbi diam turpis, vulputate a placerat ac, rutrum id nulla.',
-                          });
-                }
+                $.getJSON('/api/story/' + storyid, function(jsonString)
+                          {
+                            FB.ui({
+                                method: 'send',
+                                name: 'Check out this story on Remenis!',
+                                link: 'http://www.remenis.com/story/' + storyid,
+                                redirect_uri: 'http://www.remenis.com/messagesent/',
+                                picture: 'http://www.remenis.com/static/remenis_logo.png',
+                                description: jsonString['title'] + ": " + jsonString['story'],
+                            });
+                });
             }
         </script>
         
