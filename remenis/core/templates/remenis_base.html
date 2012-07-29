@@ -131,11 +131,11 @@
                 <h2>Share!</h2>
             </div>
             <div class="modal-body">
-                <button class="btn btn-primary btn-large" onclick="SharePostToWall()">Post to Your Wall &raquo;</button>
+                <button class="btn btn-primary btn-large" onclick="PostToYourWall()">Post to Your Wall &raquo;</button>
                 <br><br>
-                <button class="btn btn-primary btn-large" onclick="PopItUp('https://www.facebook.com/sharer/sharer.php?s=100&p%5Burl%5D=http://www.remenis.com/story/{{ story.id }}&p%5Bimages%5D%5B0%5D=http://www.remenis.com/static/remenis_logo.png&p%5Btitle%5D=I just wrote this story on Remenis!&p%5Bsummary%5D=')">Share This Link &raquo;</button>
+                <button class="btn btn-primary btn-large" onclick="ShareThisLink()">Share This Link &raquo;</button>
                 <br><br>
-                <button class="btn btn-primary btn-large" onclick="ShareStory('')">Send a Message &raquo;</button>
+                <button class="btn btn-primary btn-large" onclick="SendAMessage('')">Send a Message &raquo;</button>
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn" data-dismiss="modal">Close</a>
@@ -228,11 +228,22 @@
         
         <!--javascript for share-->
         <script>
-            function PopItUp(url) {
-                popupWindow = window.open(url,'popUpWindow','height=350,width=700,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
+            function ShareThisLink()
+            {
+                var storyid = document.getElementById('storyid_for_share').value;
+                if (storyid != "")
+                {
+                    $.getJSON('/api/story/' + storyid, function(jsonString)
+                              {
+                              var url = 'https://www.facebook.com/sharer/sharer.php?s=100&p%5Burl%5D=http://www.remenis.com/story/' + storyid + '&p%5Bimages%5D%5B0%5D=http://www.remenis.com/static/remenis_logo.png&p%5Btitle%5D=I just wrote this story on Remenis!&p%5Bsummary%5D=' + jsonString['title'] + ': ' + jsonString['story'];
+                              popupWindow = window.open(url,'popUpWindow','height=350,width=700,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
+                              });
+                }
+
+                
             }
             
-            function SharePostToWall()
+            function PostToYourWall()
             {
                 // calling the API ...
                 var obj = {
@@ -252,9 +263,9 @@
                 FB.ui(obj, callback);
             }
             
-            function ShareStory(storyid)
+            function SendAMessage(storyid)
             {
-                //var storyid = document.getElementById('storyid_for_share').value;
+                var storyid = document.getElementById('storyid_for_share').value;
                 if (storyid != "")
                 {
                     $.getJSON('/api/story/' + storyid, function(jsonString)
@@ -345,10 +356,6 @@
             $(".delete_story").click(function(){
                                      $("#storyid_for_delete").val($(this).data('id'));
                                      });
-            
-            $(".test_class").click(function(){
-                                   ShareStory("");
-                                   });
             
             function deleteFormSubmitted()
             {
