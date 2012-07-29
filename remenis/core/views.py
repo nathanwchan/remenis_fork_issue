@@ -256,12 +256,13 @@ def post(request):
         if 'private' in request.POST:
             if request.POST["private"] == "on":
                 is_private = True
-                        
+        
+        storyid_for_edit = request.POST["storyid_for_edit"]       
         story = Story()
         newstory = False
         if request.POST["storyid_for_edit"] != "":
             try:
-                story = Story.objects.get(id=int(request.POST["storyid_for_edit"]))
+                story = Story.objects.get(id=int(storyid_for_edit))
             except Story.DoesNotExist:
                 newstory = True
             else:
@@ -315,8 +316,15 @@ def post(request):
             except TaggedUser.DoesNotExist:
                 tagged_user_to_save = TaggedUser(storyid=story, taggeduserid=tagged_user)
                 tagged_user_to_save.save()
-
-        return redirect(request.META["HTTP_REFERER"])
+        
+        if newstory:
+            share_clause = "?share=" + str(story.id)
+        else:
+            share_clause = ""
+        redirect_url = request.META["HTTP_REFERER"]
+        if redirect_url.find('?') != -1:
+            return redirect(re.match(r'(.*)\?.*', redirect_url).group(1) + share_clause + "#" + str(story.id))
+        return redirect(redirect_url + share_clause + "#" + str(story.id))
 
 @csrf_exempt
 def delete(request):
@@ -335,10 +343,14 @@ def comment(request):
                                        post_date=datetime.datetime.now()
                                        )
         comment_to_save.save()
-        
-    if "story" in request.META["HTTP_REFERER"]:
-        return redirect(request.META["HTTP_REFERER"])
-    return redirect(request.META["HTTP_REFERER"] + '#' + request.POST["storyid"])
+    
+                
+    redirect_url = request.META["HTTP_REFERER"]
+    if redirect_url.find('?') != -1:
+        redirect_url = re.match(r'(.*)\?.*', redirect_url).group(1)        
+    if "story" in redirect_url:
+        return redirect(redirect_url)
+    return redirect(redirect_url + '#' + request.POST["storyid"])
     
 @csrf_exempt
 def like(request, storyid=""):
@@ -357,9 +369,12 @@ def like(request, storyid=""):
                                      )
             like_to_save.save()
             
-    if "story" in request.META["HTTP_REFERER"]:
-        return redirect(request.META["HTTP_REFERER"])
-    return redirect(request.META["HTTP_REFERER"] + '#' + storyid)
+    redirect_url = request.META["HTTP_REFERER"]
+    if redirect_url.find('?') != -1:
+        redirect_url = re.match(r'(.*)\?.*', redirect_url).group(1)        
+    if "story" in redirect_url:
+        return redirect(redirect_url)
+    return redirect(redirect_url + '#' + storyid)
 
 @csrf_exempt
 def story(request, storyid=""):

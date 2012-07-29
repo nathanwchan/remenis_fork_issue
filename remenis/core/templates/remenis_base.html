@@ -105,6 +105,25 @@
                 </div>
             </form>
         </div>
+        
+        <!--share modal-->
+        <div class="modal hide fade" id="share" style="display: none; width: 500px;">
+            <input type="hidden" id="storyid_for_share" name="storyid_for_share">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h2>Share!</h2>
+            </div>
+            <div class="modal-body">
+                <button class="btn btn-primary btn-large">Post to your wall &raquo;</button>
+                <br><br>
+                <button class="btn btn-primary btn-large">Post to your friends' walls &raquo;</button>
+                <br><br>
+                <button class="btn btn-primary btn-large">Share with friends &raquo;</button>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Close</a>
+            </div>
+        </div>
     
         <div class="container-fluid">
             <div class="row-fluid">
@@ -165,6 +184,30 @@
                     return false;
                 }
             }
+            
+            function getParameter(parameter)
+            {
+                //Get Query String from url
+                fullQString = window.location.search.substring(1);
+                
+                if(fullQString.length > 0)
+                {
+                    //Split Query String into separate parameters
+                    paramArray = fullQString.split("&");
+                    
+                    //Loop through params, check if parameter exists.  
+                    for (i=0;i<paramArray.length;i++)
+                    {
+                        currentParameter = paramArray[i].split("=");
+                        if(currentParameter[0] == parameter) //Parameter already exists in current url
+                        {
+                            return currentParameter[1];
+                        }
+                    }
+                }
+                
+                return false;
+            }
         </script>
         
         <!--javascript for search-->
@@ -196,6 +239,14 @@
               var newoption = document.createElement('option');
               newoption.innerHTML = i;
               document.getElementById("date_year_select").appendChild(newoption);
+              }
+              
+              var storyid = getParameter("share");
+              if (storyid != false)
+              {
+                $("#share_text").val(storyid);
+                $("#storyid_for_share").val(storyid);
+                $('#share').modal('show');
               }
             });
             
