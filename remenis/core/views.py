@@ -141,14 +141,12 @@ def profile(request, profileid=""):
             if not story.is_private or userid in [x.taggeduserid.fbid for x in TaggedUser.objects.filter(storyid = story)]:
                 stories_about_user.append(story)
     
-    if 'display' in request.GET and request.GET['display']:
-        display = request.GET['display']
-        if display == "timeline":
-            stories_about_user = sorted(stories_about_user, key=operator.attrgetter('story_date_year', 'story_date_month', 'story_date_day'), reverse=True) # sort by story date
-            profile_html_page = "profile_timeline.html"
-        else: # default or recent
-            stories_about_user = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True) # sort by post date
-            profile_html_page = "profile_recent.html"
+    if 'display' in request.GET and request.GET['display'] and request.GET['display'] == "timeline":
+        stories_about_user = sorted(stories_about_user, key=operator.attrgetter('story_date_year', 'story_date_month', 'story_date_day'), reverse=True) # sort by story date
+        profile_html_page = "profile_timeline.html"
+    else: # default or recent
+        stories_about_user = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True) # sort by post date
+        profile_html_page = "profile_recent.html"
     
     stories_about_user_ids = [x.id for x in stories_about_user]
     tagged_users = []
