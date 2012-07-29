@@ -49,13 +49,13 @@
                             <p>Tell us a story:<br><textarea id="story_for_edit" name="story" class="span11" rows="6"></textarea></p>
                             <p>Date:</p>
                             <div id="post_date_div" style="margin-top: -8px;">
-                            <select id="date_year_select" name="story_date_year" style="width: 100px;"></select>
-                            <button id="add_month_button" type="button" style="margin-bottom: 7px;" onclick="addMonth()">+ add month</button>
+                                <select id="date_year_select" name="story_date_year" style="width: 100px;"></select>
+                                <button id="add_month_button" type="button" style="margin-bottom: 7px;" onclick="addMonth()">+ add month</button>
                             </div>
                             <div style="margin-top: 10px;">
-                            <label class="checkbox span2" id="checkbox_label" rel="tooltip" title="Only the friends tagged in this story will be able to view it.">
-                                <input id="private_checkbox" name="private" type="checkbox"> Private
-                            </label>
+                                <label class="checkbox span2" id="checkbox_label" rel="tooltip" title="Only the friends tagged in this story will be able to view it.">
+                                    <input id="private_checkbox" name="private" type="checkbox"> Private
+                                </label>
                             </div>
                         </div>
                         <div class="span6">
@@ -248,6 +248,7 @@
                           $("#date_year_select").val(jsonString['story_date_year']);
                           addMonth(jsonString['story_date_month']);
                           addDay(jsonString['story_date_day']);
+                          $("#private_checkbox").prop("checked", jsonString['is_private']);
                           var tagged_users = JSON.parse(jsonString['tagged_users']);
                           removeAllTaggedFriends();
                           for (var i = 0; i < tagged_users.length; i++)

@@ -227,6 +227,11 @@ def post(request):
             if request.POST["story_date_day"] != "---":
                 date_day_int = request.POST["story_date_day"]
         
+        is_private = False
+        if 'private' in request.POST:
+            if request.POST["private"] == "on":
+                is_private = True
+                        
         story = Story()
         newstory = False
         if request.POST["storyid_for_edit"] != "":
@@ -241,6 +246,7 @@ def post(request):
                 story.story_date_month = date_month_int
                 story.story_date_day = date_day_int
                 story.post_date = datetime.datetime.now()
+                story.is_private = is_private
                 story.save()
         else:
             newstory = True
@@ -252,7 +258,8 @@ def post(request):
                           story_date_year=request.POST["story_date_year"],
                           story_date_month=date_month_int,
                           story_date_day=date_day_int,
-                          post_date=datetime.datetime.now()
+                          post_date=datetime.datetime.now(),
+                          is_private = is_private
                           )
             story.save()
 
