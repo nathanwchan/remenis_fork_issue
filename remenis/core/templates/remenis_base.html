@@ -131,9 +131,9 @@
                 <h2>Share!</h2>
             </div>
             <div class="modal-body">
-                <button class="btn btn-primary btn-large" onclick="PostToYourWall()">Post to Your Wall &raquo;</button>
+                <button class="btn btn-primary btn-large" onclick="PostToYourWall('')">Post to Your Wall &raquo;</button>
                 <br><br>
-                <button class="btn btn-primary btn-large" onclick="ShareThisLink()">Share This Link &raquo;</button>
+                <button class="btn btn-primary btn-large" onclick="ShareThisLink('')">Share This Link &raquo;</button>
                 <br><br>
                 <button class="btn btn-primary btn-large" onclick="SendAMessage('')">Send a Message &raquo;</button>
             </div>
@@ -228,9 +228,12 @@
         
         <!--javascript for share-->
         <script>
-            function ShareThisLink()
+            function ShareThisLink(storyid)
             {
-                var storyid = document.getElementById('storyid_for_share').value;
+                if (storyid == "")
+                {
+                    storyid = document.getElementById('storyid_for_share').value;
+                }
                 if (storyid != "")
                 {
                     $.getJSON('/api/story/' + storyid, function(jsonString)
@@ -241,31 +244,29 @@
                 }
             }
             
-            function PostToYourWall()
+            function PostToYourWall(storyid)
             {
-                // calling the API ...
-                var obj = {
-                    method: 'feed',
-                    name: 'Give the gift of a memory!',
-                    link: 'http://www.remenis.com',
-                    redirect_uri: 'http://www.remenis.com/messagesent/',
-                    caption: 'remenis caption',
-                    picture: 'http://www.remenis.com/static/remenis_logo.png',
-                    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper lectus in lorem blandit sodales. Morbi diam turpis, vulputate a placerat ac, rutrum id nulla.',
-                };
-                
-                function callback(response) {
-                    document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+                if (storyid == "")
+                {
+                    storyid = document.getElementById('storyid_for_share').value;
                 }
-                
-                FB.ui(obj, callback);
+                $.getJSON('/api/story/' + storyid, function(jsonString)
+                          {
+                          FB.ui({
+                                method: 'feed',
+                                name: 'Check out this story on Remenis!',
+                                link: 'http://www.remenis.com/story/' + storyid,
+                                redirect_uri: 'http://www.remenis.com/messagesent/',
+                                picture: 'http://www.remenis.com/static/remenis_logo.png',
+                                description: jsonString['title'] + ": " + jsonString['story'],
+                                });
+                          });
             }
             
             function SendAMessage(storyid)
             {
                 if (storyid == "")
                 {
-                    alert(storyid);
                     storyid = document.getElementById('storyid_for_share').value;
                 }
                 $.getJSON('/api/story/' + storyid, function(jsonString)
