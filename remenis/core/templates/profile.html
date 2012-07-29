@@ -22,7 +22,7 @@
                             <span style="color: grey;"> wrote </span>
                             <a href="/story/{{ story.id }}"><strong style="color: blue;">{{ story.title }}</strong></a>
                         </p>
-                        <p align="right" {% if story.authorid.fbid == userid %} style="color: grey; font-size: 12; margin-right: 32px;" {% endif %} onload="setPostDate(this)">
+                        <p align="right" style="color: grey; font-size: 12; {% if story.authorid.fbid == userid %} margin-right: 32px; {% endif %}">
                             {% for dic_storyid, dic_storypostdate in stories_post_date_dictionary.items %}
                                 {% ifequal dic_storyid story.id %}
                                     {{ dic_storypostdate }}

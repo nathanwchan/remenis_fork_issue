@@ -361,6 +361,7 @@ def story(request, storyid=""):
         story_tagged_users = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
         story_comments = StoryComment.objects.filter(storyid = story)
         story_likes = StoryLike.objects.filter(storyid = story)
+        story_post_date = getStoryPostDate(story.post_date)
         liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
         
     return render_to_response('story.html', locals())
