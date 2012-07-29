@@ -133,7 +133,7 @@
             <div class="modal-body">
                 <button class="btn btn-primary btn-large" onclick="SharePostToWall()">Post to your wall &raquo;</button>
                 <br><br>
-                <button class="btn btn-primary btn-large">Post to your friends' walls &raquo;</button>
+                <button class="btn btn-primary btn-large" onclick="PopItUp('http://www.facebook.com/sharer.php?u=http://www.remenis.com/story/{{ story.id }}')">Post to your friends' walls &raquo;</button>
                 <br><br>
                 <button class="btn btn-primary btn-large" onclick="ShareStory('')">Share with friends &raquo;</button>
             </div>
@@ -231,6 +231,10 @@
         
         <!--javascript for share-->
         <script>
+            function PopItUp(url) {
+                popupWindow = window.open(url,'popUpWindow','height=350,width=700,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
+            }
+            
             function SharePostToWall()
             {
                 // calling the API ...
