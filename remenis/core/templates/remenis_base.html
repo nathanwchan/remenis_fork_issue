@@ -131,11 +131,11 @@
                 <h2>Share!</h2>
             </div>
             <div class="modal-body">
-                <button class="btn btn-primary btn-large" onclick="SharePostToWall()">Post to your wall &raquo;</button>
+                <button class="btn btn-primary btn-large" onclick="SharePostToWall()">Post to Your Wall &raquo;</button>
                 <br><br>
-                <button class="btn btn-primary btn-large" onclick="PopItUp('http://www.facebook.com/sharer.php?u=http://www.remenis.com/story/{{ story.id }}')">Post to your friends' walls &raquo;</button>
+                <button class="btn btn-primary btn-large" onclick="PopItUp('http://www.facebook.com/sharer.php?u=http://www.remenis.com/story/{{ story.id }}')">Share This Link &raquo;</button>
                 <br><br>
-                <button class="btn btn-primary btn-large" onclick="ShareStory('')">Share with friends &raquo;</button>
+                <button class="btn btn-primary btn-large" onclick="ShareStory('')">Send a Message &raquo;</button>
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn" data-dismiss="modal">Close</a>
@@ -156,9 +156,6 @@
                             </li>
                             <li {% ifequal active_tab "post" %}class="active"{% endifequal %}>
                                 <a data-toggle="modal" href="#post"><i class="icon-pencil" style="margin-right: 6px"></i>Post</a>
-                            </li>
-                            <li {% ifequal active_tab "test" %}class="active"{% endifequal %}>
-                                <a data-toggle="modal" class="test_class" href="#test"><i class="icon-signal" style="margin-right: 6px"></i>Test</a>
                             </li>
                         </ul>
                     </div>
@@ -350,7 +347,7 @@
                                      });
             
             $(".test_class").click(function(){
-                                   ShareStory();
+                                   ShareStory("");
                                    });
             
             function deleteFormSubmitted()
