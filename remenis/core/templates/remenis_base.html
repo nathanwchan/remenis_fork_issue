@@ -55,7 +55,7 @@
         <div class="modal hide fade" id="post" style="display: none; width: 700px;">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
-                <h2>Post a story!</h2>
+                <h2 id="post_modal_title">Post a story!</h2>
             </div>
             <form action="/post/" method="post" name="submitForm" style="margin-bottom:0;" onsubmit="return validateSubmitForm(this)">
                 <input type="hidden" id="storyid_for_edit" name="storyid_for_edit">
@@ -135,7 +135,7 @@
                 <br><br>
                 <button class="btn btn-primary btn-large">Post to your friends' walls &raquo;</button>
                 <br><br>
-                <button class="btn btn-primary btn-large">Share with friends &raquo;</button>
+                <button class="btn btn-primary btn-large" onclick="ShareStory('')">Share with friends &raquo;</button>
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn" data-dismiss="modal">Close</a>
@@ -250,6 +250,38 @@
                 
                 FB.ui(obj, callback);
             }
+            
+            function ShareStory(storyid)
+            {
+                //var storyid = document.getElementById('storyid_for_share').value;
+                if (storyid != "")
+                {
+                    $.getJSON('/api/story/' + storyid, function(jsonString)
+                           {
+                              FB.ui({
+                                    method: 'send',
+                                    //                                          to: 100003196376938,
+                                    name: 'Check out this story on Remenis!',
+                                    link: 'http://www.remenis.com/story/' + storyid,
+                                    redirect_uri: 'http://www.remenis.com/messagesent/',
+                                    picture: 'http://www.remenis.com/static/remenis_logo.png',
+                                    description: jsonString['title'] + ": " + jsonString['story'],
+                                    });
+                           });
+                }
+                else
+                {
+                    FB.ui({
+                          method: 'send',
+                          //                                          to: 100003196376938,
+                          name: 'Give the gift of a memory!',
+                          link: 'http://www.remenis.com',
+                          redirect_uri: 'http://www.remenis.com/messagesent/',
+                          picture: 'http://www.remenis.com/static/remenis_logo.png',
+                          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper lectus in lorem blandit sodales. Morbi diam turpis, vulputate a placerat ac, rutrum id nulla.',
+                          });
+                }
+            }
         </script>
         
         <!--javascript for search-->
@@ -314,18 +346,8 @@
                                      });
             
             $(".test_class").click(function(){
-
-
-                                    FB.ui({
-                                          method: 'send',
-//                                          to: 100003196376938,
-                                          name: 'Give the gift of a memory!',
-                                          link: 'http://www.remenis.com',
-                                          redirect_uri: 'http://www.remenis.com/messagesent/',
-                                          picture: 'http://www.remenis.com/static/remenis_logo.png',
-                                          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper lectus in lorem blandit sodales. Morbi diam turpis, vulputate a placerat ac, rutrum id nulla.',
-                                          });
-                                    });
+                                   ShareStory();
+                                   });
             
             function deleteFormSubmitted()
             {
@@ -334,6 +356,7 @@
             
             function populateEditStory(storyid)
             {
+                $("#post_modal_title").prop("innerHTML", "Edit this story!");
                 $.getJSON('/api/story/' + storyid, function(jsonString)
                           {
                           $("#title_for_edit").val(jsonString['title']);
