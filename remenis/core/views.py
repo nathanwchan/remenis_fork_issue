@@ -332,6 +332,9 @@ def delete(request):
         if 'storyid_for_delete' in request.POST and request.POST["storyid_for_delete"] != "":
             Story.objects.get(id=int(request.POST["storyid_for_delete"])).delete()
             # note: also deletes all TaggedUsers, StoryComments and StoryLikes of this Story
+    redirect_url = request.META["HTTP_REFERER"]
+    if redirect_url.find('?') != -1:
+        return redirect(re.match(r'(.*)\?.*', redirect_url).group(1))
     return redirect(request.META["HTTP_REFERER"])
 
 @csrf_exempt
