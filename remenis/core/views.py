@@ -120,11 +120,12 @@ def profile(request, profileid=""):
     except User.DoesNotExist:
         stories_written_by_user = []
         profile_name = getUserFullName(profileid)
+        stories_about_user = []
     else:    
         stories_written_by_user = Story.objects.filter(authorid = user)
         profile_name = user.full_name
-    
-    stories_about_user = [x.storyid for x in TaggedUser.objects.filter(taggeduserid=user)]
+        stories_about_user = [x.storyid for x in TaggedUser.objects.filter(taggeduserid=user)]
+        
     for story_written_by_user in stories_written_by_user:
         if not story_written_by_user in stories_about_user:
             stories_about_user.append(story_written_by_user)
@@ -279,7 +280,7 @@ def post(request):
                 tagged_user_to_save = TaggedUser(storyid=story, taggeduserid=tagged_user)
                 tagged_user_to_save.save()
 
-        return redirect('/profile/')
+        return redirect(request.META["HTTP_REFERER"])
 
 @csrf_exempt
 def delete(request):

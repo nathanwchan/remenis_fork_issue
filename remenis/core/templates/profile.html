@@ -14,13 +14,15 @@
         <div class="row-fluid">
             <a class="span1" href="/{{ story.authorid.fbid }}" style="margin-top: 10px; margin-right: -10px;"><img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" height="50" width="50" style="border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; -webkit-border-radius: 5px;" /></a>
             <!--story table-->
-            <table class="table table-bordered span7" style="margin-bottom: 40px">
+            <table class="table table-bordered span7" style="margin-bottom: 40px;">
                 <tr><td>
+                    <div align="right" style="width: 100%">
                     <p>
                         <a href="/{{ story.authorid.fbid }}"><strong>{{ story.authorid.full_name }}</strong></a>
                         <span style="color: grey;"> wrote </span>
                         <a href="/story/{{ story.id }}"><strong style="color: blue;">{{ story.title }}</strong></a>
                     </p>
+                    </div>
                     {% if story.authorid.fbid == userid %}
                     <div class="btn-group pull-right" style="margin-top: -30px;">
                         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -49,7 +51,7 @@
                         </i></p>
                     </div>
                 </td></tr>
-                <!--comment form table row-->
+                <!--comment form table row
                 <tr><td>
                     <div style="color: grey; margin-top: 5px;">
                         <form action="/comment/" method="post" name="commentForm" onsubmit="return validateCommentForm(this)">
@@ -81,7 +83,7 @@
                             </div>
                         </form>
                     </div>
-                </td></tr>
+                </td></tr>-->
                 {% for dic_storyid, dic_storycomments in stories_comments_dictionary.items %}
                     {% ifequal dic_storyid story.id %}
                         {% for story_comment in dic_storycomments %}

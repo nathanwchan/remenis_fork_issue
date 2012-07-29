@@ -1,29 +1,40 @@
 {% extends "remenis_base.html" %}
 
-        {% block inside_body %}
-        background="/static/homepage_background.jpg"
+        {% block head_extra %}
+        <style type="text/css">
+            .background {
+                background:					#000000 url(/static/homepage_background.jpg) no-repeat top center fixed;
+                -webkit-background-size:	cover;
+                -moz-background-size:		cover;
+                -o-background-size:			cover;
+                background-size:			cover;
+                background-clip:			border-box;
+                background-origin:			padding-box;
+            }
+        </style>
         {% endblock %}
 
         {% block splash %}
-        <div style="text-align: center; margin-left: auto; margin-right: auto; margin-bottom: 50px; width: 630px;">
+        <div style="text-align: center; margin-left: auto; margin-right: auto; margin-top: -20px; margin-bottom: 20px; width: 630px;">
             <img src="/static/remenis_logo.png"/>
         </div>
-        <div style="text-align: center; margin-left: auto; margin-right: auto; background: url('/static/homepage_box.png'); width: 630px; height: 462px;">
-            <br><br><br><br>
-            <p style="font-size: 36px; color: #FFFFFF;">A collection of your life stories.</p>
-            <br>
-            <p style="font-size: 25px; color: #FFFFFF; line-height:150%;">
+        <div style="text-align: center; margin-left: auto; margin-right: auto; background: url('/static/homepage_box.png'); width: 458px; height: 297px;">
+            <br><br>
+            <p style="font-size: 24px; color: #FFFFFF; margin-bottom: 20px">A collection of all your life stories.</p>
+            <p style="font-size: 18px; color: #FFFFFF; line-height:120%;">
             Invite your friends to share their<br>favorite stories about <i>you.</i>
             </p>
-            <br><br><br>
-            <p style="font-size: 25px; color: #808080; line-height:150%;">
+            <br><br>
+            <p style="font-size: 17px; color: #808080; line-height:150%;">
             Sign up now to get advanced notice and<br>become one of the private beta testers.
             </p>
-            <br>
             <form class="form-search" method="post" name="joinForm">
-                <input type="text" class="input-xlarge" name="email" placeholder="email address">
+                <input type="text" class="input-large" name="email" placeholder="email address">
                 <button type="submit" class="btn btn-primary btn-medium">&nbsp;Join&nbsp;</button>
             </form>
+        </div>
+        <div style="text-align: center; margin-left: auto; margin-right: auto; margin-top: 20px; width: 630px;">
+            <img src="/static/homepage_steps.png"/>
         </div>
         {% endblock %}
 
