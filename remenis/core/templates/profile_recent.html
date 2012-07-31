@@ -108,15 +108,43 @@
                 </td></tr>
                 {% for dic_storyid, dic_storycomments in stories_comments_dictionary.items %}
                     {% ifequal dic_storyid story.id %}
-                        {% for story_comment in dic_storycomments %}
-                        <tr style="background-color: #F0F0F0;"><td>
-                            <a href="/{{ story_comment.authorid.fbid }}" class="nounderline">
-                                <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
-                            </a>
-                            &nbsp;&nbsp;<strong>{{ story_comment.authorid.full_name }}</strong>
-                            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ story_comment.comment }}
-                        </td></tr>
-                        {% endfor %}
+                        {% if dic_storycomments|length > 3 %}
+                            <tr style="background-color: #F0F0F0;"><td>
+                                <a href="/story/{{ story.id }}">
+                                    View all {{ dic_storycomments|length }} comments
+                                </a>
+                            </td></tr>
+                            {% with dic_storycomments_reverse=dic_storycomments|dictsortreversed:"post_date" %}
+                                {% with story_comment=dic_storycomments_reverse.1 %}
+                                    <tr style="background-color: #F0F0F0;"><td>
+                                        <a href="/{{ story_comment.authorid.fbid }}" class="nounderline">
+                                            <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
+                                        </a>
+                                        &nbsp;{{ slice }}&nbsp;<strong>{{ story_comment.authorid.full_name }}</strong>
+                                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ story_comment.comment }}
+                                    </td></tr>
+                                {% endwith %}
+                                {% with story_comment=dic_storycomments_reverse.0 %}
+                                    <tr style="background-color: #F0F0F0;"><td>
+                                        <a href="/{{ story_comment.authorid.fbid }}" class="nounderline">
+                                            <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
+                                        </a>
+                                        &nbsp;{{ slice }}&nbsp;<strong>{{ story_comment.authorid.full_name }}</strong>
+                                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ story_comment.comment }}
+                                    </td></tr>
+                                {% endwith %}
+                            {% endwith %}
+                        {% else %}
+                            {% for story_comment in dic_storycomments %}
+                            <tr style="background-color: #F0F0F0;"><td>
+                                <a href="/{{ story_comment.authorid.fbid }}" class="nounderline">
+                                    <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
+                                </a>
+                                &nbsp;&nbsp;<strong>{{ story_comment.authorid.full_name }}</strong>
+                                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ story_comment.comment }}
+                            </td></tr>
+                            {% endfor %}
+                        {% endif %}
                     {% endifequal %}
                 {% endfor %}
             <table>
