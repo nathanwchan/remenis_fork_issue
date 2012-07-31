@@ -71,7 +71,7 @@
                 </td></tr>
                 <!--comment form table row-->
                 <tr><td>
-                    <div style="color: grey; margin-top: 5px;">
+                    <div style="color: grey; margin-top: 5px; margin-bottom: -10px;">
                         <form action="/comment/" method="post" name="commentForm" onsubmit="return validateCommentForm(this)">
                             <input type="hidden" name="storyid" value="{{ story.id }}">
                             <div class="input-append">
@@ -116,8 +116,6 @@
                             &nbsp;&nbsp;<strong>{{ story_comment.authorid.full_name }}</strong>
                             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ story_comment.comment }}
                         </td></tr>
-                        {% empty %}
-                        <tr><td>&nbsp;no comments</td></tr>
                         {% endfor %}
                     {% endifequal %}
                 {% endfor %}
