@@ -65,6 +65,9 @@
                             {{ story.story_date_year }}
                         </i>
                     </p>
+                    {% if story.is_private %}
+                    <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin: -6px 0px; " rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
+                    {% endif %}
                 </td></tr>
                 <!--comment form table row-->
                 <tr><td>
