@@ -33,24 +33,6 @@
                             <span style="color: grey;"> wrote </span>
                             <a href="/story/{{ story.id }}"><strong style="color: blue;">{{ story.title }}</strong></a>
                         </p>
-                        <!--<p align="right" style="color: grey; font-size: 12; {% if story.authorid.fbid == userid %} margin-right: 32px; {% endif %}">
-                            {% for dic_storyid, dic_storypostdate in stories_post_date_dictionary.items %}
-                                {% ifequal dic_storyid story.id %}
-                                    {{ dic_storypostdate }}
-                                {% endifequal %}
-                            {% endfor %}
-                        </p>
-                        {% if story.authorid.fbid == userid %}
-                        <div class="btn-group pull-right" style="margin-top: -30px;">
-                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a data-toggle="modal" data-id="{{ story.id }}" class="edit_story" href="#post">Edit Story</a></li>
-                                <li><a data-toggle="modal" data-id="{{ story.id }}" class="delete_story" href="#delete">Delete Story</a></li>
-                            </ul>
-                        </div>
-                        {% endif %}-->
                     </div>
                 </td></tr>
                 <tr><td>
@@ -69,42 +51,6 @@
                     <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin: -6px 0px; " rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
                     {% endif %}
                 </td></tr>
-                <!--comment form table row-->
-                <!--<tr><td>
-                    <div style="color: grey; margin-top: 5px;">
-                        <form action="/comment/" method="post" name="commentForm" onsubmit="return validateCommentForm(this)">
-                            <input type="hidden" name="storyid" value="{{ story.id }}">
-                            <div class="input-append">
-                                <img src="/static/remenis_logo.png" width=40 style="margin-left: 2px; margin-right: 5px;"/>
-                                <input name="comment" type="text" class="span7 comment_text_box" size="16" placeholder="write a comment..." autocomplete="off">
-                                    
-                                <span class="add-on" style="font-size: 10; width: 18px; margin-left: -6px; margin-right: -2px; background-color: #258EAA; color: white;
-                                        -webkit-transform: rotate(270deg);
-                                        -moz-transform: rotate(270deg);
-                                        -o-transform: rotate(270deg);
-                                        -ms-transform: rotate(270deg);
-                                        transform: rotate(270deg);">
-                                {% for dic_storyid, dic_storylikes in stories_likes_dictionary.items %}
-                                    {% ifequal dic_storyid story.id %}
-                                        {{ dic_storylikes.count }}
-                                    {% endifequal %}
-                                {% endfor %}
-                                </span>
-                                
-                                <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -4px;"
-                                    {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
-                                    <i class="icon-heart"></i>
-                                </button>
-                                <button class="btn btn-medium" type="button" style="margin-left: -4px;" rel="popover" data-original-title="Bookmark" data-content="coming soon..." data-placement="top">
-                                    <i class="icon-bookmark"></i>
-                                </button>
-                                <button class="btn btn-medium" type="button" style="margin-left: -4px;" rel="popover" data-original-title="Share" data-content="coming soon..." data-placement="top">
-                                    <i class="icon-share-alt"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </td></tr>-->
                 <tr><td>
                     <div class="input-append pull-right" style="margin-top: 5px; margin-right: 5px;">
                         <img src="/static/remenis_logo.png" width=40 style="margin-left: 2px; margin-right: 10px;"/>
@@ -115,11 +61,11 @@
                             -o-transform: rotate(270deg);
                             -ms-transform: rotate(270deg);
                             transform: rotate(270deg);">
-                            {% for dic_storyid, dic_storylikes in stories_likes_dictionary.items %}
+                        {% for dic_storyid, dic_storylikes in stories_likes_dictionary.items %}
                             {% ifequal dic_storyid story.id %}
-                            {{ dic_storylikes.count }}
+                                {{ dic_storylikes.count }}
                             {% endifequal %}
-                            {% endfor %}
+                        {% endfor %}
                         </span>
                         
                         <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -4px;"
@@ -137,20 +83,6 @@
                         </button>
                     </div>
                 </td></tr>
-                <!--{% for dic_storyid, dic_storycomments in stories_comments_dictionary.items %}
-                    {% ifequal dic_storyid story.id %}
-                        {% for story_comment in dic_storycomments %}
-                        <tr style="background-color: #F0F0F0;"><td>
-                            <a href="/{{ story_comment.authorid.fbid }}"><img id="{{ story_comment.authorid.fbid }}" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/>
-                            </a>
-                            &nbsp;&nbsp;<strong>{{ story_comment.authorid.full_name }}</strong>
-                            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ story_comment.comment }}
-                        </td></tr>
-                        {% empty %}
-                        <tr><td>&nbsp;no comments</td></tr>
-                        {% endfor %}
-                    {% endifequal %}
-                {% endfor %}-->
             <table>
                 
             <!--tagged user div-->
