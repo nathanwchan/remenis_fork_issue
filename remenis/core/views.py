@@ -31,12 +31,12 @@ def logout(request):
     request.session.pop('token', None)
     request.session.pop('profile', None)
     request.session.pop('accessCredentials', None)
-    return redirect('/login/')
+    return redirect('/')
 
 @csrf_exempt
 def home(request):
     if not saveSessionAndRegisterUser(request):
-        return redirect('/login/')
+        return redirect('/')
 
     fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
@@ -67,7 +67,7 @@ def home(request):
 @csrf_exempt
 def profile(request, profileid=""):
     if not saveSessionAndRegisterUser(request):
-        return redirect('/login/')
+        return redirect('/')
     
     fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
@@ -163,7 +163,7 @@ def profile(request, profileid=""):
 @csrf_exempt
 def searcherror(request):
     if not saveSessionAndRegisterUser(request):
-        return redirect('/login/')
+        return redirect('/')
     
     fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
@@ -194,7 +194,7 @@ def searcherror(request):
 @csrf_exempt
 def post(request): 
     if not saveSessionAndRegisterUser(request):
-        return redirect('/login/')
+        return redirect('/')
     
     active_tab = "post"
     
@@ -367,9 +367,9 @@ def like(request, storyid=""):
 def story(request, storyid=""):
     if not saveSessionAndRegisterUser(request):
         if not storyid == "":
-            return redirect('/login/?story=' + storyid)
+            return redirect('/?story=' + storyid)
         else:
-            return redirect('/login/')
+            return redirect('/')
     
     fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')

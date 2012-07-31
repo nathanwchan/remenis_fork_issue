@@ -1,28 +1,15 @@
 {% extends "remenis_base.html" %}
-
-        {% block nav %}
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container-fluid">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="/home/">Remenis</a>
-                </div>
-            </div>
-        </div>
-        {% endblock %}
         
         {% block no_sidebar %}
         {% endblock %}
         
         {% block content %}
+        <br>
         <div class="span9">
             <div class="hero-unit">
+                <img src="/static/remenis_logo.png" width=200 />
+                <br><br>
                 <p>You must login first to view this story.</p>
-                <h1>Welcome to <img src="/static/remenis_logo.png" width=400 /></h1>
                 <br>
                 <a class="login rpxnow btn btn-primary btn-large" href="https://remenis.rpxnow.com/openid/v2/signin?token_url={{ token_url }}{{ subsite }}{{ story_id }}">Login with Facebook &raquo;</a>
             </div>
