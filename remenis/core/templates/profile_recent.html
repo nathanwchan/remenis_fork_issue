@@ -21,7 +21,9 @@
         
         <a name="{{ story.id }}" style="position:absolute; margin-top: -70px"></a>
         <div class="row-fluid">
-            <a class="span1" href="/{{ story.authorid.fbid }}" style="margin-top: 10px; margin-right: -10px;"><img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" height="50" width="50" style="border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; -webkit-border-radius: 5px;" /></a>
+            <a class="span1 nounderline" href="/{{ story.authorid.fbid }}" style="margin-top: 10px; margin-right: -10px;">
+                <img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" class="highlightit rounded5" height="50" width="50"/>
+            </a>
             <!--story table-->
             <table class="table table-bordered span7" style="margin-bottom: 40px;">
                 <tr><td>
@@ -105,7 +107,8 @@
                     {% ifequal dic_storyid story.id %}
                         {% for story_comment in dic_storycomments %}
                         <tr style="background-color: #F0F0F0;"><td>
-                            <a href="/{{ story_comment.authorid.fbid }}"><img id="{{ story_comment.authorid.fbid }}" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/>
+                            <a href="/{{ story_comment.authorid.fbid }}" class="nounderline">
+                                <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
                             </a>
                             &nbsp;&nbsp;<strong>{{ story_comment.authorid.full_name }}</strong>
                             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ story_comment.comment }}
@@ -130,7 +133,8 @@
                                 <tr>
                                     <td>
                                         <p>
-                                            <a href="/{{ tagged_user.fbid }}"><img id="{{ tagged_user.fbid }}" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30" style="border-radius: 3px; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px;"/>
+                                            <a href="/{{ tagged_user.fbid }}" class="nounderline">
+                                                <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
                                             </a>
                                             &nbsp;&nbsp;{{ tagged_user.full_name }}
                                         </p>

@@ -82,7 +82,7 @@
                             <table class="table table-unbordered" id="post-tagged-friends-table">
                                 <tbody id="post-tagged-friends-body">
                                     <tr id="{{ userid }}">
-                                        <td width="35"><img src="https://graph.facebook.com/{{ userid }}/picture?type=square" height="30"/></td>
+                                        <td width="35"><img src="https://graph.facebook.com/{{ userid }}/picture?type=square" class="lightborder rounded3" height="30"/></td>
                                         <td width="150">{{ fullname }}</td>
                                         <td width="20"><img src="/static/img/x.png" height="15" id="{{ userid }}" onclick="removeTaggedFriend(this)"/></td>
                                     </tr>
@@ -501,7 +501,7 @@
                         if (!exists)
                         {
                             $('#post-tagged-friends-body').append("<tr id=\"" + key + "\"><td width=\"35\">" +
-                                                             "<img src=\"https://graph.facebook.com/" + key + "/picture?type=square\" height=\"30\"/>" +
+                                                             "<img src=\"https://graph.facebook.com/" + key + "/picture?type=square\" class=\"lightborder rounded3\" height=\"30\"/>" +
                                                              "</td><td width=\"150\">" + allFriendsDic[key] +
                                                              "</td><td width=\"20\">" + "<img src=\"/static/img/x.png\" height=\"15\" id=\"" + key + "\" onclick=\"removeTaggedFriend(this)\"/>" +
                                                              "</td></tr>");
