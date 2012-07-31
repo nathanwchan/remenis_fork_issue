@@ -52,14 +52,14 @@
                     {% endif %}
                 </td></tr>
                 <tr><td>
-                    <div class="row-fluid">
+                    <!--<div class="row-fluid">
                         <div class="span5">
                         {% for dic_storyid, dic_storycomments in stories_comments_dictionary.items %}
                             {% ifequal dic_storyid story.id %}
                                 <p style="margin-top: 15px; margin-left: 10px; font-size: 12px;">
                                     <a href="/story/{{ story.id }}">
                                     {% if dic_storycomments|length == 0 %}
-                                    Be the first to write a comment
+                                    Be the first to write a comment!
                                     {% elif dic_storycomments|length == 1 %}
                                     View {{ dic_storycomments|length }} comment
                                     {% else %}
@@ -70,7 +70,7 @@
                             {% endifequal %}
                         {% endfor %}
                         </div>
-                        <div class="span7">
+                        <div class="span7">-->
                             <div class="input-append pull-right" style="margin-top: 5px; margin-right: 5px;">
                                 <img src="/static/remenis_logo.png" width=40 style="margin-left: 2px; margin-right: 10px;"/>
                                 
@@ -100,9 +100,9 @@
                                 <button class="btn btn-medium" onclick="SendAMessage({{ story.id }})" type="button" style="margin-left: -4px;">
                                     <i class="icon-share-alt"></i>
                                 </button>
-                            </div>
+                            </div><!--
                         </div>
-                    </div>
+                    </div>-->
                 </td></tr>
             <table>
                 

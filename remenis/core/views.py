@@ -357,7 +357,7 @@ def like(request, storyid=""):
             like_to_save.save()
             
     redirect_url = request.META["HTTP_REFERER"]
-    if redirect_url.find('?') != -1:
+    if redirect_url.find('?share') != -1:
         redirect_url = re.match(r'(.*)\?.*', redirect_url).group(1)        
     if "story" in redirect_url:
         return redirect(redirect_url)
