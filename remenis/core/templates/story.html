@@ -14,7 +14,7 @@
             <table class="table table-bordered span7" style="margin-bottom: 40px">
                 <tr><td>
                     <div>
-                        <p class="span10">
+                        <p class="span10" style="margin-bottom: 0px;">
                             <a href="/{{ story.authorid.fbid }}"><strong>{{ story.authorid.full_name }}</strong></a>
                             <span style="color: grey;"> wrote </span>
                             <a href="/story/{{ story.id }}"><strong style="color: blue;">{{ story.title }}</strong></a>
@@ -36,7 +36,7 @@
                     </div>
                 </td></tr>
                 <tr><td>
-                    <p style="color: grey;">{{ story.story }} &nbsp;
+                    <p style="color: grey; margin-bottom: 0px;">{{ story.story }} &nbsp;
                         <i style="color: #CFCFCF">
                             {% if story.story_date_month != 0 %}
                             {{ story.story_date_month }} / 
