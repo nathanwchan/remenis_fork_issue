@@ -1,31 +1,41 @@
 {% extends "remenis_base.html" %}
 
-        {% block nav %}
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container-fluid">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="/home/">Remenis</a>
-                </div>
-            </div>
+        {% block head_extra %}
+        <style type="text/css">
+            .background {
+                background:					#000000 url(/static/homepage_background.jpg) no-repeat top center fixed;
+                -webkit-background-size:	cover;
+                -moz-background-size:		cover;
+                -o-background-size:			cover;
+                background-size:			cover;
+                background-clip:			border-box;
+                background-origin:			padding-box;
+            }
+        </style>
+        {% endblock %}
+
+        {% block splash %}
+        <div style="text-align: center; margin-left: auto; margin-right: auto; margin-top: -20px; margin-bottom: 20px; width: 630px;">
+            <img src="/static/remenis_logo.png"/>
+        </div>
+        <div style="text-align: center; margin-left: auto; margin-right: auto; background: url('/static/homepage_box.png'); width: 458px; height: 297px;">
+            <br><br>
+            <p style="font-size: 24px; color: #FFFFFF; margin-bottom: 20px">A collection of all your life stories.</p>
+            <p style="font-size: 18px; color: #FFFFFF; line-height:120%;">
+            Invite your friends to share their<br>favorite stories about <i>you.</i>
+            </p>
+            <br><br><br>
+            <a class="login rpxnow btn btn-primary btn-large" href="https://remenis.rpxnow.com/openid/v2/signin?token_url={{ token_url }}{{ subsite }}{{ story_id }}">Login with Facebook &raquo;</a>
+        </div>
+        <div style="text-align: center; margin-left: auto; margin-right: auto; margin-top: 20px; width: 630px;">
+            <img src="/static/homepage_steps.png"/>
         </div>
         {% endblock %}
-        
+
         {% block no_sidebar %}
         {% endblock %}
-        
-        {% block content %}
-        <div class="span9">
-            <div class="hero-unit">
-                <h1>Welcome to <img src="/static/remenis_logo.png" width=400 /></h1>
-                <br>
-                <a class="login rpxnow btn btn-primary btn-large" href="https://remenis.rpxnow.com/openid/v2/signin?token_url={{ token_url }}{{ subsite }}{{ story_id }}">Login with Facebook &raquo;</a>
-            </div>
-        </div><!--/span-->
+
+        {% block no_footer %}
         {% endblock %}
 
         {% block load_javascript %}
@@ -34,12 +44,14 @@
             var rpxJsHost = (("https:" == document.location.protocol) ? "https://" : "http://static.");
             document.write(unescape("%3Cscript src='" + rpxJsHost +
                                     "rpxnow.com/js/lib/rpx.js' type='text/javascript'%3E%3C/script%3E"));
-        </script>
+            </script>
         <script>
             RPXNOW.overlay = true;
             RPXNOW.language_preference = 'en';
             // Set default provider to Facebook
             // https://rpxnow.com/docs#sign-in_default_provider
             //RPXNOW.default_provider = 'facebook';
-        </script>
+            </script>
         {% endblock %}
+
+

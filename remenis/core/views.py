@@ -12,20 +12,6 @@ from django.views.decorators.csrf import csrf_exempt
 import urllib, urllib2, json
 from operator import itemgetter
 from itertools import groupby
-
-@csrf_exempt
-def splash(request):
-    if request.method == 'POST':
-        try:
-            existing_email = BetaEmail.objects.get(email=request.POST["email"])
-        except BetaEmail.DoesNotExist:
-            email_to_save = BetaEmail(email=request.POST["email"],
-                                      submit_date=datetime.datetime.now()
-                                      )
-            email_to_save.save()
-        return render_to_response('thankyou.html', locals())
-    else:
-        return render_to_response('splash.html', locals())
     
 @csrf_exempt
 def login(request):
