@@ -6,10 +6,12 @@
         <link rel="shortcut icon" type="image/ico" href="/static/remenis_logo.png" />
         <meta property="og:title" content="Remenis"/>
         <meta property="og:type" content="website"/>
-        <meta property="og:url" content="http://www.remenis.com"/>
         <meta property="og:image" content="http://www.remenis.com/static/remenis_logo.png"/>
+        {% block metatags %}
+        <meta property="og:url" content="http://www.remenis.com"/>
         <meta property="og:site_name" content="Remenis"/>
         <meta property="og:description" content="A collection of all your life stories."/>
+        {% endblock %}
         
         {% block head_extra %}
         {% endblock %}
@@ -236,11 +238,12 @@
                 }
                 if (storyid != "")
                 {
-                    $.getJSON('/api/story/' + storyid, function(jsonString)
-                              {
-                              var url = 'https://www.facebook.com/sharer/sharer.php?s=100&p%5Burl%5D=http://www.remenis.com/story/' + storyid + '&p%5Bimages%5D%5B0%5D=http://www.remenis.com/static/remenis_logo.png&p%5Btitle%5D=I just wrote this story on Remenis!&p%5Bsummary%5D=' + jsonString['title'] + ': ' + jsonString['story'];
-                              popupWindow = window.open(url,'popUpWindow','height=350,width=700,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
-                              });
+//                    $.getJSON('/api/story/' + storyid, function(jsonString)
+//                              {
+//                              var url = 'https://www.facebook.com/sharer/sharer.php?s=100&p%5Burl%5D=http://www.remenis.com/story/' + storyid + '&p%5Bimages%5D%5B0%5D=http://www.remenis.com/static/remenis_logo.png&p%5Btitle%5D=I just wrote this story on Remenis!&p%5Bsummary%5D=' + jsonString['title'] + ': ' + jsonString['story'];
+                    var url = 'https://www.facebook.com/sharer/sharer.php?u=http://www.remenis.com/story/' + storyid;
+                    popupWindow = window.open(url,'popUpWindow','height=350,width=700,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes');
+//                              });
                 }
             }
             

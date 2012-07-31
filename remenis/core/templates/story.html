@@ -1,5 +1,13 @@
 {% extends "remenis_base_nav.html" %}
 
+        {% if story %}
+        {% block metatags %}
+        <meta property="og:url" content="http://www.remenis.com/story/{{ story.id }}"/>
+        <meta property="og:site_name" content="Remenis2"/>
+        <meta property="og:description" content="A collection of all your life stories!"/>
+        {% endblock %}
+        {% endif %}
+
         {% block content %}
         
         <br>
