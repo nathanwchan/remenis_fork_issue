@@ -247,15 +247,17 @@
             
             function PostToYourWall(storyid)
             {
+                var title = 'Check out this story on Remenis!';
                 if (storyid == "")
                 {
                     storyid = document.getElementById('storyid_for_share').value;
+                    title = 'I just wrote this story on Remenis!';
                 }
                 $.getJSON('/api/story/' + storyid, function(jsonString)
                           {
                           FB.ui({
                                 method: 'feed',
-                                name: 'Check out this story on Remenis!',
+                                name: title,
                                 link: 'http://www.remenis.com/story/' + storyid,
                                 redirect_uri: 'http://www.remenis.com/messagesent/',
                                 picture: 'http://www.remenis.com/static/remenis_logo.png',
@@ -266,15 +268,17 @@
             
             function SendAMessage(storyid)
             {
+                var title = 'Check out this story on Remenis!';
                 if (storyid == "")
                 {
                     storyid = document.getElementById('storyid_for_share').value;
+                    title = 'I just wrote this story on Remenis!';
                 }
                 $.getJSON('/api/story/' + storyid, function(jsonString)
                           {
                             FB.ui({
                                 method: 'send',
-                                name: 'Check out this story on Remenis!',
+                                name: title,
                                 link: 'http://www.remenis.com/story/' + storyid,
                                 redirect_uri: 'http://www.remenis.com/messagesent/',
                                 picture: 'http://www.remenis.com/static/remenis_logo.png',
