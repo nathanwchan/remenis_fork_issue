@@ -28,9 +28,7 @@ def login(request):
     return render_to_response('login.html', locals())
 
 def logout(request):
-    request.session.pop('token', None)
-    request.session.pop('profile', None)
-    request.session.pop('accessCredentials', None)
+    clearSession(request)
     return redirect('/')
 
 @csrf_exempt
@@ -464,15 +462,21 @@ def messagesent(request):
 
 ## UTILS
 
+def clearSession(request):
+    request.session.pop('token', None)
+    request.session.pop('profile', None)
+    request.session.pop('accessCredentials', None)
+            
 def saveSessionAndRegisterUser(request):
     if 'token' in request.session:
+        if not 'accessCredentials' in request.session:
+            clearSession(request)
+            return False # weird case, but hit it once
         userid = (request.session['accessCredentials']).get('uid')
         try:
             user = User.objects.get(fbid=userid)
         except User.DoesNotExist:
-            request.session.pop('token', None)
-            request.session.pop('profile', None)
-            request.session.pop('accessCredentials', None)
+            clearSession(request)
             return False # something wrong - clear session
         else:
             user.last_date = datetime.datetime.now()
