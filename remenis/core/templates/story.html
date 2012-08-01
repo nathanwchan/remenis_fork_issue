@@ -68,7 +68,7 @@
                                     -ms-transform: rotate(270deg);
                                     transform: rotate(270deg);">
                                     <p style="margin: -5px;">
-                                    {{ story_likes.count }}
+                                    {{ story_likes|length }}
                                     </p>
                                 </span>
                                 
@@ -93,8 +93,13 @@
                             <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
                         </a>
                         <div class="span11">
-                            <p><strong>{{ story_comment.authorid.full_name }}</strong></p>
-                            <p>{{ story_comment.comment }}</p>
+                            <div class="row-fluid" style="margin-bottom: -10px;">
+                                <p class="span10"><strong>{{ story_comment.authorid.full_name }}</strong></p>
+                                <p class="span2" align="right" style="color: grey; font-size: 12;">
+                                {{ story_comment.post_date }}
+                                </p>
+                            </div>
+                            <p style="margin-bottom: 0px;">{{ story_comment.comment }}</p>
                         </div>
                     </div>
                 </td></tr>

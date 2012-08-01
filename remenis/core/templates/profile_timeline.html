@@ -65,7 +65,7 @@
                                 <p style="margin: -5px;">
                                 {% for dic_storyid, dic_storylikes in stories_likes_dictionary.items %}
                                     {% ifequal dic_storyid story.id %}
-                                        {{ dic_storylikes.count }}
+                                        {{ dic_storylikes|length }}
                                     {% endifequal %}
                                 {% endfor %}
                                 </p>
@@ -85,7 +85,7 @@
                                 <p style="margin: -5px;">
                                 {% for dic_storyid, dic_storycomments in stories_comments_dictionary.items %}
                                     {% ifequal dic_storyid story.id %}
-                                        {{ dic_storycomments.count }}
+                                        {{ dic_storycomments|length }}
                                     {% endifequal %}
                                 {% endfor %}
                                 </p>

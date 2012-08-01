@@ -142,7 +142,15 @@ def profile(request, profileid=""):
     for story in stories_about_user:
         tagged_users_in_story = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
         tagged_users.append(tagged_users_in_story)
-        story_comments.append(StoryComment.objects.filter(storyid = story))
+        story_comments_of_story = []
+        story_comments_objects_of_story = StoryComment.objects.filter(storyid = story)
+        for comment in story_comments_objects_of_story:
+            story_comments_of_story.append({'storyid': comment.storyid,
+                                            'authorid': comment.authorid,
+                                            'comment': comment.comment,
+                                            'post_date': getStoryPostDate(comment.post_date)
+                                            })
+        story_comments.append(story_comments_of_story)
         story_likes.append(StoryLike.objects.filter(storyid = story))
         story_post_date.append(getStoryPostDate(story.post_date))
     stories_tagged_users_dictionary = dict(zip(stories_about_user_ids, tagged_users))
@@ -407,7 +415,14 @@ def story(request, storyid=""):
             story = False
             error = "You do not have access to this story."
         else:
-            story_comments = StoryComment.objects.filter(storyid = story)
+            story_comments = []
+            story_comments_objects = StoryComment.objects.filter(storyid = story)
+            for comment in story_comments_objects:
+                story_comments.append({'storyid': comment.storyid,
+                                       'authorid': comment.authorid,
+                                       'comment': comment.comment,
+                                       'post_date': getStoryPostDate(comment.post_date)
+                                       })
             story_likes = StoryLike.objects.filter(storyid = story)
             story_post_date = getStoryPostDate(story.post_date)
             liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
