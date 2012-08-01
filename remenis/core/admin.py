@@ -4,6 +4,7 @@ from models import User, Story, TaggedUser, StoryComment, StoryLike, BetaEmail
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'fbid', 'first_name', 'last_name', 'full_name', 'email', 'is_registered', 'last_date', 'page_views')
     search_fields = ('first_name', 'last_name', 'full_name', 'email')
+    ordering = ('-is_registered', '-last_date')
 
 class StoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'author_name', 'title', 'story', 'story_date_year', 'story_date_month', 'story_date_day', 'post_date', 'is_private')
