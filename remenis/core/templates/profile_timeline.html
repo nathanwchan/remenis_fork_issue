@@ -52,57 +52,54 @@
                     {% endif %}
                 </td></tr>
                 <tr><td>
-                    <!--<div class="row-fluid">
-                        <div class="span5">
-                        {% for dic_storyid, dic_storycomments in stories_comments_dictionary.items %}
-                            {% ifequal dic_storyid story.id %}
-                                <p style="margin-top: 15px; margin-left: 10px; font-size: 12px;">
-                                    <a href="/story/{{ story.id }}">
-                                    {% if dic_storycomments|length == 0 %}
-                                    Be the first to write a comment!
-                                    {% elif dic_storycomments|length == 1 %}
-                                    View {{ dic_storycomments|length }} comment
-                                    {% else %}
-                                    View all {{ dic_storycomments|length }} comments
-                                    {% endif %}
-                                    </a>
-                                </p>
-                            {% endifequal %}
-                        {% endfor %}
-                        </div>
-                        <div class="span7">-->
-                            <div class="input-append pull-right" style="margin-top: 5px; margin-right: 5px;">
-                                <img src="/static/remenis_logo.png" width=40 style="margin-left: 2px; margin-right: 10px;"/>
-                                
-                                <span class="add-on" style="font-size: 10; width: 18px; margin-left: -6px; margin-right: -2px; background-color: #258EAA; color: white;
-                                    -webkit-transform: rotate(270deg);
-                                    -moz-transform: rotate(270deg);
-                                    -o-transform: rotate(270deg);
-                                    -ms-transform: rotate(270deg);
-                                    transform: rotate(270deg);">
-                                {% for dic_storyid, dic_storylikes in stories_likes_dictionary.items %}
-                                    {% ifequal dic_storyid story.id %}
-                                        {{ dic_storylikes.count }}
-                                    {% endifequal %}
-                                {% endfor %}
-                                </span>
-                                
-                                <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -4px;"
-                                    {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
-                                    <i class="icon-heart"></i>
-                                </button>
-                                <button class="btn btn-medium" onclick="location.href='/story/{{ story.id }}'" style="margin-left: -4px;">
-                                    <i class="icon-comment"></i>
-                                </button>
-                                <button class="btn btn-medium" type="button" style="margin-left: -4px;" rel="popover" data-original-title="Bookmark" data-content="coming soon..." data-placement="top">
-                                    <i class="icon-bookmark"></i>
-                                </button>
-                                <button class="btn btn-medium" onclick="SendAMessage({{ story.id }})" type="button" style="margin-left: -4px;">
-                                    <i class="icon-share-alt"></i>
-                                </button>
-                            </div><!--
-                        </div>
-                    </div>-->
+                    <div class="input-append pull-right" style="margin-top: 5px; margin-right: 5px;">
+                        <img src="/static/remenis_logo.png" width=40 />
+                        
+                        <span class="add-on" style="font-size: 10; height: 10px; width: 18px; margin-left: 4px; background-color: #258EAA; color: white;
+                            -webkit-transform: rotate(270deg);
+                            -moz-transform: rotate(270deg);
+                            -o-transform: rotate(270deg);
+                            -ms-transform: rotate(270deg);
+                            transform: rotate(270deg);">
+                            <p style="margin: -5px;">
+                            {% for dic_storyid, dic_storylikes in stories_likes_dictionary.items %}
+                                {% ifequal dic_storyid story.id %}
+                                    {{ dic_storylikes.count }}
+                                {% endifequal %}
+                            {% endfor %}
+                            </p>
+                        </span>
+                        
+                        <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -10px;"
+                            {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
+                            <i class="icon-heart"></i>
+                        </button>
+                        
+                        <span class="add-on" style="font-size: 10; height: 10px; width: 18px; margin-left: -10px; background-color: #258EAA; color: white;
+                            -webkit-transform: rotate(270deg);
+                            -moz-transform: rotate(270deg);
+                            -o-transform: rotate(270deg);
+                            -ms-transform: rotate(270deg);
+                            transform: rotate(270deg);">
+                            <p style="margin: -5px;">
+                            {% for dic_storyid, dic_storycomments in stories_comments_dictionary.items %}
+                                {% ifequal dic_storyid story.id %}
+                                    {{ dic_storycomments.count }}
+                                {% endifequal %}
+                            {% endfor %}
+                            </p>
+                        </span>
+                        
+                        <button class="btn btn-medium" onclick="location.href='/story/{{ story.id }}'" style="margin-left: -10px;">
+                            <i class="icon-comment"></i>
+                        </button>
+                        <button class="btn btn-medium" type="button" style="margin-left: -4px;" rel="popover" data-original-title="Bookmark" data-content="coming soon..." data-placement="top">
+                            <i class="icon-bookmark"></i>
+                        </button>
+                        <button class="btn btn-medium" onclick="SendAMessage({{ story.id }})" type="button" style="margin-left: -5px;">
+                            <i class="icon-share-alt"></i>
+                        </button>
+                    </div>
                 </td></tr>
             <table>
                 

@@ -57,26 +57,29 @@
                         <form action="/comment/" method="post" name="commentForm" onsubmit="return validateCommentForm(this)">
                             <input type="hidden" name="storyid" value="{{ story.id }}">
                             <div class="input-append">
-                                <img src="/static/remenis_logo.png" width=40 style="margin-left: 2px; margin-right: 5px;"/>
-                                <input name="comment" type="text" class="span7 comment_text_box" size="16" placeholder="write a comment..." autocomplete="off">
+                                <img src="/static/remenis_logo.png" width=40 />
+                                
+                                <input name="comment" type="text" class="input-xlarge comment_text_box" size="16" placeholder="write a comment..." autocomplete="off" style="margin-left: 4px;">
                                     
-                                <span class="add-on" style="font-size: 10; width: 18px; margin-left: -6px; margin-right: -2px; background-color: #258EAA; color: white;
-                                        -webkit-transform: rotate(270deg);
-                                        -moz-transform: rotate(270deg);
-                                        -o-transform: rotate(270deg);
-                                        -ms-transform: rotate(270deg);
-                                        transform: rotate(270deg);">
-                                {{ story_likes.count }}
+                                <span class="add-on" style="font-size: 10; height: 10px; width: 18px; margin-left: -10px; background-color: #258EAA; color: white;
+                                    -webkit-transform: rotate(270deg);
+                                    -moz-transform: rotate(270deg);
+                                    -o-transform: rotate(270deg);
+                                    -ms-transform: rotate(270deg);
+                                    transform: rotate(270deg);">
+                                    <p style="margin: -5px;">
+                                    {{ story_likes.count }}
+                                    </p>
                                 </span>
                                 
-                                <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -4px;"
+                                <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -10px;"
                                     {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
                                     <i class="icon-heart"></i>
                                 </button>
                                 <button class="btn btn-medium" type="button" style="margin-left: -4px;" rel="popover" data-original-title="Bookmark" data-content="coming soon..." data-placement="top">
                                     <i class="icon-bookmark"></i>
                                 </button>
-                                <button class="btn btn-medium" onclick="SendAMessage({{ story.id }})" type="button" style="margin-left: -4px;">
+                                <button class="btn btn-medium" onclick="SendAMessage({{ story.id }})" type="button" style="margin-left: -5px;">
                                     <i class="icon-share-alt"></i>
                                 </button>
                             </div>

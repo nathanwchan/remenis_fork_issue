@@ -75,24 +75,26 @@
                         <form action="/comment/" method="post" name="commentForm" onsubmit="return validateCommentForm(this)">
                             <input type="hidden" name="storyid" value="{{ story.id }}">
                             <div class="input-append">
-                                <img src="/static/remenis_logo.png" width=40 style="margin-left: 2px; margin-right: 5px;"/>
+                                <img src="/static/remenis_logo.png" width=40 />
 
-                                <input name="comment" type="text" class="input-xlarge comment_text_box" size="16" placeholder="write a comment..." autocomplete="off">
-                                    
-                                <span class="add-on" style="font-size: 10; width: 18px; margin-left: -6px; margin-right: -2px; background-color: #258EAA; color: white;
-                                        -webkit-transform: rotate(270deg);
-                                        -moz-transform: rotate(270deg);
-                                        -o-transform: rotate(270deg);
-                                        -ms-transform: rotate(270deg);
-                                        transform: rotate(270deg);">
-                                {% for dic_storyid, dic_storylikes in stories_likes_dictionary.items %}
-                                    {% ifequal dic_storyid story.id %}
-                                        {{ dic_storylikes.count }}
-                                    {% endifequal %}
-                                {% endfor %}
+                                <input name="comment" type="text" class="input-xlarge comment_text_box" size="16" placeholder="write a comment..." autocomplete="off" style="margin-left: 4px;">
+                                
+                                <span class="add-on" style="font-size: 10; height: 10px; width: 18px; margin-left: -10px; background-color: #258EAA; color: white;
+                                    -webkit-transform: rotate(270deg);
+                                    -moz-transform: rotate(270deg);
+                                    -o-transform: rotate(270deg);
+                                    -ms-transform: rotate(270deg);
+                                    transform: rotate(270deg);">
+                                    <p style="margin: -5px;">
+                                    {% for dic_storyid, dic_storylikes in stories_likes_dictionary.items %}
+                                        {% ifequal dic_storyid story.id %}
+                                            {{ dic_storylikes.count }}
+                                        {% endifequal %}
+                                    {% endfor %}
+                                    </p>
                                 </span>
                                 
-                                <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -4px;"
+                                <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -10px;"
                                     {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
                                     <i class="icon-heart"></i>
                                 </button>
