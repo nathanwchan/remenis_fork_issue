@@ -20,124 +20,108 @@
         {% for story in stories_about_user %}
         
         <a name="{{ story.id }}" style="position:absolute; margin-top: -70px"></a>
-        <div class="row-fluid">
-            <a class="span1 nounderline" href="/{{ story.authorid.fbid }}" style="margin-top: 10px; margin-right: -10px;">
-                <img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" class="highlightit rounded5" height="50" width="50" />
-            </a>
-            <!--story table-->
-            <table class="table table-bordered span7" style="margin-bottom: 40px;">
-                <tr><td>
-                    <div>
-                        <p>
-                            <a href="/{{ story.authorid.fbid }}"><strong>{{ story.authorid.full_name }}</strong></a>
-                            <span style="color: grey;"> wrote </span>
-                            <a href="/story/{{ story.id }}" style="color: blue;"><strong>{{ story.title }}</strong></a>
-                        </p>
-                    </div>
-                </td></tr>
-                <tr><td>
-                    <p style="color: grey; margin-bottom: 0px;">{{ story.story }} &nbsp;
-                        <i style="color: #CFCFCF">
-                            {% if story.story_date_month != 0 %}
-                            {{ story.story_date_month }} / 
-                            {% endif %}
-                            {% if story.story_date_day != 0 %}
-                            {{ story.story_date_day }} / 
-                            {% endif %}
-                            {{ story.story_date_year }}
-                        </i>
+        <!--<a class="span1 nounderline" href="/{{ story.authorid.fbid }}" style="margin-top: 10px; margin-right: -10px;">
+            <img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" class="highlightit rounded5" height="50" width="50" />
+        </a>-->
+        <!--story table-->
+        <table class="table table-bordered span7" style="margin-bottom: 40px;">
+            <tr><td>
+                <div>
+                    <p>
+                        <a href="/{{ story.authorid.fbid }}"><strong>{{ story.authorid.full_name }}</strong></a>
+                        <span style="color: grey;"> wrote </span>
+                        <a href="/story/{{ story.id }}" style="color: blue;"><strong>{{ story.title }}</strong></a>
                     </p>
-                    {% if story.is_private %}
-                    <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin: -6px 0px; " rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
-                    {% endif %}
-                </td></tr>
-                <tr><td>
-                    <div class="row-fluid">
-                        <div class="input-append pull-right" style="margin-top: 5px; margin-right: 5px;">
-                            <img src="/static/remenis_logo.png" width=40 />
-                            
-                            <span class="add-on" style="font-size: 10; height: 10px; width: 18px; margin-left: 4px; background-color: #258EAA; color: white;
-                                -webkit-transform: rotate(270deg);
-                                -moz-transform: rotate(270deg);
-                                -o-transform: rotate(270deg);
-                                -ms-transform: rotate(270deg);
-                                transform: rotate(270deg);">
-                                <p style="margin: -5px;">
-                                {% for dic_storyid, dic_storylikes in stories_likes_dictionary.items %}
-                                    {% ifequal dic_storyid story.id %}
-                                        {{ dic_storylikes|length }}
-                                    {% endifequal %}
-                                {% endfor %}
-                                </p>
-                            </span>
-                            
-                            <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -10px;"
-                                {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
-                                <i class="icon-heart"></i>
-                            </button>
-                            
-                            <span class="add-on" style="font-size: 10; height: 10px; width: 18px; margin-left: -10px; background-color: #258EAA; color: white;
-                                -webkit-transform: rotate(270deg);
-                                -moz-transform: rotate(270deg);
-                                -o-transform: rotate(270deg);
-                                -ms-transform: rotate(270deg);
-                                transform: rotate(270deg);">
-                                <p style="margin: -5px;">
-                                {% for dic_storyid, dic_storycomments in stories_comments_dictionary.items %}
-                                    {% ifequal dic_storyid story.id %}
-                                        {{ dic_storycomments|length }}
-                                    {% endifequal %}
-                                {% endfor %}
-                                </p>
-                            </span>
-                            
-                            <button class="btn btn-medium" onclick="location.href='/story/{{ story.id }}'" style="margin-left: -10px;">
-                                <i class="icon-comment"></i>
-                            </button>
-                            <button class="btn btn-medium" type="button" style="margin-left: -4px;" rel="popover" data-original-title="Bookmark" data-content="coming soon..." data-placement="top">
-                                <i class="icon-bookmark"></i>
-                            </button>
-                            <button class="btn btn-medium" onclick="PostToYourWall({{ story.id }})" type="button" style="margin-left: -5px;">
-                                <i class="icon-share-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </td></tr>
-            <table>
-                
-            <!--tagged user div-->
-            <div class="span4">
-                <table class="table table-borderless table-condensed span4" id="tagged-friends-table" style="margin-top: -30px; margin-left: 20px;">
-                    {% for dic_storyid, dic_taggedusers in stories_tagged_users_dictionary.items %}
-                        {% ifequal dic_storyid story.id %}
-                            <tbody id="tagged-friends-body">
-                                <tr><td>
-                                    <p>In This Story</p>
-                                </tr>
+                </div>
+            </td></tr>
+            <tr><td>
+                <p style="color: grey; margin-bottom: 0px;">{{ story.story }} &nbsp;
+                    <i style="color: #CFCFCF">
+                        {% if story.story_date_month != 0 %}
+                        {{ story.story_date_month }} / 
+                        {% endif %}
+                        {% if story.story_date_day != 0 %}
+                        {{ story.story_date_day }} / 
+                        {% endif %}
+                        {{ story.story_date_year }}
+                    </i>
+                </p>
+                {% if story.is_private %}
+                <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin: -6px 0px;" rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
+                {% endif %}
+            </td></tr>
+            <tr><td>
+                <div class="row-fluid" style="margin-left: 5px;">
+                    <div class="span6" style="margin-top: 3px;">
+                        {% for dic_storyid, dic_taggedusers in stories_tagged_users_dictionary.items %}
+                            {% ifequal dic_storyid story.id %}
+                                <a href="/{{ story.authorid.fbid }}" class="nounderline">
+                                    <img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" class="highlightit rounded3" height="30" width="30"rel="tooltip" title="Written by {{ story.authorid.full_name }}" />
+                                </a>
                                 {% for tagged_user in dic_taggedusers %}
-                                <tr>
-                                    <td>
-                                        <p>
-                                            <a href="/{{ tagged_user.fbid }}" class="nounderline">
-                                                <img id="{{ tagged_user.fbid }}" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" class="highlightit rounded3" height="30" width="30"/>
-                                            </a>
-                                            &nbsp;&nbsp;{{ tagged_user.full_name }}
-                                        </p>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr><td>none</td></tr>
+                                    {% if tagged_user.fbid != story.authorid.fbid %}
+                                    <a href="/{{ tagged_user.fbid }}" class="nounderline">
+                                        <img src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" class="highlightit rounded3" height="30" width="30" rel="tooltip" title="{{ tagged_user.full_name }}"/>
+                                    </a>
+                                    {% endif %}
                                 {% endfor %}
-                            </tbody>
-                        {% endifequal %}
-                    {% endfor %}
-                </table>
-                <br><br><br>
-            </div>                
+                            {% endifequal %}
+                        {% endfor %}
+                    </div>
+                    <div class="input-append span6 pull-right" style="margin-top: 5px; margin-right: 0px; min-width: 250px;">
+                        <img src="/static/remenis_logo.png" width=40 />
+                        
+                        <span class="add-on" style="font-size: 10; height: 10px; width: 18px; margin-left: 4px; background-color: #258EAA; color: white;
+                            -webkit-transform: rotate(270deg);
+                            -moz-transform: rotate(270deg);
+                            -o-transform: rotate(270deg);
+                            -ms-transform: rotate(270deg);
+                            transform: rotate(270deg);">
+                            <p style="margin: -5px;">
+                            {% for dic_storyid, dic_storylikes in stories_likes_dictionary.items %}
+                                {% ifequal dic_storyid story.id %}
+                                    {{ dic_storylikes|length }}
+                                {% endifequal %}
+                            {% endfor %}
+                            </p>
+                        </span>
+                        
+                        <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -10px;"
+                            {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
+                            <i class="icon-heart"></i>
+                        </button>
+                        
+                        <span class="add-on" style="font-size: 10; height: 10px; width: 18px; margin-left: -10px; background-color: #258EAA; color: white;
+                            -webkit-transform: rotate(270deg);
+                            -moz-transform: rotate(270deg);
+                            -o-transform: rotate(270deg);
+                            -ms-transform: rotate(270deg);
+                            transform: rotate(270deg);">
+                            <p style="margin: -5px;">
+                            {% for dic_storyid, dic_storycomments in stories_comments_dictionary.items %}
+                                {% ifequal dic_storyid story.id %}
+                                    {{ dic_storycomments|length }}
+                                {% endifequal %}
+                            {% endfor %}
+                            </p>
+                        </span>
+                        
+                        <button class="btn btn-medium" onclick="location.href='/story/{{ story.id }}'" style="margin-left: -10px;">
+                            <i class="icon-comment"></i>
+                        </button>
+                        <button class="btn btn-medium" type="button" style="margin-left: -4px;" rel="popover" data-original-title="Bookmark" data-content="coming soon..." data-placement="top">
+                            <i class="icon-bookmark"></i>
+                        </button>
+                        <button class="btn btn-medium" onclick="PostToYourWall({{ story.id }})" type="button" style="margin-left: -5px;">
+                            <i class="icon-share-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </td></tr>
+        </table>
         {% empty %}
         <p>No stories.</p>
         {% endfor %}
-        </div>
 
         {% endif %}
 

@@ -176,11 +176,11 @@
                         {% endif %}
                     {% endifequal %}
                 {% endfor %}
-            <table>
+            </table>
                 
             <!--tagged user div-->
             <div class="span4">
-                <table class="table table-borderless table-condensed span4" id="tagged-friends-table" style="margin-top: -30px; margin-left: 20px;">
+                <table class="table table-borderless table-condensed" id="tagged-friends-table">
                     {% for dic_storyid, dic_taggedusers in stories_tagged_users_dictionary.items %}
                         {% ifequal dic_storyid story.id %}
                             <tbody id="tagged-friends-body">
@@ -234,12 +234,11 @@
                         {% endifequal %}
                     {% endfor %}
                 </table>
-                <br><br><br>
-            </div>                
+            </div>
+        </div>
         {% empty %}
         <p>No stories.</p>
         {% endfor %}
-        </div>
 
         {% endif %}
 
