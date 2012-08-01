@@ -186,21 +186,50 @@
                             <tbody id="tagged-friends-body">
                                 <tr><td>
                                     <p>In This Story</p>
-                                </tr>
-                                {% for tagged_user in dic_taggedusers %}
-                                <tr>
-                                    <td>
-                                        <p>
+                                </td></tr>
+                                {% if dic_taggedusers|length > 3 %}
+                                    {% if dic_taggedusers.0.fbid == story.authorid.fbid %}
+                                        {% for tagged_user in dic_taggedusers|slice:"1:3" %}
+                                        <tr><td>
+                                            <p>
                                             <a href="/{{ tagged_user.fbid }}" class="nounderline">
                                                 <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
                                             </a>
                                             &nbsp;&nbsp;{{ tagged_user.full_name }}
-                                        </p>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr><td>none</td></tr>
-                                {% endfor %}
+                                            </p>
+                                        </td></tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        {% for tagged_user in dic_taggedusers|slice:":2" %}
+                                        <tr><td>
+                                            <p>
+                                            <a href="/{{ tagged_user.fbid }}" class="nounderline">
+                                                <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
+                                            </a>
+                                            &nbsp;&nbsp;{{ tagged_user.full_name }}
+                                            </p>
+                                        </td></tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <tr><td>
+                                        <a href="/story/{{ story.id }}">
+                                            View all {{ dic_taggedusers|length }} tagged friends
+                                        </a>
+                                    </td></tr>
+                                {% else %}
+                                    {% for tagged_user in dic_taggedusers %}
+                                    <tr><td>
+                                            <p>
+                                                <a href="/{{ tagged_user.fbid }}" class="nounderline">
+                                                    <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
+                                                </a>
+                                                &nbsp;&nbsp;{{ tagged_user.full_name }}
+                                            </p>
+                                    </td></tr>
+                                    {% empty %}
+                                    <tr><td>none</td></tr>
+                                    {% endfor %}
+                                {% endif %}
                             </tbody>
                         {% endifequal %}
                     {% endfor %}
