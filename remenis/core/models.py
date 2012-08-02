@@ -25,6 +25,7 @@ class Story(models.Model):
     story_date_day = models.IntegerField(blank=True, null=True)
     post_date = models.DateTimeField(blank=True, null=True)
     is_private = models.BooleanField()
+    page_views = models.IntegerField(default=0)
     
     class Admin:
         pass
