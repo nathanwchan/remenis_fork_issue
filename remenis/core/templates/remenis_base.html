@@ -264,13 +264,23 @@
                 }
                 $.getJSON('/api/story/' + storyid, function(jsonString)
                           {
+                          var description = "";
+                          if (jsonString['title'] != "")
+                          {
+                          description += jsonString['title'] + ": ";
+                          }
+                          description += jsonString['story'].substring(0,100);
+                          if (jsonString['story'].length > 100)
+                          {
+                          description += "...";
+                          }
                           FB.ui({
                                 method: 'feed',
                                 name: title,
                                 link: 'http://www.remenis.com/story/' + storyid,
                                 redirect_uri: 'http://www.remenis.com/messagesent/',
                                 picture: 'http://www.remenis.com/static/remenis_logo.png',
-                                description: jsonString['title'] + ": " + jsonString['story'],
+                                description: description,
                                 });
                           });
             }
@@ -285,13 +295,23 @@
                 }
                 $.getJSON('/api/story/' + storyid, function(jsonString)
                           {
+                          var description = "";
+                          if (jsonString['title'] != "")
+                          {
+                            description += jsonString['title'] + ": ";
+                          }
+                          description += jsonString['story'].substring(0,100);
+                          if (jsonString['story'].length > 100)
+                          {
+                            description += "...";
+                          }
                             FB.ui({
                                 method: 'send',
                                 name: title,
                                 link: 'http://www.remenis.com/story/' + storyid,
                                 redirect_uri: 'http://www.remenis.com/messagesent/',
                                 picture: 'http://www.remenis.com/static/remenis_logo.png',
-                                description: jsonString['title'] + ": " + jsonString['story'],
+                                description: description,
                             });
                 });
             }
