@@ -2,11 +2,13 @@
 
         {% block content %}
 
+        <div class="">
+            
         {% if not_friend %}
         <p><a href="http://www.facebook.com/{{ profileid }}">{{ profile_name }}</a> is not your Facebook friend.</p>
         {% else %}
         <h2>{{ profile_name }}</h2>
-        <br>
+        <!--<br>
         <ul class="nav nav-tabs">
             <li class="active">
                 <a href="?display=recent">Most Recent</a>
@@ -14,21 +16,23 @@
             <li>
                 <a href="?display=timeline">Timeline</a>
             </li>
-        </ul>
+        </ul>-->
         <br>
 
+        <table class="table table-notop" style="width: 800px; float: left;">
         {% for story in stories_about_user %}
-        
-        <a name="{{ story.id }}" style="position:absolute; margin-top: -70px"></a>
-        <div class="row-fluid">
-            <a class="span1 nounderline" href="/{{ story.authorid.fbid }}" style="margin-top: 10px; margin-right: -10px;">
+        <tr><td>
+        <a name="{{ story.id }}" style="position:absolute; margin-top: 0px"></a>    
+        <div style="margin-top: 15px;">
+            <a class="nounderline" href="/{{ story.authorid.fbid }}" style="margin-top: 5px; float: left;">
                 <img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" class="highlightit rounded5" height="50" width="50"/>
             </a>
+            <img src="/static/bubbles.png" style="margin-top: 2px; float: left;"/>
             <!--story table-->
-            <table class="table table-bordered span7" style="margin-bottom: 40px;">
+            <table class="table table-bordered" style="width: 500px; float: left;">
                 <tr><td>
-                    <div>
-                        <p class="span10" style="margin-bottom: 0px;">
+                    <div class="row-fluid" style="margin-top: 0px;">
+                        <p class="span10" style="margin: 0px 0px; font-size: 16;">
                             <a href="/{{ story.authorid.fbid }}"><strong>{{ story.authorid.full_name }}</strong></a>
                             <span style="color: grey;"> wrote </span>
                             <a href="/story/{{ story.id }}" style="color: blue;"><strong>{{ story.title }}</strong></a>
@@ -54,7 +58,7 @@
                     </div>
                 </td></tr>
                 <tr><td>
-                    <p style="color: grey; margin-bottom: 0px;">{{ story.story }} &nbsp;
+                    <p style="color: grey; margin-bottom: 0px; font-size: 14;">{{ story.story }} &nbsp;
                         <i style="color: #CFCFCF">
                             {% if story.story_date_month != 0 %}
                             {{ story.story_date_month }} / 
@@ -66,7 +70,7 @@
                         </i>
                     </p>
                     {% if story.is_private %}
-                    <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin: -6px 0px; " rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
+                    <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin-bottom: -6px;" rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
                     {% endif %}
                 </td></tr>
                 <!--comment form table row-->
@@ -75,7 +79,7 @@
                         <form action="/comment/" method="post" name="commentForm" onsubmit="return validateCommentForm(this)">
                             <input type="hidden" name="storyid" value="{{ story.id }}">
                             <div class="input-append">
-                                <img src="/static/remenis_logo.png" width=40 />
+                                <img src="/static/remenis_favicon.png" width=30 />
 
                                 <input name="comment" type="text" class="input-xlarge comment_text_box" size="16" placeholder="write a comment..." autocomplete="off" style="margin-left: 4px;">
                                 
@@ -113,43 +117,35 @@
                         {% if dic_storycomments|length > 3 %}
                             <tr style="background-color: #F0F0F0;"><td>
                                 <a href="/story/{{ story.id }}">
-                                    View all {{ dic_storycomments|length }} comments
+                                    <span style="font-size: 13px;">View all {{ dic_storycomments|length }} comments</span>
                                 </a>
                             </td></tr>
                             {% with dic_storycomments_reverse=dic_storycomments|dictsortreversed:"post_date" %}
                                 {% with story_comment=dic_storycomments_reverse.1 %}
                                     <tr style="background-color: #F0F0F0;"><td>
-                                        <div class="row-fluid"/>
-                                            <a href="/{{ story_comment.authorid.fbid }}" class="span1 nounderline">
-                                                <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
-                                            </a>
-                                            <div class="span11">
-                                                <div class="row-fluid" style="margin-bottom: -10px;">
-                                                    <p class="span10"><strong>{{ story_comment.authorid.full_name }}</strong></p>
-                                                    <p class="span2" align="right" style="color: grey; font-size: 12;">
-                                                    {{ story_comment.post_date }}
-                                                    </p>
-                                                </div>
-                                                <p style="margin-bottom: 0px;">{{ story_comment.comment }}</p>
-                                            </div>
+                                        <a href="/{{ story_comment.authorid.fbid }}" class="nounderline" style="float: left;">
+                                            <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
+                                        </a>
+                                        <div style="margin: 0px 5px 0px 8px; width: 435px; float: left;">
+                                            <p style="margin-top: -3px; color: grey; font-size: 10; float: right;">
+                                            {{ story_comment.post_date_for_display }}
+                                            </p>
+                                            <p style="margin-bottom: 2px; font-size: 14"><strong>{{ story_comment.authorid.full_name }}</strong></p>
+                                            <p style="margin-bottom: 0px; font-size: 14">{{ story_comment.comment }}</p>
                                         </div>
                                     </td></tr>
                                 {% endwith %}
                                 {% with story_comment=dic_storycomments_reverse.0 %}
                                     <tr style="background-color: #F0F0F0;"><td>
-                                        <div class="row-fluid"/>
-                                            <a href="/{{ story_comment.authorid.fbid }}" class="span1 nounderline">
-                                                <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
-                                            </a>
-                                            <div class="span11">
-                                                <div class="row-fluid" style="margin-bottom: -10px;">
-                                                    <p class="span10"><strong>{{ story_comment.authorid.full_name }}</strong></p>
-                                                    <p class="span2" align="right" style="color: grey; font-size: 12;">
-                                                    {{ story_comment.post_date }}
-                                                    </p>
-                                                </div>
-                                                <p style="margin-bottom: 0px;">{{ story_comment.comment }}</p>
-                                            </div>
+                                        <a href="/{{ story_comment.authorid.fbid }}" class="nounderline" style="float: left;">
+                                            <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
+                                        </a>
+                                        <div style="margin: 0px 5px 0px 8px; width: 435px; float: left;">
+                                            <p style="margin-top: -3px; color: grey; font-size: 10; float: right;">
+                                            {{ story_comment.post_date_for_display }}
+                                            </p>
+                                            <p style="margin-bottom: 2px; font-size: 14"><strong>{{ story_comment.authorid.full_name }}</strong></p>
+                                            <p style="margin-bottom: 0px; font-size: 14">{{ story_comment.comment }}</p>
                                         </div>
                                     </td></tr>
                                 {% endwith %}
@@ -157,19 +153,15 @@
                         {% else %}
                             {% for story_comment in dic_storycomments %}
                             <tr style="background-color: #F0F0F0;"><td>
-                                <div class="row-fluid"/>
-                                    <a href="/{{ story_comment.authorid.fbid }}" class="span1 nounderline">
-                                        <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
-                                    </a>
-                                    <div class="span11">
-                                        <div class="row-fluid" style="margin-bottom: -10px;">
-                                            <p class="span10"><strong>{{ story_comment.authorid.full_name }}</strong></p>
-                                            <p class="span2" align="right" style="color: grey; font-size: 12;">
-                                            {{ story_comment.post_date }}
-                                            </p>
-                                        </div>
-                                        <p style="margin-bottom: 0px;">{{ story_comment.comment }}</p>
-                                    </div>
+                                <a href="/{{ story_comment.authorid.fbid }}" class="nounderline" style="float: left;">
+                                    <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
+                                </a>
+                                <div style="margin: 0px 5px 0px 8px; width: 435px; float: left;">
+                                    <p style="margin-top: -3px; color: grey; font-size: 10; float: right;">
+                                    {{ story_comment.post_date_for_display }}
+                                    </p>
+                                    <p style="margin-bottom: 2px; font-size: 14"><strong>{{ story_comment.authorid.full_name }}</strong></p>
+                                    <p style="margin-bottom: 0px; font-size: 14">{{ story_comment.comment }}</p>
                                 </div>
                             </td></tr>
                             {% endfor %}
@@ -179,67 +171,69 @@
             </table>
                 
             <!--tagged user div-->
-            <div class="span4">
-                <table class="table table-borderless table-condensed" id="tagged-friends-table">
-                    {% for dic_storyid, dic_taggedusers in stories_tagged_users_dictionary.items %}
-                        {% ifequal dic_storyid story.id %}
-                            <tbody id="tagged-friends-body">
-                                <tr><td>
-                                    <p>In This Story</p>
-                                </td></tr>
-                                {% if dic_taggedusers|length > 3 %}
-                                    {% if dic_taggedusers.0.fbid == story.authorid.fbid %}
-                                        {% for tagged_user in dic_taggedusers|slice:"1:3" %}
-                                        <tr><td>
-                                            <p>
-                                            <a href="/{{ tagged_user.fbid }}" class="nounderline">
-                                                <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
-                                            </a>
-                                            &nbsp;&nbsp;{{ tagged_user.full_name }}
-                                            </p>
-                                        </td></tr>
-                                        {% endfor %}
-                                    {% else %}
-                                        {% for tagged_user in dic_taggedusers|slice:":2" %}
-                                        <tr><td>
-                                            <p>
-                                            <a href="/{{ tagged_user.fbid }}" class="nounderline">
-                                                <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
-                                            </a>
-                                            &nbsp;&nbsp;{{ tagged_user.full_name }}
-                                            </p>
-                                        </td></tr>
-                                        {% endfor %}
-                                    {% endif %}
+            <table class="table table-borderless table-condensed" id="tagged-friends-table" style="margin-left: 10px; width: 200px; float: left;">
+                {% for dic_storyid, dic_taggedusers in stories_tagged_users_dictionary.items %}
+                    {% ifequal dic_storyid story.id %}
+                        <tbody id="tagged-friends-body">
+                            <tr><td>
+                                <p style="margin-bottom: 15px;">In This Story</p>
+                            </td></tr>
+                            {% if dic_taggedusers|length > 3 %}
+                                {% if dic_taggedusers.0.fbid == story.authorid.fbid %}
+                                    {% for tagged_user in dic_taggedusers|slice:"1:3" %}
                                     <tr><td>
-                                        <a href="/story/{{ story.id }}">
-                                            View all {{ dic_taggedusers|length }} tagged friends
+                                        <p style="font-size: 13;">
+                                        <a href="/{{ tagged_user.fbid }}" class="nounderline">
+                                            <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
                                         </a>
+                                        &nbsp;&nbsp;{{ tagged_user.full_name }}
+                                        </p>
                                     </td></tr>
+                                    {% endfor %}
                                 {% else %}
-                                    {% for tagged_user in dic_taggedusers %}
+                                    {% for tagged_user in dic_taggedusers|slice:":2" %}
                                     <tr><td>
-                                            <p>
-                                                <a href="/{{ tagged_user.fbid }}" class="nounderline">
-                                                    <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
-                                                </a>
-                                                &nbsp;&nbsp;{{ tagged_user.full_name }}
-                                            </p>
+                                        <p style="font-size: 13;">
+                                        <a href="/{{ tagged_user.fbid }}" class="nounderline">
+                                            <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
+                                        </a>
+                                        &nbsp;&nbsp;{{ tagged_user.full_name }}
+                                        </p>
                                     </td></tr>
-                                    {% empty %}
-                                    <tr><td>none</td></tr>
                                     {% endfor %}
                                 {% endif %}
-                            </tbody>
-                        {% endifequal %}
-                    {% endfor %}
-                </table>
-            </div>
+                                <tr><td>
+                                    <a href="/story/{{ story.id }}">
+                                        <span style="font-size: 13px;">View all {{ dic_taggedusers|length }} tagged friends</span>
+                                    </a>
+                                </td></tr>
+                            {% else %}
+                                {% for tagged_user in dic_taggedusers %}
+                                <tr><td>
+                                        <p style="font-size: 13;">
+                                            <a href="/{{ tagged_user.fbid }}" class="nounderline">
+                                                <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
+                                            </a>
+                                            &nbsp;&nbsp;{{ tagged_user.full_name }}
+                                        </p>
+                                </td></tr>
+                                {% empty %}
+                                <tr><td>
+                                    <span style="font-size: 13px;">none</span>
+                                </td></tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    {% endifequal %}
+                {% endfor %}
+            </table>
         </div>
+        </td></tr>
         {% empty %}
-        <p>No stories.</p>
+        <p style="margin-bottom: 300px;">No stories.</p>
         {% endfor %}
+        </table>
 
         {% endif %}
-
+        </div>
         {% endblock %}

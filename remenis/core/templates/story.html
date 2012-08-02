@@ -6,37 +6,40 @@
         {% if not story %}
         <p>{{ error }}</p>
         {% else %}
-        <a name="{{ story.id }}" style="position:absolute; margin-top: -70px"></a>
-        <div class="row-fluid">
-            <a class="span1 nounderline" href="/{{ story.authorid.fbid }}" style="margin-top: 10px; margin-right: -10px;">
-                <img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" class="highlightit rounded5" height="50" width="50" /></a>
+        <div style="margin-top: 15px;">
+            <a class="nounderline" href="/{{ story.authorid.fbid }}" style="margin-top: 5px; float: left;">
+                <img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" class="highlightit rounded5" height="50" width="50"/>
+            </a>
+            <img src="/static/bubbles.png" style="margin-top: 2px; float: left;"/>
             <!--story table-->
-            <table class="table table-bordered span7" style="margin-bottom: 40px">
+            <table class="table table-bordered" style="width: 500px; float: left;">
                 <tr><td>
                     <div>
-                        <p class="span10" style="margin-bottom: 0px;">
-                            <a href="/{{ story.authorid.fbid }}"><strong>{{ story.authorid.full_name }}</strong></a>
-                            <span style="color: grey;"> wrote </span>
-                            <a href="/story/{{ story.id }}"><strong style="color: blue;">{{ story.title }}</strong></a>
-                        </p>
-                        <p align="right" style="color: grey; font-size: 12; {% if story.authorid.fbid == userid %} margin-right: 32px; {% endif %}">
-                            {{ story_post_date }}
-                        </p>
-                        {% if story.authorid.fbid == userid %}
-                        <div class="btn-group pull-right" style="margin-top: -30px;">
-                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a data-toggle="modal" data-id="{{ story.id }}" class="edit_story" href="#post">Edit Story</a></li>
-                                <li><a data-toggle="modal" data-id="{{ story.id }}" class="delete_story" href="#delete">Delete Story</a></li>
-                            </ul>
+                        <div class="row-fluid" style="margin-top: 0px;">
+                            <p class="span10" style="margin: 0px 0px; font-size: 16;">
+                                <a href="/{{ story.authorid.fbid }}"><strong>{{ story.authorid.full_name }}</strong></a>
+                                <span style="color: grey;"> wrote </span>
+                                <a href="/story/{{ story.id }}" style="color: blue;"><strong>{{ story.title }}</strong></a>
+                            </p>
+                            <p align="right" style="color: grey; font-size: 12; {% if story.authorid.fbid == userid %} margin-right: 32px; {% endif %}">
+                                {{ story_post_date }}
+                            </p>
+                            {% if story.authorid.fbid == userid %}
+                            <div class="btn-group pull-right" style="margin-top: -30px;">
+                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a data-toggle="modal" data-id="{{ story.id }}" class="edit_story" href="#post">Edit Story</a></li>
+                                    <li><a data-toggle="modal" data-id="{{ story.id }}" class="delete_story" href="#delete">Delete Story</a></li>
+                                </ul>
+                            </div>
+                            {% endif %}
                         </div>
-                        {% endif %}
                     </div>
                 </td></tr>
                 <tr><td>
-                    <p style="color: grey; margin-bottom: 0px;">{{ story.story }} &nbsp;
+                    <p style="color: grey; margin-bottom: 0px; font-size: 14;">{{ story.story }} &nbsp;
                         <i style="color: #CFCFCF">
                             {% if story.story_date_month != 0 %}
                             {{ story.story_date_month }} / 
@@ -48,7 +51,7 @@
                         </i>
                     </p>
                     {% if story.is_private %}
-                    <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin: -6px 0px; " rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
+                    <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin-bottom: -6px;" rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
                     {% endif %}
                 </td></tr>
                 <!--comment form table row-->
@@ -57,7 +60,7 @@
                         <form action="/comment/" method="post" name="commentForm" onsubmit="return validateCommentForm(this)">
                             <input type="hidden" name="storyid" value="{{ story.id }}">
                             <div class="input-append">
-                                <img src="/static/remenis_logo.png" width=40 />
+                                <img src="/static/remenis_favicon.png" width=30 />
                                 
                                 <input name="comment" type="text" class="input-xlarge comment_text_box" size="16" placeholder="write a comment..." autocomplete="off" style="margin-left: 4px;">
                                     
@@ -68,7 +71,7 @@
                                     -ms-transform: rotate(270deg);
                                     transform: rotate(270deg);">
                                     <p style="margin: -5px;">
-                                    {{ story_likes|length }}
+                                        {{ story_likes|length }}
                                     </p>
                                 </span>
                                 
@@ -79,7 +82,7 @@
                                 <button class="btn btn-medium" type="button" style="margin-left: -4px;" rel="popover" data-original-title="Bookmark" data-content="coming soon..." data-placement="top">
                                     <i class="icon-bookmark"></i>
                                 </button>
-                                <button class="btn btn-medium" onclick="PostToYourWall({{ story.id }})" type="button" style="margin-left: -5px;">
+                                <button class="btn btn-medium" onclick="PostToYourWall({{ story.id }})" type="button" style="margin-left: -4px;">
                                     <i class="icon-share-alt"></i>
                                 </button>
                             </div>
@@ -88,46 +91,42 @@
                 </td></tr>
                 {% for story_comment in story_comments %}
                 <tr style="background-color: #F0F0F0;"><td>
-                    <div class="row-fluid"/>
-                        <a href="/{{ story_comment.authorid.fbid }}" class="span1 nounderline">
-                            <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
-                        </a>
-                        <div class="span11">
-                            <div class="row-fluid" style="margin-bottom: -10px;">
-                                <p class="span10"><strong>{{ story_comment.authorid.full_name }}</strong></p>
-                                <p class="span2" align="right" style="color: grey; font-size: 12;">
-                                {{ story_comment.post_date }}
-                                </p>
-                            </div>
-                            <p style="margin-bottom: 0px;">{{ story_comment.comment }}</p>
-                        </div>
+                    <a href="/{{ story_comment.authorid.fbid }}" class="nounderline" style="float: left;">
+                        <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
+                    </a>
+                    <div style="margin: 0px 5px 0px 8px; width: 435px; float: left;">
+                        <p style="margin-top: -3px; color: grey; font-size: 10; float: right;">
+                        {{ story_comment.post_date }}
+                        </p>
+                        <p style="margin-bottom: 2px; font-size: 14"><strong>{{ story_comment.authorid.full_name }}</strong></p>
+                        <p style="margin-bottom: 0px; font-size: 14">{{ story_comment.comment }}</p>
                     </div>
                 </td></tr>
                 {% endfor %}
             </table>
+            
             <!--tagged user div-->
-            <div class="span4">
-                <table class="table table-borderless table-condensed" id="tagged-friends-table">
-                    <tbody id="tagged-friends-body">
-                        <tr><td><p>In This Story</p></td></tr>
-                        {% for tagged_user in story_tagged_users %}
-                        <tr>
-                            <td>
-                                <p>
-                                    <a href="/{{ tagged_user.fbid }}" class="nounderline">
-                                        <img id="{{ tagged_user.fbid }}" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" class="highlightit rounded3" height="30" width="30"/>
-                                    </a>
-                                    &nbsp;&nbsp;{{ tagged_user.full_name }}
-                                </p>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr><td>none</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <br><br><br>
-            </div>
+            <table class="table table-borderless table-condensed" id="tagged-friends-table" style="margin-left: 10px; width: 200px; float: left;">
+                <tbody id="tagged-friends-body">
+                    <tr><td>
+                        <p style="margin-bottom: 15px;">In This Story</p>
+                    </td></tr>
+                    {% for tagged_user in story_tagged_users %}
+                    <tr><td>
+                        <p style="font-size: 13;">
+                        <a href="/{{ tagged_user.fbid }}" class="nounderline">
+                            <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
+                        </a>
+                        &nbsp;&nbsp;{{ tagged_user.full_name }}
+                        </p>
+                    </td></tr>
+                    {% empty %}
+                    <tr><td>
+                        <span style="font-size: 13px;">none</span>
+                    </td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
         {% endif %}
 

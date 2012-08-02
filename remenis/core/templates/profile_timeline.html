@@ -45,7 +45,7 @@
                     </i>
                 </p>
                 {% if story.is_private %}
-                <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin: -6px 0px;" rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
+                <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin-bottom: -6px;" rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
                 {% endif %}
             </td></tr>
             <tr><td>
@@ -66,7 +66,8 @@
                             {% endifequal %}
                         {% endfor %}
                     </div>
-                    <div class="input-append span6 pull-right" style="margin-top: 5px; margin-right: 0px; min-width: 250px;">
+                    <div class="span6" style="margin-top: 5px; min-width: 250px;">
+                        <div class="input-append pull-right" style="margin-right: 8px;" >
                         <img src="/static/remenis_logo.png" width=40 />
                         
                         <span class="add-on" style="font-size: 10; height: 10px; width: 18px; margin-left: 4px; background-color: #258EAA; color: white;
@@ -113,6 +114,7 @@
                         <button class="btn btn-medium" onclick="PostToYourWall({{ story.id }})" type="button" style="margin-left: -5px;">
                             <i class="icon-share-alt"></i>
                         </button>
+                        </div>
                     </div>
                 </div>
             </td></tr>

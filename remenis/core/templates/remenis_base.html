@@ -18,7 +18,7 @@
         <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
         <style type="text/css">
             body {
-                padding-top: 60px;
+                padding-top: 0px;
                 padding-bottom: 40px;
             }
             .sidebar-nav-fixed {
@@ -155,44 +155,40 @@
                 <a href="#" class="btn" data-dismiss="modal">Close</a>
             </div>
         </div>
-    
-        <div class="container-fluid">
-            <div class="row-fluid">
-                {% block no_sidebar %}
-                <div class="span2">
-                    <div class="sidebar-nav-fixed span2">
-                        <ul class="nav nav-list">
-                            <li {% ifequal active_tab "home" %}class="active"{% endifequal %}>
-                                <a href="/home"><i class="icon-home" style="margin-right: 6px"></i>Home</a>
-                            </li>
-                            <li {% ifequal active_tab "profile" %}class="active"{% endifequal %}>
-                                <a href="/profile"><i class="icon-user" style="margin-right: 6px"></i>Profile</a>
-                            </li>
-                            <li {% ifequal active_tab "post" %}class="active"{% endifequal %}>
-                                <a data-toggle="modal" href="#post"><i class="icon-pencil" style="margin-right: 6px"></i>Post</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                {% endblock %}
-                
-                <div class="span10 span-fixed-sidebar">
-                {% block content %}
-                {% endblock %}
+
+        <div>
+            {% block no_sidebar %}
+            <div class="sidebar-nav-fixed" style="float: left; width: 200px; margin-top: -50px;">
+                <div class="well">
+                    <img src="/static/remenis_logo.png" width="200" style="margin: 0px auto 20px;"/>
+                    <ul class="nav nav-list">
+                        <li {% ifequal active_tab "home" %}class="active"{% endifequal %}>
+                            <a href="/home"><i class="icon-home" style="margin-right: 6px"></i>Home</a>
+                        </li>
+                        <li {% ifequal active_tab "profile" %}class="active"{% endifequal %}>
+                            <a href="/profile"><i class="icon-user" style="margin-right: 6px"></i>Profile</a>
+                        </li>
+                        <li {% ifequal active_tab "post" %}class="active"{% endifequal %}>
+                            <a data-toggle="modal" href="#post"><i class="icon-pencil" style="margin-right: 6px"></i>Post</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            
-            {% block no_footer %}
-            <br><br><br>
-            <hr>
-            <footer>
-                <div class="row-fluid">
-                    <div class="span9 fb-like" data-href="http://www.remenis.com" data-send="true" data-width="450" data-show-faces="true" data-font="lucida grande" style="margin-left: 20px;"></div>
-                    <p align="right">&copy; 2012 Nathan Chan &nbsp;&nbsp;&nbsp;</p>
-                </div>
-            </footer>
             {% endblock %}
+            
+            <div style="margin-left: 250px;">
+            {% block content %}
+            {% endblock %}
+            </div>
         </div>
+        
+        {% block no_footer %}
+        <footer>
+            <hr style="width: 100%;">
+            <div class="fb-like" data-href="http://www.remenis.com" data-send="true" data-width="450" data-show-faces="true" data-font="lucida grande" style="margin: 0px 0px 10px 20px; float: left;"></div>
+            <p style="margin-right: 20px; float: right;">&copy; 2012 Nathan Chan</p>
+        </footer>
+        {% endblock %}
         
         
         {% block load_javascript %}

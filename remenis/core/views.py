@@ -146,7 +146,8 @@ def profile(request, profileid=""):
             story_comments_of_story.append({'storyid': comment.storyid,
                                             'authorid': comment.authorid,
                                             'comment': comment.comment,
-                                            'post_date': getStoryPostDate(comment.post_date)
+                                            'post_date': comment.post_date,
+                                            'post_date_for_display': getStoryPostDate(comment.post_date)
                                             })
         story_comments.append(story_comments_of_story)
         story_likes.append(StoryLike.objects.filter(storyid = story))
@@ -325,7 +326,7 @@ def delete(request):
     redirect_url = request.META["HTTP_REFERER"]
     if redirect_url.find('?') != -1:
         return redirect(re.match(r'(.*)\?.*', redirect_url).group(1))
-    return redirect(request.META["HTTP_REFERER"])
+    return redirect(redirect_url)
 
 @csrf_exempt
 def comment(request):
