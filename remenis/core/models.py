@@ -2,7 +2,6 @@ from django.db import models
 
 class User(models.Model):
     fbid = models.CharField(max_length=20)
-    facebook_id = models.BigIntegerField(primary_key=True)
     first_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
     full_name = models.CharField(max_length=100)
