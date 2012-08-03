@@ -1,18 +1,41 @@
 {% extends "remenis_base.html" %}
-        
+
+        {% block head_extra %}
+        <style type="text/css">
+            .background {
+                background:					#000000 url(/static/homepage_background.jpg) no-repeat top center fixed;
+                -webkit-background-size:	cover;
+                -moz-background-size:		cover;
+                -o-background-size:			cover;
+                background-size:			cover;
+                background-clip:			border-box;
+                background-origin:			padding-box;
+            }
+            </style>
+        {% endblock %}
+
+        {% block splash %}
+        <div style="text-align: center; margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 20px; width: 630px;">
+            <img src="/static/remenis_logo.png"/>
+        </div>
+        <!--[if IE]>
+         <p style="width: 600px; margin: 40px auto; text-align: center; font-size: 20px; font-family: Verdana; color: #FFFFFF; line-height:120%;">Sorry, we currently do not support Internet Explorer.  Consider using <a href="http://www.mozilla.org/firefox/new/" target="_blank">Mozilla Firefox</a> or <a href="http://www.google.com/chrome/" target="_blank">Google Chrome</a><p>
+         <![endif]-->
+        <!--[if !IE]> -->
+        <p style="width: 600px; margin: 30px auto; text-align: center; font-size: 20px; font-family: Verdana; color: #FFFFFF;">You must login first to view this story.</p>
+        <section style="width: 600px; margin: 0px auto; position: relative; z-index: 2;">
+            <div style="text-align: center; background: url('/static/remenis_box.png'); height: 414px;">
+                <p style="font-size: 27px; font-family: Verdana; color: #FFFFFF; padding: 65px 0px 25px 0px;">A collection of all your life stories.</p>
+                <a class="login rpxnow btn btn-primary btn-xlarge" href="https://remenis.rpxnow.com/openid/v2/signin?token_url={{ token_url }}{{ subsite }}{{ story_id }}">Login with Facebook &raquo;</a>
+            </div>
+        </section>
+        <!-- <![endif]-->
+        {% endblock %}
+
         {% block no_sidebar %}
         {% endblock %}
-        
-        {% block content %}
-        <div class="span9">
-            <div class="hero-unit">
-                <img src="/static/remenis_logo.png" width=200 />
-                <br><br>
-                <p>You must login first to view this story.</p>
-                <br>
-                <a class="login rpxnow btn btn-primary btn-large" href="https://remenis.rpxnow.com/openid/v2/signin?token_url={{ token_url }}{{ subsite }}{{ story_id }}">Login with Facebook &raquo;</a>
-            </div>
-        </div><!--/span-->
+
+        {% block no_footer %}
         {% endblock %}
 
         {% block load_javascript %}
@@ -21,12 +44,12 @@
             var rpxJsHost = (("https:" == document.location.protocol) ? "https://" : "http://static.");
             document.write(unescape("%3Cscript src='" + rpxJsHost +
                                     "rpxnow.com/js/lib/rpx.js' type='text/javascript'%3E%3C/script%3E"));
-        </script>
+            </script>
         <script>
             RPXNOW.overlay = true;
             RPXNOW.language_preference = 'en';
             // Set default provider to Facebook
             // https://rpxnow.com/docs#sign-in_default_provider
             //RPXNOW.default_provider = 'facebook';
-        </script>
+            </script>
         {% endblock %}
