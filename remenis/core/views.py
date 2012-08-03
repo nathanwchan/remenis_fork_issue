@@ -529,7 +529,7 @@ def saveSessionAndRegisterUser(request):
             return False # weird case, but hit it once
         userid = (request.session['accessCredentials']).get('uid')
         try:
-            user = User.objects.get(facebook_id=userid)
+            user = User.objects.get(fbid=userid)
         except User.DoesNotExist:
             clearSession(request)
             return False # something wrong - clear session
@@ -642,7 +642,7 @@ def getUserFullName(fbid):
         return ""
     
 def getMyFullName(request):
-    user = User.objects.get(facebook_id=(request.session['accessCredentials']).get('uid'))
+    user = User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
     return user.full_name
 
 monthDictionary = {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"}
