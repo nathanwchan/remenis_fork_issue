@@ -2,7 +2,7 @@
 
         {% block content %}
 
-        <div class="">
+        <div>
             
         {% if not_friend %}
         <p style="margin-bottom: 300px;"><a href="http://www.facebook.com/{{ profileid }}" target="_blank">{{ profile_name }}</a> is not your Facebook friend.</p>
@@ -32,7 +32,7 @@
             <table class="table table-bordered" style="width: 500px; float: left;">
                 <tr><td>
                     <div class="row-fluid" style="margin-top: 0px;">
-                        <p class="span10" style="margin: 0px 0px; font-size: 16;">
+                        <p class="span10" style="margin: 0px -10px 0px 0px; font-size: 16;">
                             <a href="/{{ story.authorid.fbid }}"><strong>{{ story.authorid.full_name }}</strong></a>
                             <span style="color: grey;"> wrote </span>
                         <a href="/story/{{ story.id }}" style="color: blue;">{% if story.title == '' %}...{% else %}<strong>{{ story.title }}</strong>{% endif %}</a>
