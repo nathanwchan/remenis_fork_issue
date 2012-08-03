@@ -15,21 +15,15 @@
         {% endblock %}
 
         {% block splash %}
-        <div style="text-align: center; margin-left: auto; margin-right: auto; margin-top: -20px; margin-bottom: 20px; width: 630px;">
+        <div style="text-align: center; margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 20px; width: 630px;">
             <img src="/static/remenis_logo.png"/>
         </div>
-        <div style="text-align: center; margin-left: auto; margin-right: auto; background: url('/static/homepage_box.png'); width: 458px; height: 297px;">
-            <br><br>
-            <p style="font-size: 24px; color: #FFFFFF; margin-bottom: 20px">A collection of all your life stories.</p>
-            <p style="font-size: 18px; color: #FFFFFF; line-height:120%;">
-            Invite your friends to share their<br>favorite stories about <i>you.</i>
-            </p>
-            <br><br><br>
-            <a class="login rpxnow btn btn-primary btn-large" href="https://remenis.rpxnow.com/openid/v2/signin?token_url={{ token_url }}{{ subsite }}{{ story_id }}">Login with Facebook &raquo;</a>
-        </div>
-        <div style="text-align: center; margin-left: auto; margin-right: auto; margin-top: 20px; width: 630px;">
-            <img src="/static/homepage_steps.png"/>
-        </div>
+        <section style="width: 600px; margin: 0px auto; position: relative; z-index: 2;">
+            <div style="text-align: center; background: url('/static/remenis_box.png'); height: 414px;">
+                <p style="font-size: 27px; font-family: Verdana; color: #FFFFFF; padding: 65px 0px 25px 0px;">A collection of all your life stories.</p>
+                <a class="login rpxnow btn btn-primary btn-xlarge" href="https://remenis.rpxnow.com/openid/v2/signin?token_url={{ token_url }}{{ subsite }}{{ story_id }}">Login with Facebook &raquo;</a>
+            </div>
+        </section>
         {% endblock %}
 
         {% block no_sidebar %}

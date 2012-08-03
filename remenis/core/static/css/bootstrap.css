@@ -2716,6 +2716,15 @@ button.close {
           box-shadow: none;
 }
 
+.btn-xlarge {
+  padding: 12px 18px;
+  font-size: 17px;
+  line-height: normal;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
 .btn-large {
   padding: 9px 14px;
   font-size: 15px;
