@@ -1,31 +1,5 @@
 from django.db import models
-from remenis import settings
-from django.db.models import fields
 
-class BigIntegerField(fields.IntegerField):
-    
-    def db_type(self):
-        if settings.DATABASE_ENGINE == 'mysql':
-            return "bigint"
-        elif settings.DATABASE_ENGINE == 'oracle':
-            return "NUMBER(19)"
-        elif settings.DATABASE_ENGINE[:8] == 'postgres':
-            return "bigint"
-        else:
-            raise NotImplemented
-    
-    def get_internal_type(self):
-        return "BigIntegerField"
-    
-    def to_python(self, value):
-        if value is None:
-            return value
-        try:
-            return long(value)
-        except (TypeError, ValueError):
-            raise exceptions.ValidationError(
-                _("This value must be a long integer."))
-            
 class User(models.Model):
     fbid = models.CharField(max_length=20)
     facebook_id = models.BigIntegerField(default=0, primary_key=True)
