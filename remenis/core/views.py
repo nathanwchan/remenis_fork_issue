@@ -174,7 +174,7 @@ def profile(request, profileid=""):
     else:
         stories_about_user = []
         for story in stories_about_user_all:
-            if not story.is_private or userid in [str(x.taggeduserid.facebook_id) for x in TaggedUser.objects.filter(storyid = story)]:
+            if not story.is_private or userid == story.authorid.facebook_id or userid in [str(x.taggeduserid.facebook_id) for x in TaggedUser.objects.filter(storyid = story)]:
                 stories_about_user.append(story)
     
     if 'display' in request.GET and request.GET['display'] and request.GET['display'] == "timeline":
