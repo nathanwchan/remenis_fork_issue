@@ -63,6 +63,48 @@ def home(request):
     return render_to_response('home.html', locals())
 
 @csrf_exempt
+def migrate1(request):
+    stories = Story.objects.all()
+    tagged_users = TaggedUser.objects.all()
+    story_comments = StoryComment.objects.all()
+    story_likes = StoryLike.objects.all()
+    for story in stories:
+        story.fbid_for_migration = story.authorid.fbid
+        story.save()
+    for tagged_user in tagged_users:
+        tagged_user.fbid_for_migration = tagged_user.taggeduserid.fbid
+        tagged_user.save()
+    for story_comment in story_comments:
+        story_comment.fbid_for_migration = story_comment.authorid.fbid
+        story_comment.save()
+    for story_like in story_likes:
+        story_like.fbid_for_migration = story_like.authorid.fbid
+        story_like.save()
+    return HttpResponse(True)
+
+@csrf_exempt
+def migrate2(request):
+    stories = Story.objects.all()
+    tagged_users = TaggedUser.objects.all()
+    story_comments = StoryComment.objects.all()
+    story_likes = StoryLike.objects.all()
+    
+    for story in stories:
+        story.authorid = User.objects.get(fbid=story.fbid_for_migration)
+        story.save()
+    for tagged_user in tagged_users:
+        tagged_user.taggeduserid = User.objects.get(fbid=tagged_user.fbid_for_migration)
+        tagged_user.save()
+    for story_comment in story_comments:
+        story_comment.authorid = User.objects.get(fbid=story_comment.fbid_for_migration)
+        story_comment.save()
+    for story_like in story_likes:
+        story_like.authorid = User.objects.get(fbid=story_like.fbid_for_migration)
+        story_like.save()
+            
+    return HttpResponse(True)
+
+@csrf_exempt
 def profile(request, profileid=""):
     if not saveSessionAndRegisterUser(request):
         return redirect('/')
