@@ -26,8 +26,6 @@ urlpatterns = patterns('',
     url(r'^messagesent/$', views.messagesent),
     url(r'^story/(\d+)/$', views.story),
     url(r'^api/story/(\d+)/$', views.api_story),
-    url(r'^secret/migrate1/$', views.migrate1),
-    url(r'^secret/migrate2/$', views.migrate2),
     
     url(r'^logout/$', views.logout),
 )
