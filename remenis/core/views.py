@@ -63,6 +63,85 @@ def home(request):
     return render_to_response('home.html', locals())
 
 @csrf_exempt
+def feed(request):
+    if not saveSessionAndRegisterUser(request):
+        return redirect('/')
+    
+    fullname = getMyFullName(request)
+    userid = (request.session['accessCredentials']).get('uid')
+    logged_in_user = User.objects.get(fbid=userid)
+    
+    myfriends = getGraphForMe(request, 'friends', True)
+    
+    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array.append(str(fullname))
+    friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
+    friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
+    
+    friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_id_array.append(str(userid))
+    
+    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
+
+    if 'q' in request.GET:
+        active_tab = "none"
+        if request.GET['q']:
+            query = request.GET['q']
+            return redirect('/' + query)
+        else:
+            return redirect('/searcherror/?error=1') 
+    
+    profile_name = "Remenis Feed"
+    active_tab = "home"
+
+    stories_in_feed_all = []
+    for friend_id in friends_id_array:
+        try:    
+            user = User.objects.get(fbid=friend_id)
+        except User.DoesNotExist:
+            # do nothing
+            stories_in_feed_all += []
+        else:  
+            stories_in_feed_all += getStoriesOfUser(request, user)
+
+    stories_about_user = [] # actually should be called stories_in_feed, but re-using profile.html
+    # remove duplicates
+    for story_in_feed_all in stories_in_feed_all:
+        if not story_in_feed_all in stories_about_user:
+            stories_about_user.append(story_in_feed_all)
+    
+    stories_about_user = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True) # sort by post date
+    
+    stories_about_user_ids = [x.id for x in stories_about_user]
+    tagged_users = []
+    story_comments = []
+    story_likes = []
+    story_post_date = []
+    for story in stories_about_user:
+        tagged_users_in_story = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
+        tagged_users.append(tagged_users_in_story)
+        story_comments_of_story = []
+        story_comments_objects_of_story = StoryComment.objects.filter(storyid = story)
+        for comment in story_comments_objects_of_story:
+            story_comments_of_story.append({'storyid': comment.storyid,
+                                            'authorid': comment.authorid,
+                                            'comment': comment.comment,
+                                            'post_date': comment.post_date,
+                                            'post_date_for_display': getStoryPostDate(comment.post_date)
+                                            })
+        story_comments.append(story_comments_of_story)
+        story_likes.append(StoryLike.objects.filter(storyid = story))
+        story_post_date.append(getStoryPostDate(story.post_date))
+    stories_tagged_users_dictionary = dict(zip(stories_about_user_ids, tagged_users))
+    stories_comments_dictionary = dict(zip(stories_about_user_ids, story_comments))
+    stories_likes_dictionary = dict(zip(stories_about_user_ids, story_likes))
+    stories_post_date_dictionary = dict(zip(stories_about_user_ids, story_post_date))
+    
+    liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
+
+    return render_to_response('profile_recent.html', locals())
+
+@csrf_exempt
 def profile(request, profileid=""):
     if not saveSessionAndRegisterUser(request):
         return redirect('/')
@@ -99,32 +178,16 @@ def profile(request, profileid=""):
     
     if profileid == userid:
         active_tab = "profile"
-    
+
     try:    
         user = User.objects.get(fbid=profileid)
     except User.DoesNotExist:
-        stories_written_by_user = []
-        profile_name = getUserFullName(profileid)
-        stories_about_user_all = []
-    else:    
-        stories_written_by_user = Story.objects.filter(authorid = user)
-        profile_name = user.full_name
-        stories_about_user_all = [x.storyid for x in TaggedUser.objects.filter(taggeduserid=user)]
-    
-    # aggregate stories written by and about user together, removing duplicates 
-    for story_written_by_user in stories_written_by_user:
-        if not story_written_by_user in stories_about_user_all:
-            stories_about_user_all.append(story_written_by_user)
-
-    # exclude private stories
-    if profileid == userid:
-        stories_about_user = stories_about_user_all
-    else:
         stories_about_user = []
-        for story in stories_about_user_all:
-            if not story.is_private or userid == story.authorid.fbid or userid in [x.taggeduserid.fbid for x in TaggedUser.objects.filter(storyid = story)]:
-                stories_about_user.append(story)
-    
+        profile_name = getUserFullName(profileid)
+    else:  
+        stories_about_user = getStoriesOfUser(request, user)
+        profile_name = user.full_name
+
     if 'display' in request.GET and request.GET['display'] and request.GET['display'] == "timeline":
         stories_about_user = sorted(stories_about_user, key=operator.attrgetter('story_date_year', 'story_date_month', 'story_date_day'), reverse=True) # sort by story date
         profile_html_page = "profile_timeline.html"
@@ -532,6 +595,29 @@ def saveSessionAndRegisterUser(request):
     else:
         return False # weird case
 
+def getStoriesOfUser(request, user):
+    stories_written_by_user = Story.objects.filter(authorid = user)
+    stories_user_tagged_in = [x.storyid for x in TaggedUser.objects.filter(taggeduserid=user)]
+    stories_of_user_all = stories_user_tagged_in
+    
+    # aggregate stories written by user and tagged in, removing duplicates 
+    for story_written_by_user in stories_written_by_user:
+        if not story_written_by_user in stories_of_user_all:
+            stories_of_user_all.append(story_written_by_user)
+
+    logged_in_user_id = (request.session['accessCredentials']).get('uid')
+    stories_of_user = []
+    
+    # exclude private stories
+    if not user.fbid == logged_in_user_id:
+        for story in stories_of_user_all:
+            if not story.is_private or logged_in_user_id == story.authorid.fbid or logged_in_user_id in [x.taggeduserid.fbid for x in TaggedUser.objects.filter(storyid = story)]:
+                stories_of_user.append(story)
+    else:
+        stories_of_user = stories_of_user_all
+                
+    return stories_of_user
+    
 def getErrorMessage(errorid):
     if errorid == '1':
         return 'Please submit a valid search term.'
