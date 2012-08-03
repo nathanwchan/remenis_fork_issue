@@ -2,7 +2,6 @@ from django.db import models
 
 class User(models.Model):
     fbid = models.CharField(max_length=20)
-    facebook_id = models.BigIntegerField(default=0)
     first_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
     full_name = models.CharField(max_length=100)
@@ -27,7 +26,6 @@ class Story(models.Model):
     post_date = models.DateTimeField(blank=True, null=True)
     is_private = models.BooleanField()
     page_views = models.IntegerField(default=0)
-    fbid_for_migration = models.BigIntegerField(default=0)
     
     class Admin:
         pass
@@ -35,7 +33,6 @@ class Story(models.Model):
 class TaggedUser(models.Model):
     storyid = models.ForeignKey(Story)
     taggeduserid = models.ForeignKey(User, blank=True, null=True)
-    fbid_for_migration = models.BigIntegerField(default=0)
         
     class Admin:
         pass
@@ -45,7 +42,6 @@ class StoryComment(models.Model):
     authorid = models.ForeignKey(User, blank=True, null=True)
     comment = models.TextField()
     post_date = models.DateTimeField(blank=True, null=True)
-    fbid_for_migration = models.BigIntegerField(default=0)
     
     class Admin:
         pass
@@ -53,7 +49,6 @@ class StoryComment(models.Model):
 class StoryLike(models.Model):
     storyid = models.ForeignKey(Story)
     authorid = models.ForeignKey(User)
-    fbid_for_migration = models.BigIntegerField(default=0)
     
     class Admin:
         pass

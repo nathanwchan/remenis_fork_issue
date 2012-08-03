@@ -20,8 +20,8 @@
         {% for story in stories_about_user %}
         
         <a name="{{ story.id }}" style="position:absolute; margin-top: -70px"></a>
-        <!--<a class="span1 nounderline" href="/{{ story.authorid.facebook_id }}" style="margin-top: 10px; margin-right: -10px;">
-            <img src="https://graph.facebook.com/{{ story.authorid.facebook_id }}/picture?type=square" class="highlightit rounded5" height="50" width="50" />
+        <!--<a class="span1 nounderline" href="/{{ story.authorid.fbid }}" style="margin-top: 10px; margin-right: -10px;">
+            <img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" class="highlightit rounded5" height="50" width="50" />
         </a>-->
         <!--story table-->
         <table class="table table-bordered span7" style="margin-bottom: 40px;">
@@ -53,13 +53,13 @@
                     <div class="span6" style="margin-top: 3px;">
                         {% for dic_storyid, dic_taggedusers in stories_tagged_users_dictionary.items %}
                             {% ifequal dic_storyid story.id %}
-                                <a href="/{{ story.authorid.facebook_id }}" class="nounderline">
-                                    <img src="https://graph.facebook.com/{{ story.authorid.facebook_id }}/picture?type=square" class="highlightit rounded3" height="30" width="30"rel="tooltip" title="Written by {{ story.authorid.full_name }}" />
+                                <a href="/{{ story.authorid.fbid }}" class="nounderline">
+                                    <img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" class="highlightit rounded3" height="30" width="30"rel="tooltip" title="Written by {{ story.authorid.full_name }}" />
                                 </a>
                                 {% for tagged_user in dic_taggedusers %}
-                                    {% if tagged_user.facebook_id != story.authorid.facebook_id %}
-                                    <a href="/{{ tagged_user.facebook_id }}" class="nounderline">
-                                        <img src="https://graph.facebook.com/{{ tagged_user.facebook_id }}/picture?type=square" class="highlightit rounded3" height="30" width="30" rel="tooltip" title="{{ tagged_user.full_name }}"/>
+                                    {% if tagged_user.fbid != story.authorid.fbid %}
+                                    <a href="/{{ tagged_user.fbid }}" class="nounderline">
+                                        <img src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" class="highlightit rounded3" height="30" width="30" rel="tooltip" title="{{ tagged_user.full_name }}"/>
                                     </a>
                                     {% endif %}
                                 {% endfor %}

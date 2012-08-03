@@ -63,63 +63,13 @@ def home(request):
     return render_to_response('home.html', locals())
 
 @csrf_exempt
-def migrate(request):
-    users = User.objects.all()
-    for user in users:
-        user.facebook_id = int(user.fbid)
-        user.save()
-    return HttpResponse(True)
-
-@csrf_exempt
-def migrate1(request):
-    stories = Story.objects.all()
-    tagged_users = TaggedUser.objects.all()
-    story_comments = StoryComment.objects.all()
-    story_likes = StoryLike.objects.all()
-    for story in stories:
-        story.fbid_for_migration = story.authorid.facebook_id
-        story.save()
-    for tagged_user in tagged_users:
-        tagged_user.fbid_for_migration = tagged_user.taggeduserid.facebook_id
-        tagged_user.save()
-    for story_comment in story_comments:
-        story_comment.fbid_for_migration = story_comment.authorid.facebook_id
-        story_comment.save()
-    for story_like in story_likes:
-        story_like.fbid_for_migration = story_like.authorid.facebook_id
-        story_like.save()
-    return HttpResponse(True)
-
-@csrf_exempt
-def migrate2(request):
-    stories = Story.objects.all()
-    tagged_users = TaggedUser.objects.all()
-    story_comments = StoryComment.objects.all()
-    story_likes = StoryLike.objects.all()
-    
-    for story in stories:
-        story.authorid = User.objects.get(facebook_id=story.fbid_for_migration)
-        story.save()
-    for tagged_user in tagged_users:
-        tagged_user.taggeduserid = User.objects.get(facebook_id=tagged_user.fbid_for_migration)
-        tagged_user.save()
-    for story_comment in story_comments:
-        story_comment.authorid = User.objects.get(facebook_id=story_comment.fbid_for_migration)
-        story_comment.save()
-    for story_like in story_likes:
-        story_like.authorid = User.objects.get(facebook_id=story_like.fbid_for_migration)
-        story_like.save()
-            
-    return HttpResponse(True)
-   
-@csrf_exempt
 def profile(request, profileid=""):
     if not saveSessionAndRegisterUser(request):
         return redirect('/')
     
     fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
-    logged_in_user = User.objects.get(facebook_id=userid)
+    logged_in_user = User.objects.get(fbid=userid)
     
     myfriends = getGraphForMe(request, 'friends', True)
     
@@ -145,15 +95,13 @@ def profile(request, profileid=""):
     elif not profileid in friends_id_array:
         not_friend = True
         profile_name = getUserFullName(profileid)
-        return render_to_response('profile_recent.html', locals())
-    else:
-        profileid = int(profileid)
+        return render_to_response('profile_recent.html', locals())    
     
     if profileid == userid:
         active_tab = "profile"
     
     try:    
-        user = User.objects.get(facebook_id=profileid)
+        user = User.objects.get(fbid=profileid)
     except User.DoesNotExist:
         stories_written_by_user = []
         profile_name = getUserFullName(profileid)
@@ -174,7 +122,7 @@ def profile(request, profileid=""):
     else:
         stories_about_user = []
         for story in stories_about_user_all:
-            if not story.is_private or userid == story.authorid.facebook_id or userid in [str(x.taggeduserid.facebook_id) for x in TaggedUser.objects.filter(storyid = story)]:
+            if not story.is_private or userid in [x.taggeduserid.fbid for x in TaggedUser.objects.filter(storyid = story)]:
                 stories_about_user.append(story)
     
     if 'display' in request.GET and request.GET['display'] and request.GET['display'] == "timeline":
@@ -283,7 +231,7 @@ def post(request):
     if request.method == 'GET':
         return redirect('/home/')
     elif request.method == 'POST':
-        user = User.objects.get(facebook_id=userid)
+        user = User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
         
         date_month_int = 0
         if 'story_date_month' in request.POST:
@@ -339,16 +287,16 @@ def post(request):
             tagged_friends = tagged_friends.split(",")
         
         if not newstory: # editing story
-            existing_tagged_users = [str(x.taggeduserid.facebook_id) for x in TaggedUser.objects.filter(storyid = story)]
+            existing_tagged_users = [x.taggeduserid.fbid for x in TaggedUser.objects.filter(storyid = story)]
             for existing_tagged_user in existing_tagged_users:
                 if not existing_tagged_user in tagged_friends:
-                    TaggedUser.objects.filter(storyid = story).filter(taggeduserid=User.objects.get(facebook_id=int(existing_tagged_user))).delete()
+                    TaggedUser.objects.filter(storyid = story).filter(taggeduserid=User.objects.get(fbid=existing_tagged_user)).delete()
         
         for tagged_friend in tagged_friends:
             try:    
-                tagged_user = User.objects.get(facebook_id=int(tagged_friend))
+                tagged_user = User.objects.get(fbid=tagged_friend)
             except User.DoesNotExist:
-                tagged_user = User(facebook_id=int(tagged_friend),
+                tagged_user = User(fbid=tagged_friend,
                                     full_name=friends_dictionary_temp[tagged_friend],
                                     is_registered=False
                                     )
@@ -384,7 +332,7 @@ def delete(request):
 def comment(request):
     if request.method == 'POST':
         comment_to_save = StoryComment(storyid=Story.objects.get(id=int(request.POST["storyid"])),
-                                       authorid=User.objects.get(facebook_id=(request.session['accessCredentials']).get('uid')),
+                                       authorid=User.objects.get(fbid=(request.session['accessCredentials']).get('uid')),
                                        comment=request.POST["comment"],
                                        post_date=datetime.datetime.now()
                                        )
@@ -407,11 +355,11 @@ def like(request, storyid=""):
     else:
         try:
             like = StoryLike.objects.get(storyid=story,
-                                         authorid=User.objects.get(facebook_id=(request.session['accessCredentials']).get('uid'))
+                                         authorid=User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
                                          )
         except StoryLike.DoesNotExist:    
             like_to_save = StoryLike(storyid=story,
-                                     authorid=User.objects.get(facebook_id=(request.session['accessCredentials']).get('uid'))
+                                     authorid=User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
                                      )
             like_to_save.save()
             
@@ -432,7 +380,7 @@ def story(request, storyid=""):
     
     fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
-    logged_in_user = User.objects.get(facebook_id=userid)
+    logged_in_user = User.objects.get(fbid=userid)
     
     myfriends = getGraphForMe(request, 'friends', True)
     
@@ -462,7 +410,7 @@ def story(request, storyid=""):
         # Check if you have access to this story
         story_tagged_users = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
         # - check if private story
-        if story.is_private and userid != story.authorid.facebook_id and not userid in [x.facebook_id for x in story_tagged_users]:
+        if story.is_private and userid != story.authorid.fbid and not userid in [x.fbid for x in story_tagged_users]:
             story = False
             error = "You do not have access to this story."
         else:
@@ -495,9 +443,9 @@ def api_story(request, storyid=""):
         return HttpResponse(False)
     else:
         # Check if you have access to this story
-        tagged_users = [int(x.taggeduserid.facebook_id) for x in TaggedUser.objects.filter(storyid = story)]
+        tagged_users = [int(x.taggeduserid.fbid) for x in TaggedUser.objects.filter(storyid = story)]
         # - check if private story
-        if story.is_private and userid != story.authorid.facebook_id and not userid in tagged_users:
+        if story.is_private and userid != story.authorid.fbid and not userid in tagged_users:
             return HttpResponse(False)
         else:
             # remove post date (can't json serialize post_date)
@@ -554,15 +502,14 @@ def saveSessionAndRegisterUser(request):
             lastname = name.get('familyName')
             
             request.session['accessCredentials'] = auth_info['accessCredentials']
-            (request.session['accessCredentials'])['uid'] = int((request.session['accessCredentials']).get('uid'))
             
             userid = (request.session['accessCredentials']).get('uid')
             
             try:
-                user = User.objects.get(facebook_id=userid)
+                user = User.objects.get(fbid=userid)
             except User.DoesNotExist:
                 # save new user to user DB
-                user_to_save = User(facebook_id=userid,
+                user_to_save = User(fbid=userid,
                                     first_name=firstname,
                                     last_name=lastname,
                                     full_name=fullname,
@@ -572,7 +519,7 @@ def saveSessionAndRegisterUser(request):
                 user_to_save.save()
             else:
                 if user.is_registered == False: # user has already been tagged in a story, but this is their first time logging into Remenis
-                    user.facebook_id = userid
+                    user.fbid = userid
                     user.first_name = firstname
                     user.last_name = lastname
                     user.full_name = fullname
@@ -620,7 +567,7 @@ def getGraphData(request, url_to_open):
     return graph['data']
 
 def getGraphForMe(request, graph_string, access_token_needed=False):
-    url_to_open = 'https://graph.facebook.com/' + str((request.session['accessCredentials']).get('uid')) + '/' + graph_string
+    url_to_open = 'https://graph.facebook.com/' + (request.session['accessCredentials']).get('uid') + '/' + graph_string
     if access_token_needed:
         url_to_open += '?access_token=' + (request.session['accessCredentials']).get('accessToken')
     return getGraphData(request, url_to_open)
@@ -632,7 +579,7 @@ def getGraphCustom(request, graph_string, access_token_needed=False):
     return getGraphData(request, url_to_open)
 
 def getUserFullName(fbid):
-    url_to_open = 'https://graph.facebook.com/' + str(fbid)
+    url_to_open = 'https://graph.facebook.com/' + fbid
     http_response = urllib2.urlopen(url_to_open)
     graph_json = http_response.read()
     graph = json.loads(graph_json)

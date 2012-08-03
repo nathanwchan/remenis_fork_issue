@@ -7,8 +7,8 @@
         <p style="margin-bottom: 300px;">{{ error }}</p>
         {% else %}
         <div style="margin-top: 15px;">
-            <a class="nounderline" href="/{{ story.authorid.facebook_id }}" style="margin-top: 5px; float: left;">
-                <img src="https://graph.facebook.com/{{ story.authorid.facebook_id }}/picture?type=square" class="highlightit rounded5" height="50" width="50"/>
+            <a class="nounderline" href="/{{ story.authorid.fbid }}" style="margin-top: 5px; float: left;">
+                <img src="https://graph.facebook.com/{{ story.authorid.fbid }}/picture?type=square" class="highlightit rounded5" height="50" width="50"/>
             </a>
             <img src="/static/bubbles.png" style="margin-top: 2px; float: left;"/>
             <!--story table-->
@@ -17,14 +17,14 @@
                     <div>
                         <div class="row-fluid" style="margin-top: 0px;">
                             <p class="span10" style="margin: 0px 0px; font-size: 16;">
-                                <a href="/{{ story.authorid.facebook_id }}"><strong>{{ story.authorid.full_name }}</strong></a>
+                                <a href="/{{ story.authorid.fbid }}"><strong>{{ story.authorid.full_name }}</strong></a>
                                 <span style="color: grey;"> wrote </span>
                                 <a href="/story/{{ story.id }}" style="color: blue;"><strong>{{ story.title }}</strong></a>
                             </p>
-                            <p align="right" style="color: grey; font-size: 12; {% if story.authorid.facebook_id == userid %} margin-right: 32px; {% endif %}">
+                            <p align="right" style="color: grey; font-size: 12; {% if story.authorid.fbid == userid %} margin-right: 32px; {% endif %}">
                                 {{ story_post_date }}
                             </p>
-                            {% if story.authorid.facebook_id == userid %}
+                            {% if story.authorid.fbid == userid %}
                             <div class="btn-group pull-right" style="margin-top: -30px;">
                                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                                     <span class="caret"></span>
@@ -91,8 +91,8 @@
                 </td></tr>
                 {% for story_comment in story_comments %}
                 <tr style="background-color: #F0F0F0;"><td>
-                    <a href="/{{ story_comment.authorid.facebook_id }}" class="nounderline" style="float: left;">
-                        <img id="{{ story_comment.authorid.facebook_id }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.facebook_id }}/picture?type=square" height="30" width="30"/>
+                    <a href="/{{ story_comment.authorid.fbid }}" class="nounderline" style="float: left;">
+                        <img id="{{ story_comment.authorid.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ story_comment.authorid.fbid }}/picture?type=square" height="30" width="30"/>
                     </a>
                     <div style="margin: 0px 5px 0px 8px; width: 435px; float: left;">
                         <p style="margin-top: -3px; color: grey; font-size: 10; float: right;">
@@ -114,8 +114,8 @@
                     {% for tagged_user in story_tagged_users %}
                     <tr><td>
                         <p style="font-size: 13;">
-                        <a href="/{{ tagged_user.facebook_id }}" class="nounderline">
-                            <img id="{{ tagged_user.facebook_id }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.facebook_id }}/picture?type=square" height="30" width="30"/>
+                        <a href="/{{ tagged_user.fbid }}" class="nounderline">
+                            <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
                         </a>
                         &nbsp;&nbsp;{{ tagged_user.full_name }}
                         </p>
