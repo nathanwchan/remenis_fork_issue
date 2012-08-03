@@ -77,16 +77,16 @@ def migrate1(request):
     story_comments = StoryComment.objects.all()
     story_likes = StoryLike.objects.all()
     for story in stories:
-        story.fbid_for_migration = int(story.authorid.fbid)
+        story.fbid_for_migration = story.authorid.facebook_id
         story.save()
     for tagged_user in tagged_users:
-        tagged_user.fbid_for_migration = int(tagged_user.taggeduserid.fbid)
+        tagged_user.fbid_for_migration = tagged_user.taggeduserid.facebook_id
         tagged_user.save()
     for story_comment in story_comments:
-        story_comment.fbid_for_migration = int(story_comment.authorid.fbid)
+        story_comment.fbid_for_migration = story_comment.authorid.facebook_id
         story_comment.save()
     for story_like in story_likes:
-        story_like.fbid_for_migration = int(story_like.authorid.fbid)
+        story_like.fbid_for_migration = story_like.authorid.facebook_id
         story_like.save()
     return HttpResponse(True)
 
