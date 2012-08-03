@@ -5,14 +5,10 @@ from django.db.models import fields
 class BigIntegerField(fields.IntegerField):
     
     def db_type(self):
-        if settings.DATABASE_ENGINE == 'mysql':
-            return "bigint"
-        elif settings.DATABASE_ENGINE == 'oracle':
+        if settings.DATABASE_ENGINE == 'oracle':
             return "NUMBER(19)"
-        elif settings.DATABASE_ENGINE[:8] == 'postgres':
-            return "bigint"
         else:
-            raise NotImplemented
+            return "bigint"
     
     def get_internal_type(self):
         return "BigIntegerField"
@@ -28,7 +24,7 @@ class BigIntegerField(fields.IntegerField):
             
 class User(models.Model):
     fbid = models.CharField(max_length=20)
-    facebook_id = models.BigIntegerField(default=0, primary_key=True)
+    facebook_id = models.IntegerField(default=0, primary_key=True)
     first_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
     full_name = models.CharField(max_length=100)
