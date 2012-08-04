@@ -413,9 +413,15 @@ def post(request):
                     notification_to_save.save()
         
         if newstory:
+            analyticsPageView("post_story")
             share_clause = "?share=" + str(story.id)
         else:
+            analyticsPageView("edit_story")
             share_clause = ""
+        
+        if request.POST["story_of_the_day_flag"] == "true":
+            analyticsPageView("post_story_via_story_of_the_day")
+        
         redirect_url = request.META["HTTP_REFERER"]
         if redirect_url.find('?') != -1:
             return redirect(re.match(r'(.*)\?.*', redirect_url).group(1) + share_clause + "#" + str(story.id))

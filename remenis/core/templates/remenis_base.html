@@ -73,6 +73,7 @@
             </div>
             <form action="/post/" method="post" name="submitForm" style="margin-bottom:0;" onsubmit="return validateSubmitForm(this)">
                 <input type="hidden" id="storyid_for_edit" name="storyid_for_edit">
+                <input type="hidden" id="story_of_the_day_flag" name="story_of_the_day_flag" value="false">
                 <div class="modal-body">
                     <div class="row-fluid">
                         <div class="span7" style="margin-left: 5px;">
@@ -259,6 +260,7 @@
         <script>
             function StoryOfTheDay()
             {
+                $("#story_of_the_day_flag").prop("value", "true");
                 $("#story_for_edit").prop("placeholder", document.getElementById('story_of_the_day').innerHTML);
                 $('#post').modal('show');
             }
