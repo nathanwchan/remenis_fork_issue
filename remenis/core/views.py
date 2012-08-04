@@ -222,13 +222,7 @@ def profile(request, profileid=""):
     
     liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
     
-    if 'display' in request.GET and request.GET['display']:
-        display = request.GET['display']
-        if display == "recent":
-            return render_to_response('profile_recent.html', locals())
-        elif display == "timeline":
-            return render_to_response('profile_timeline.html', locals())
-    return render_to_response('profile_recent.html', locals())
+    return render_to_response(profile_html_page, locals())
 
 @csrf_exempt
 def searcherror(request):
