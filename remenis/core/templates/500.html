@@ -80,15 +80,20 @@
     </head>
     
     <body class="background">
-        <div style="margin-left: 20px;">
-            <br><img src="/static/remenis_logo.png" height=100/>
-            <br><br><h2>Sorry, something went wrong.  Our engineers have been alerted.</h2>
-            <br><a href="http://www.remenis.com" class="btn">Go Home</a>
+        <div style="text-align: center; margin: 30px auto; width: 630px;">
+            <img src="/static/remenis_logo.png"/>
         </div>
-        <div class="snake" style="position: fixed; left: 30%;">
-            <a href="#" id="play-snake">Play Snake</a>
-            <canvas id="snake-cage" width="381" height="221"><p>Bummer! You need an updated browser to play with us. Try <a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/new/" target="_blank">Mozilla Firefox</a>, or <a href="http://windows.microsoft.com/en-US/internet-explorer/downloads/ie" target="_blank">Internet Explorer 9</a></p></canvas>
-        </div>
+        <section style="width: 600px; margin: 0px auto; position: relative; z-index: 2;">
+            <div style="text-align: center;">
+                <p style="width: 600px; margin: 30px auto; text-align: center; font-size: 20px; font-family: Verdana; color: #FFFFFF; line-height: 140%;">Sorry, something went wrong.<br>Our engineers have been alerted.</p>
+                <a href="http://www.remenis.com" class="btn btn-primary btn-large">Go Home</a>
+                <p style="width: 600px; margin: 20px auto 10px auto; text-align: center; font-size: 14px; font-family: Verdana; color: #FFFFFF;">or play snake...</p>
+                <div class="snake" style="margin-left: 110px;">
+                    <a href="#" id="play-snake">Play Snake</a>
+                    <canvas id="snake-cage" width="381" height="221"><p>Bummer! You need an updated browser to play with us. Try <a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/new/" target="_blank">Mozilla Firefox</a>, or <a href="http://windows.microsoft.com/en-US/internet-explorer/downloads/ie" target="_blank">Internet Explorer 9</a></p></canvas>
+                </div>
+            </div>
+        </section>
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript"></script>
         <script src="/static/js/snake.js"></script>
