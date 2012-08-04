@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^searcherror/$', views.searcherror),
     url(r'^messagesent1/$', views.messagesent1),
     url(r'^messagesent2/$', views.messagesent2),
+    url(r'^messagesent3/$', views.messagesent3),
     url(r'^story/(\d+)/$', views.story),
     url(r'^api/story/(\d+)/$', views.api_story),
     

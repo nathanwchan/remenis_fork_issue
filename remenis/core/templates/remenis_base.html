@@ -285,10 +285,12 @@
             function PostToYourWall(storyid)
             {
                 var title = 'Check out this story on Remenis!';
-                if (storyid == "")
+                var redirect_uri = 'http://www.remenis.com/messagesent1/';
+                if (storyid == "") // via share popup
                 {
                     storyid = document.getElementById('storyid_for_share').value;
                     title = 'I just wrote this story on Remenis!';
+                    redirect_uri = 'http://www.remenis.com/messagesent3/';
                 }
                 $.getJSON('/api/story/' + storyid, function(jsonString)
                           {
@@ -306,7 +308,7 @@
                                 method: 'feed',
                                 name: title,
                                 link: 'http://www.remenis.com/story/' + storyid,
-                                redirect_uri: 'http://www.remenis.com/messagesent1/',
+                                redirect_uri: redirect_uri,
                                 picture: 'http://www.remenis.com/static/remenis_logo.png',
                                 description: description,
                                 });
@@ -315,8 +317,8 @@
             
             function SendAMessage(storyid)
             {
-                var title = 'Check out this story on Remenis!';
-                if (storyid == "")
+                var title = 'Check out this story on Remenis!'; // currently not used.  SendAMessage always called via share popup.
+                if (storyid == "") // via share popup
                 {
                     storyid = document.getElementById('storyid_for_share').value;
                     title = 'I just wrote this story on Remenis!';

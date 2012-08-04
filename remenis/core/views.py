@@ -621,11 +621,15 @@ def api_story(request, storyid=""):
     return HttpResponse(False)
 
 def messagesent1(request):
-    analyticsPageView("share_post_to_wall")
+    analyticsPageView("share_popup_post_to_wall")
     return render_to_response('messagesent.html', locals())
 
 def messagesent2(request):
-    analyticsPageView("share_send_a_message")
+    analyticsPageView("share_popup_send_a_message")
+    return render_to_response('messagesent.html', locals())
+
+def messagesent3(request):
+    analyticsPageView("share_post_to_wall")
     return render_to_response('messagesent.html', locals())
 
 ## UTILS
