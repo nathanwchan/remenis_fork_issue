@@ -2,9 +2,8 @@
 
         {% block content %}
         
-        <br>
         {% if not story %}
-        <p style="margin-bottom: 300px;">{{ error }}</p>
+        <p style="margin-top: 30px;">{{ error }}</p>
         {% else %}
         <div style="margin-top: 15px;">
             <a class="nounderline" href="/{{ story.authorid.fbid }}" style="margin-top: 5px; float: left;">

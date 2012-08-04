@@ -3,10 +3,11 @@
         {% block content %}
 
         {% if not_friend %}
-        <p style="margin-bottom: 300px;"><a href="http://www.facebook.com/{{ profileid }}" target="_blank">{{ profile_name }}</a> is not your Facebook friend.</p>
+        <p style="margin-top: 30px;"><a href="http://www.facebook.com/{{ profileid }}" target="_blank">{{ profile_name }}</a> is not your Facebook friend.</p>
         {% else %}
         <h2>{{ profile_name }}</h2>
         <br>
+        {% if stories_about_user and active_tab != 'home' %}
         <ul class="nav nav-tabs">
             <li>
                 <a href="?display=recent">Most Recent</a>
@@ -16,6 +17,7 @@
             </li>
         </ul>
         <br>
+        {% endif %}
 
         <table class="table table-notop" style="width: 620px; float: left; margin-top: -10px;">
         {% for story in stories_about_user %}
@@ -120,7 +122,7 @@
             </table>
         </td></tr>
         {% empty %}
-        <p style="margin-bottom: 300px;">No stories.</p>
+        <p>No stories.</p>
         {% endfor %}
         </table>
 
