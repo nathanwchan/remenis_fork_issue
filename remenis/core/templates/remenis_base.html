@@ -77,7 +77,7 @@
                     <div class="row-fluid">
                         <div class="span6">
                             <p>Title:<br><input id="title_for_edit" type="text" class="span11" name="title" placeholder="(optional)" autocomplete="off"></p>
-                            <p>Tell us a story:<br><textarea id="story_for_edit" name="story" class="span11" rows="6"></textarea></p>
+                            <p>Tell us your story:<br><textarea id="story_for_edit" name="story" class="span11" rows="6"></textarea></p>
                             <p>When did this story happen?</p>
                             <div id="post_date_div" style="margin-top: -8px;">
                                 <select id="date_year_select" name="story_date_year" style="width: 100px;"></select>
@@ -180,6 +180,13 @@
                             <a data-toggle="modal" href="#post"><i class="icon-pencil" style="margin-right: 6px"></i>Post</a>
                         </li>
                     </ul>
+                    <div style="text-align: left; background: url('/static/storyoftheday.png'); width: 151px; height: 77px; margin: 20px 0px 20px;">
+                        <p style="font-size: 13px; font-family: Verdana; color: #000000; padding: 5px;">One of my favorite vacations was...</p>
+                    </div>
+                    <div style="margin: -10px auto 50px;">
+                        <img src="/static/storyoftheday_asterisk.png" width="20" style="float: left; margin-top: 5px;"/>
+                        <input class="input-large" type="text" autocomplete="off" placeholder="Tell us your story..." style="width: 135px; float: right;">
+                    </div>
                 </div>
             </div>
             {% endblock %}
