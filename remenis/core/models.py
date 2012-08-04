@@ -69,7 +69,7 @@ class StoryOfTheDay(models.Model):
         pass
     
 class PageView(models.Model):
-    page = models.CharField(max_length=20)
+    page = models.CharField(max_length=40)
     count = models.IntegerField(default=0)
     
     class Admin:
