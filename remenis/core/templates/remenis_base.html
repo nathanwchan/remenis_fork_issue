@@ -641,11 +641,13 @@
             
             function validateCommentForm(form)
             {
-                if (form.comment.value == "")
+                if (form.comment.value != "" && form.comment_flag.value == "false")
                 {
-                    return false;
+                    form.comment_flag.value = "true";
+                    form.comment.readOnly = true;
+                    return true;
                 }
-                return true;
+                return false;
             }
         </script>
         {% block load_javascript2 %}

@@ -58,6 +58,7 @@
                     <div style="color: grey; margin-top: 5px; margin-bottom: -10px;">
                         <form action="/comment/" method="post" name="commentForm" onsubmit="return validateCommentForm(this)">
                             <input type="hidden" name="storyid" value="{{ story.id }}">
+                            <input type="hidden" name="comment_flag" value="false">
                             <div class="input-append">
                                 <img src="/static/remenis_favicon.png" width=30 />
                                 
