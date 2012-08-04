@@ -1,14 +1,10 @@
 {% extends "remenis_base_nav.html" %}
 
         {% block content %}
-        
+
+        <h2>Notifications</h2>
         {% if notifications %}
-            <div style="width: 700px;">
-                <h2 style="float: left;">Notifications</h2>
-                <a class="btn btn-primary btn-medium" style="float: right;" href="/notifications/clear">Clear all notifications</a>
-            </div>
-            <br>
-            <table class="table table-bordered" style="width: 700px; margin: 50px 0px;">
+            <table class="table table-bordered" style="width: 700px; margin: 30px 0px;">
             {% for notification in notifications %}
                 <tr><td>
                     <p>
@@ -25,6 +21,7 @@
                 </td></tr>
             {% endfor %}
             </table>
+            <a class="btn btn-primary btn-medium" href="/notifications/clear">Clear all notifications</a>
         {% else %}
         <p style="margin-top: 30px;">No new notifications.</p>
         {% endif %}
