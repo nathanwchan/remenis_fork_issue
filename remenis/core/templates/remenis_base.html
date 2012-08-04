@@ -66,7 +66,7 @@
         </script>
         
         <!--post modal-->
-        <div class="modal hide fade" id="post" style="display: none; width: 700px;">
+        <div class="modal hide fade" id="post" style="display: none; width: 580px;">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
                 <h2 id="post_modal_title">Post a story!</h2>
@@ -75,7 +75,7 @@
                 <input type="hidden" id="storyid_for_edit" name="storyid_for_edit">
                 <div class="modal-body">
                     <div class="row-fluid">
-                        <div class="span6">
+                        <div class="span7" style="margin-left: 5px;">
                             <p>Title:<br><input id="title_for_edit" type="text" class="span11" name="title" placeholder="(optional)" autocomplete="off"></p>
                             <p>Tell us your story:<br><textarea id="story_for_edit" name="story" class="span11" rows="6"></textarea></p>
                             <p>When did this story happen?</p>
@@ -89,16 +89,20 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="span6">
-                            <p>Who was in the story?<br><input id="tagged_friend_searchBox" type="text" class="input-xlarge" data-provide="typeahead" data-items="6" data-source='{{ friends_name_array_string|safe }}' placeholder="enter friend's name" autocomplete="off"></p>
+                        <div class="span5" style="margin-left: 0px;">
+                            <p>Who was in the story?<br><input id="tagged_friend_searchBox" type="text" class="input-large" data-provide="typeahead" data-items="6" data-source='{{ friends_name_array_string|safe }}' placeholder="enter friend's name" autocomplete="off"></p>
                             <h3>tagged friends</h3>
                             <input type="hidden" id="post-tagged-friends" name="tagged_friends">
-                            <table class="table table-unbordered" id="post-tagged-friends-table">
+                            <table class="table table-unbordered" id="post-tagged-friends-table" style="margin-left: -4px;">
                                 <tbody id="post-tagged-friends-body">
                                     <tr id="{{ userid }}">
-                                        <td width="35"><img src="https://graph.facebook.com/{{ userid }}/picture?type=square" class="lightborder rounded3" height="30"/></td>
-                                        <td width="150">{{ fullname }}</td>
-                                        <td width="20"><img src="/static/img/x.png" height="15" id="{{ userid }}" onclick="removeTaggedFriend(this)"/></td>
+                                        <td>
+                                            <p style="font-size: 14;">
+                                                <img src="https://graph.facebook.com/{{ userid }}/picture?type=square" style="float: left; margin-left: -4px;" class="lightborder rounded3" height="30"/>
+                                                <span style="margin-top: 5px; float: left;">&nbsp;&nbsp;&nbsp;{% if fullname|length > 15 %}{{ fullname|slice:":15" }}...{% else %}{{ fullname }}{% endif %}</span>
+                                                <img src="/static/img/x.png" style="float: right;" height="20" width="20" id="{{ userid }}" onclick="removeTaggedFriend(this)"/>
+                                            </p>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -558,11 +562,17 @@
                         }
                         if (!exists)
                         {
-                            $('#post-tagged-friends-body').append("<tr id=\"" + key + "\"><td width=\"35\">" +
-                                                             "<img src=\"https://graph.facebook.com/" + key + "/picture?type=square\" class=\"lightborder rounded3\" height=\"30\"/>" +
-                                                             "</td><td width=\"150\">" + allFriendsDic[key] +
-                                                             "</td><td width=\"20\">" + "<img src=\"/static/img/x.png\" height=\"15\" id=\"" + key + "\" onclick=\"removeTaggedFriend(this)\"/>" +
-                                                             "</td></tr>");
+                            var taggedFriendName = allFriendsDic[key];
+                            if (taggedFriendName.length > 15)
+                            {
+                                taggedFriendName = taggedFriendName.substring(0, 15) + "...";
+                            }
+                            $('#post-tagged-friends-body').append("<tr id=\"" + key + "\"><td>" +
+                                                             "<p style=\"font-size: 14;\">" +
+                                                             "<img src=\"https://graph.facebook.com/" + key + "/picture?type=square\" style=\"float: left;  margin-left: -4px;\" class=\"lightborder rounded3\" height=\"30\"/>" +
+                                                             "<span style=\"margin-top: 5px; float: left;\">&nbsp;&nbsp;&nbsp;" + taggedFriendName + "</span>" + 
+                                                             "<img src=\"/static/img/x.png\" style=\"float: right;\" height=\"20\" width=\"20\" id=\"" + key + "\" onclick=\"removeTaggedFriend(this)\"/>" +
+                                                             "</p></td></tr>");
                         }
                         document.submitForm.tagged_friend_searchBox.value = "";
                         break;
