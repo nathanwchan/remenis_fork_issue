@@ -429,6 +429,9 @@ def post(request):
 
 @csrf_exempt
 def delete(request):
+    if not saveSessionAndRegisterUser(request):
+        return redirect('/')
+    
     if request.method == 'POST':
         if 'storyid_for_delete' in request.POST and request.POST["storyid_for_delete"] != "":
             Story.objects.get(id=int(request.POST["storyid_for_delete"])).delete()
@@ -442,6 +445,9 @@ def delete(request):
 
 @csrf_exempt
 def comment(request):
+    if not saveSessionAndRegisterUser(request):
+        return redirect('/')
+    
     if request.method == 'POST':
         story = Story.objects.get(id=int(request.POST["storyid"]))
         userid = (request.session['accessCredentials']).get('uid')
@@ -489,6 +495,9 @@ def comment(request):
     
 @csrf_exempt
 def like(request, storyid=""):
+    if not saveSessionAndRegisterUser(request):
+        return redirect('/')
+    
     try:
         story = Story.objects.get(id=int(storyid))
     except Story.DoesNotExist:
@@ -537,7 +546,7 @@ def like(request, storyid=""):
 def story(request, storyid=""):
     if not saveSessionAndRegisterUser(request, "story"):
         if not storyid == "":
-            return redirect('/?story=' + storyid)
+            return redirect('/?story=' + storyid) # story login page
         else:
             return redirect('/')
     
@@ -627,14 +636,20 @@ def api_story(request, storyid=""):
     return HttpResponse(False)
 
 def messagesent1(request):
+    if not saveSessionAndRegisterUser(request):
+        return redirect('/')
     analyticsPageView("share_post_to_wall")
     return render_to_response('messagesent.html', locals())
 
 def messagesent2(request):
+    if not saveSessionAndRegisterUser(request):
+        return redirect('/')
     analyticsPageView("share_popup_send_a_message")
     return render_to_response('messagesent.html', locals())
 
 def messagesent3(request):
+    if not saveSessionAndRegisterUser(request):
+        return redirect('/')
     analyticsPageView("share_popup_post_to_wall")
     return render_to_response('messagesent.html', locals())
 
