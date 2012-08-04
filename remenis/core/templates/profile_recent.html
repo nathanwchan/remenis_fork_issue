@@ -186,7 +186,7 @@
                                         <a href="/{{ tagged_user.fbid }}" class="nounderline">
                                             <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
                                         </a>
-                                        &nbsp;&nbsp;{{ tagged_user.full_name }}
+                                        &nbsp;&nbsp;{% if tagged_user.full_name|length > 18 %}{{ tagged_user.full_name|slice:":18" }}...{% else %}{{ tagged_user.full_name }}{% endif %}
                                         </p>
                                     </td></tr>
                                     {% endfor %}
@@ -197,7 +197,7 @@
                                         <a href="/{{ tagged_user.fbid }}" class="nounderline">
                                             <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
                                         </a>
-                                        &nbsp;&nbsp;{{ tagged_user.full_name }}
+                                        &nbsp;&nbsp;{% if tagged_user.full_name|length > 18 %}{{ tagged_user.full_name|slice:":18" }}...{% else %}{{ tagged_user.full_name }}{% endif %}
                                         </p>
                                     </td></tr>
                                     {% endfor %}
@@ -214,7 +214,7 @@
                                             <a href="/{{ tagged_user.fbid }}" class="nounderline">
                                                 <img id="{{ tagged_user.fbid }}" class="highlightit rounded3" src="https://graph.facebook.com/{{ tagged_user.fbid }}/picture?type=square" height="30" width="30"/>
                                             </a>
-                                            &nbsp;&nbsp;{{ tagged_user.full_name }}
+                                            &nbsp;&nbsp;{% if tagged_user.full_name|length > 18 %}{{ tagged_user.full_name|slice:":18" }}...{% else %}{{ tagged_user.full_name }}{% endif %}
                                         </p>
                                 </td></tr>
                                 {% empty %}
