@@ -52,7 +52,16 @@ class StoryLike(models.Model):
     
     class Admin:
         pass
-        
+
+class Notification(models.Model):
+    storyid = models.ForeignKey(Story)
+    userid = models.ForeignKey(User)
+    type = models.CharField(max_length=20) # tagged, comment, like
+    count = models.IntegerField(default=0)
+    
+    class Admin:
+        pass
+    
 class BetaEmail(models.Model):
     email = models.EmailField(blank=True, null=True)
     submit_date = models.DateTimeField(blank=True, null=True)

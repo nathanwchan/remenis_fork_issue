@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 import datetime, random, re, logging, operator
 from datetime import timedelta
-from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, BetaEmail
+from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, Notification, BetaEmail
 from remenis import settings
 
 from django.template import RequestContext
@@ -343,8 +343,9 @@ def post(request):
         else:
             tagged_friends = tagged_friends.split(",")
         
+        existing_tagged_users = [x.taggeduserid.fbid for x in TaggedUser.objects.filter(storyid = story)]
+        
         if not newstory: # editing story
-            existing_tagged_users = [x.taggeduserid.fbid for x in TaggedUser.objects.filter(storyid = story)]
             for existing_tagged_user in existing_tagged_users:
                 if not existing_tagged_user in tagged_friends:
                     TaggedUser.objects.filter(storyid = story).filter(taggeduserid=User.objects.get(fbid=existing_tagged_user)).delete()
@@ -364,6 +365,14 @@ def post(request):
             except TaggedUser.DoesNotExist:
                 tagged_user_to_save = TaggedUser(storyid=story, taggeduserid=tagged_user)
                 tagged_user_to_save.save()
+            
+            # notification
+            if tagged_user.fbid != userid and not tagged_user.fbid in existing_tagged_users:
+                try:
+                    notification_temp = Notification.objects.get(storyid=story, userid=tagged_user, type="tagged")
+                except Notification.DoesNotExist:
+                    notification_to_save = Notification(storyid=story, userid=tagged_user, type="tagged")
+                    notification_to_save.save()
         
         if newstory:
             share_clause = "?share=" + str(story.id)
@@ -388,13 +397,39 @@ def delete(request):
 @csrf_exempt
 def comment(request):
     if request.method == 'POST':
-        comment_to_save = StoryComment(storyid=Story.objects.get(id=int(request.POST["storyid"])),
-                                       authorid=User.objects.get(fbid=(request.session['accessCredentials']).get('uid')),
+        story = Story.objects.get(id=int(request.POST["storyid"]))
+        userid = (request.session['accessCredentials']).get('uid')
+        user = User.objects.get(fbid=userid)
+        
+        comment_to_save = StoryComment(storyid=story,
+                                       authorid=user,
                                        comment=request.POST["comment"],
                                        post_date=datetime.datetime.now()
                                        )
         comment_to_save.save()
-    
+        
+        # notification
+        users_to_be_notified = [story.authorid]
+        tagged_users_in_story = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
+        for tagged_user in tagged_users_in_story:
+            if not tagged_user in users_to_be_notified:
+                users_to_be_notified.append(tagged_user)
+        story_comment_users_of_story = [x.authorid for x in StoryComment.objects.filter(storyid = story)]
+        for story_comment_user in story_comment_users_of_story:
+            if not story_comment_user in users_to_be_notified:
+                users_to_be_notified.append(story_comment_user)
+        
+        for user_to_be_notified in users_to_be_notified:
+            if user_to_be_notified.fbid != userid:
+                try:
+                    notification = Notification.objects.get(storyid=story, userid=user_to_be_notified, type="comment")
+                except Notification.DoesNotExist:
+                    notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="comment", count=1)
+                    notification_to_save.save()
+                else:
+                    notification.count += 1
+                    notification.save()
+                    
                 
     redirect_url = request.META["HTTP_REFERER"]
     if redirect_url.find('?') != -1:
@@ -419,6 +454,25 @@ def like(request, storyid=""):
                                      authorid=User.objects.get(fbid=(request.session['accessCredentials']).get('uid'))
                                      )
             like_to_save.save()
+            
+            # notification
+            userid = (request.session['accessCredentials']).get('uid')
+            users_to_be_notified = [story.authorid]
+            tagged_users_in_story = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
+            for tagged_user in tagged_users_in_story:
+                if not tagged_user in users_to_be_notified:
+                    users_to_be_notified.append(tagged_user)
+            
+            for user_to_be_notified in users_to_be_notified:
+                if user_to_be_notified.fbid != userid:
+                    try:
+                        notification = Notification.objects.get(storyid=story, userid=user_to_be_notified, type="like")
+                    except Notification.DoesNotExist:
+                        notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="like", count=1)
+                        notification_to_save.save()
+                    else:
+                        notification.count += 1
+                        notification.save()
             
     redirect_url = request.META["HTTP_REFERER"]
     if redirect_url.find('?share') != -1:
