@@ -62,6 +62,12 @@ class Notification(models.Model):
     class Admin:
         pass
     
+class StoryOfTheDay(models.Model):
+    text = models.TextField()
+    
+    class Admin:
+        pass
+    
 class BetaEmail(models.Model):
     email = models.EmailField(blank=True, null=True)
     submit_date = models.DateTimeField(blank=True, null=True)

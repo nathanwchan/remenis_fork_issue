@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 import datetime, random, re, logging, operator
 from datetime import timedelta
-from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, Notification, BetaEmail
+from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, Notification, StoryOfTheDay, BetaEmail
 from remenis import settings
 
 from django.template import RequestContext
@@ -40,6 +40,7 @@ def feed(request):
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
     notification_count = Notification.objects.filter(userid = logged_in_user).count
+    story_of_the_day = getStoryOfTheDay()
     
     myfriends = getGraphForMe(request, 'friends', True)
     
@@ -120,6 +121,7 @@ def profile(request, profileid=""):
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
     notification_count = Notification.objects.filter(userid = logged_in_user).count
+    story_of_the_day = getStoryOfTheDay()
     
     myfriends = getGraphForMe(request, 'friends', True)
     
@@ -204,6 +206,7 @@ def notifications(request):
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
     notification_count = Notification.objects.filter(userid = logged_in_user).count
+    story_of_the_day = getStoryOfTheDay()
     
     myfriends = getGraphForMe(request, 'friends', True)
     
@@ -251,6 +254,9 @@ def searcherror(request):
     
     fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
+    logged_in_user = User.objects.get(fbid=userid)
+    notification_count = Notification.objects.filter(userid = logged_in_user).count
+    story_of_the_day = getStoryOfTheDay()
     
     myfriends = getGraphForMe(request, 'friends', True)
     
@@ -519,6 +525,7 @@ def story(request, storyid=""):
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
     notification_count = Notification.objects.filter(userid = logged_in_user).count
+    story_of_the_day = getStoryOfTheDay()
     
     myfriends = getGraphForMe(request, 'friends', True)
     
@@ -781,3 +788,9 @@ def getStoryPostDate(post_datetime):
         return str(timedelta.seconds / 60) + "m"
     else:
         return str(timedelta.seconds) + "s"
+    
+def getStoryOfTheDay():
+    stories_of_the_day = StoryOfTheDay.objects.all()
+    now = datetime.datetime.now()
+    story_of_the_day_index = now.day % len(stories_of_the_day)
+    return stories_of_the_day[story_of_the_day_index].text

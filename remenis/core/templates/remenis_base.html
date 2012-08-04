@@ -181,11 +181,11 @@
                         </li>
                     </ul>
                     <div style="text-align: left; background: url('/static/storyoftheday.png'); width: 151px; height: 77px; margin: 20px 0px 20px;">
-                        <p style="font-size: 13px; font-family: Verdana; color: #000000; padding: 5px;">One of my favorite vacations was...</p>
+                        <p id="story_of_the_day" style="font-size: 13px; font-family: Verdana; color: #000000; padding: 5px 10px 5px 5px;">{{ story_of_the_day }}</p>
                     </div>
                     <div style="margin: -10px auto 50px;">
                         <img src="/static/storyoftheday_asterisk.png" width="20" style="float: left; margin-top: 5px;"/>
-                        <input class="input-large" type="text" autocomplete="off" placeholder="Tell us your story..." style="width: 135px; float: right;">
+                        <input class="input-large" type="text" autocomplete="off" placeholder="Tell us your story..." style="width: 135px; float: right;" onclick="StoryOfTheDay()">
                     </div>
                 </div>
             </div>
@@ -248,6 +248,15 @@
                 }
                 
                 return false;
+            }
+        </script>
+        
+        <!--javascript for story of the day-->
+        <script>
+            function StoryOfTheDay()
+            {
+                $("#story_for_edit").prop("placeholder", document.getElementById('story_of_the_day').innerHTML);
+                $('#post').modal('show');
             }
         </script>
         
