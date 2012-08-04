@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import User, Story, TaggedUser, StoryComment, StoryLike, Notification, StoryOfTheDay, BetaEmail
+from models import User, Story, TaggedUser, StoryComment, StoryLike, Notification, StoryOfTheDay, PageView, BetaEmail
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'fbid', 'first_name', 'last_name', 'full_name', 'email', 'is_registered', 'last_date', 'page_views')
@@ -58,6 +58,9 @@ class NotificationAdmin(admin.ModelAdmin):
     
 class StoryOfTheDayAdmin(admin.ModelAdmin):
     list_display = ('text',)
+    
+class PageViewAdmin(admin.ModelAdmin):
+    list_display = ('page', 'count')
         
 class BetaEmailAdmin(admin.ModelAdmin):
     list_display = ('email', 'submit_date')
@@ -71,4 +74,5 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Story, StoryAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(StoryOfTheDay, StoryOfTheDayAdmin)
+admin.site.register(PageView, PageViewAdmin)
 admin.site.register(BetaEmail, BetaEmailAdmin)

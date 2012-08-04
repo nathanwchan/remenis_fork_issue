@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 import datetime, random, re, logging, operator
 from datetime import timedelta
-from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, Notification, StoryOfTheDay, BetaEmail
+from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, Notification, StoryOfTheDay, PageView, BetaEmail
 from remenis import settings
 
 from django.template import RequestContext
@@ -16,6 +16,7 @@ from itertools import groupby
 @csrf_exempt
 def login(request):
     if 'token' in request.session:
+        analyticsPageView("login_already_logged_in")
         return redirect('/home/')
     else:
         token_url = urllib.quote_plus(settings.SITE_ROOT_URL)
@@ -24,7 +25,9 @@ def login(request):
             if request.GET['story']:
                 subsite = "story%2F"
                 story_id = request.GET['story'] + "%2F"
-                return render_to_response('login_story.html', locals())            
+                analyticsPageView("login_story")
+                return render_to_response('login_story.html', locals())
+    analyticsPageView("login")
     return render_to_response('login.html', locals())
 
 def logout(request):
@@ -58,6 +61,7 @@ def feed(request):
         active_tab = "none"
         if request.GET['q']:
             query = request.GET['q']
+            analyticsPageView("search")
             return redirect('/' + query)
         else:
             return redirect('/searcherror/?error=1') 
@@ -110,6 +114,7 @@ def feed(request):
     
     liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
 
+    analyticsPageView("home")
     return render_to_response('profile_recent.html', locals())
 
 @csrf_exempt
@@ -139,6 +144,7 @@ def profile(request, profileid=""):
         active_tab = "none"
         if request.GET['q']:
             query = request.GET['q']
+            analyticsPageView("search")
             return redirect('/' + query)
         else:
             return redirect('/searcherror/?error=1')
@@ -163,10 +169,10 @@ def profile(request, profileid=""):
 
     if 'display' in request.GET and request.GET['display'] and request.GET['display'] == "timeline":
         stories_about_user = sorted(stories_about_user, key=operator.attrgetter('story_date_year', 'story_date_month', 'story_date_day'), reverse=True) # sort by story date
-        profile_html_page = "profile_timeline.html"
+        profile_display = request.GET['display']
     else: # default or recent
         stories_about_user = sorted(stories_about_user, key=lambda x: x.post_date, reverse=True) # sort by post date
-        profile_html_page = "profile_recent.html"
+        profile_display = "recent"
     
     stories_about_user_ids = [x.id for x in stories_about_user]
     tagged_users = []
@@ -195,7 +201,8 @@ def profile(request, profileid=""):
     
     liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
     
-    return render_to_response(profile_html_page, locals())
+    analyticsPageView(profile_display)
+    return render_to_response("profile_" + profile_display + ".html", locals())
 
 @csrf_exempt
 def notifications(request):
@@ -224,6 +231,7 @@ def notifications(request):
         active_tab = "none"
         if request.GET['q']:
             query = request.GET['q']
+            analyticsPageView("search")
             return redirect('/' + query)
         else:
             return redirect('/searcherror/?error=1') 
@@ -232,6 +240,7 @@ def notifications(request):
     
     notifications = Notification.objects.filter(userid = logged_in_user)
     
+    analyticsPageView("notifications")
     return render_to_response('notifications.html', locals())
                               
 @csrf_exempt
@@ -245,6 +254,7 @@ def notifications_clear(request):
     notification_count = Notification.objects.filter(userid = logged_in_user).count
     
     Notification.objects.filter(userid = logged_in_user).delete()
+    analyticsPageView("notifications_clear")
     return redirect('/notifications/')
     
 @csrf_exempt
@@ -273,12 +283,14 @@ def searcherror(request):
     if 'q' in request.GET:
         if request.GET['q']:
             query = request.GET['q']
+            analyticsPageView("search")
             return redirect('/' + query)
         else:
             return redirect('/searcherror/?error=1')
 
     if 'error' in request.GET and request.GET['error']:
         error = getErrorMessage(request.GET['error'])
+    analyticsPageView("search_error")
     return render_to_response('search_form.html', locals())
 
 @csrf_exempt
@@ -418,6 +430,8 @@ def delete(request):
     redirect_url = request.META["HTTP_REFERER"]
     if redirect_url.find('?') != -1:
         return redirect(re.match(r'(.*)\?.*', redirect_url).group(1))
+    
+    analyticsPageView("delete_story")
     return redirect(redirect_url)
 
 @csrf_exempt
@@ -542,6 +556,7 @@ def story(request, storyid=""):
     if 'q' in request.GET:
         if request.GET['q']:
             query = request.GET['q']
+            analyticsPageView("search")
             return redirect('/' + query)
         else:
             return redirect('/searcherror/?error=1')
@@ -605,7 +620,12 @@ def api_story(request, storyid=""):
             return HttpResponse(json.dumps(story_for_json))
     return HttpResponse(False)
 
-def messagesent(request):
+def messagesent1(request):
+    analyticsPageView("share_post_to_wall")
+    return render_to_response('messagesent.html', locals())
+
+def messagesent2(request):
+    analyticsPageView("share_send_a_message")
     return render_to_response('messagesent.html', locals())
 
 ## UTILS
@@ -614,6 +634,7 @@ def clearSession(request):
     request.session.pop('token', None)
     request.session.pop('profile', None)
     request.session.pop('accessCredentials', None)
+    analyticsPageView("logout")
             
 def saveSessionAndRegisterUser(request):
     if 'token' in request.session:
@@ -671,10 +692,13 @@ def saveSessionAndRegisterUser(request):
                     user.email = email
                     user.is_registered = True
                     user.save()
+            analyticsPageView("login_conversion")
             return True # login successful
         else:
+            clearSession(request)
             return False # something in auth from rpxnow failed
     else:
+        clearSession(request)
         return False # weird case
 
 def getStoriesOfUser(request, user):
@@ -794,3 +818,12 @@ def getStoryOfTheDay():
     now = datetime.datetime.now()
     story_of_the_day_index = now.day % len(stories_of_the_day)
     return stories_of_the_day[story_of_the_day_index].text
+
+def analyticsPageView(page):
+    try:
+        page_view = PageView.objects.get(page=page)
+    except PageView.DoesNotExist:
+        page_view = PageView(page=page, count=1)
+    else:
+        page_view.count += 1
+    page_view.save()

@@ -68,6 +68,13 @@ class StoryOfTheDay(models.Model):
     class Admin:
         pass
     
+class PageView(models.Model):
+    page = models.CharField(max_length=20)
+    count = models.IntegerField(default=0)
+    
+    class Admin:
+        pass
+    
 class BetaEmail(models.Model):
     email = models.EmailField(blank=True, null=True)
     submit_date = models.DateTimeField(blank=True, null=True)
