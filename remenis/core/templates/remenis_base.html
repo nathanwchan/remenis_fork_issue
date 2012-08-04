@@ -138,18 +138,23 @@
         </div>
         
         <!--share modal-->
-        <div class="modal hide fade" id="share" style="display: none; width: 500px;">
+        <div class="modal hide fade" id="share" style="display: none; width: 370px;">
             <input type="hidden" id="storyid_for_share" name="storyid_for_share">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
-                <h2>Share!</h2>
+                <h2>Share your story!</h2>
             </div>
             <div class="modal-body">
-                <button class="btn btn-primary btn-large" onclick="PostToYourWall('')">Post to Your Wall &raquo;</button>
-                <br><br>
-                <button class="btn btn-primary btn-large" onclick="ShareThisLink('')">Share This Link &raquo;</button>
-                <br><br>
-                <button class="btn btn-primary btn-large" onclick="SendAMessage('')">Send a Message &raquo;</button>
+                <div class="row-fluid">
+                    <div class="span7" style="margin: auto;">
+                        <button class="btn btn-primary btn-xlarge" onclick="PostToYourWall('')">Post to Your Wall &raquo;</button>
+                        <br><br>
+                        <button class="btn btn-primary btn-xlarge" onclick="SendAMessage('')">Send a Message &raquo;</button>
+                    </div>
+                    <div class="span5">
+                        <img src="/static/remenis_logo.png" style="margin-top: 10px;"/>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn" data-dismiss="modal">Close</a>
@@ -269,8 +274,8 @@
                           {
                           description += jsonString['title'] + ": ";
                           }
-                          description += jsonString['story'].substring(0,100);
-                          if (jsonString['story'].length > 100)
+                          description += jsonString['story'].substring(0,200);
+                          if (jsonString['story'].length > 200)
                           {
                           description += "...";
                           }
@@ -300,8 +305,8 @@
                           {
                             description += jsonString['title'] + ": ";
                           }
-                          description += jsonString['story'].substring(0,100);
-                          if (jsonString['story'].length > 100)
+                          description += jsonString['story'].substring(0,200);
+                          if (jsonString['story'].length > 200)
                           {
                             description += "...";
                           }
