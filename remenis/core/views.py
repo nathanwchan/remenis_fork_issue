@@ -421,14 +421,17 @@ def comment(request):
         
         for user_to_be_notified in users_to_be_notified:
             if user_to_be_notified.fbid != userid:
-                try:
-                    notification = Notification.objects.get(storyid=story, userid=user_to_be_notified, type="comment")
+                try: # if user has a notification that he/she is tagged in a story, they shouldn't get more notifications for the story's comments/likes
+                    notification_temp = Notification.objects.get(storyid=story, userid=user_to_be_notified, type="tagged")
                 except Notification.DoesNotExist:
-                    notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="comment", count=1)
-                    notification_to_save.save()
-                else:
-                    notification.count += 1
-                    notification.save()
+                    try:
+                        notification = Notification.objects.get(storyid=story, userid=user_to_be_notified, type="comment")
+                    except Notification.DoesNotExist:
+                        notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="comment", count=1)
+                        notification_to_save.save()
+                    else:
+                        notification.count += 1
+                        notification.save()
                     
                 
     redirect_url = request.META["HTTP_REFERER"]
@@ -465,14 +468,17 @@ def like(request, storyid=""):
             
             for user_to_be_notified in users_to_be_notified:
                 if user_to_be_notified.fbid != userid:
-                    try:
-                        notification = Notification.objects.get(storyid=story, userid=user_to_be_notified, type="like")
+                    try: # if user has a notification that he/she is tagged in a story, they shouldn't get more notifications for the story's comments/likes
+                        notification_temp = Notification.objects.get(storyid=story, userid=user_to_be_notified, type="tagged")
                     except Notification.DoesNotExist:
-                        notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="like", count=1)
-                        notification_to_save.save()
-                    else:
-                        notification.count += 1
-                        notification.save()
+                        try:
+                            notification = Notification.objects.get(storyid=story, userid=user_to_be_notified, type="like")
+                        except Notification.DoesNotExist:
+                            notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="like", count=1)
+                            notification_to_save.save()
+                        else:
+                            notification.count += 1
+                            notification.save()
             
     redirect_url = request.META["HTTP_REFERER"]
     if redirect_url.find('?share') != -1:
