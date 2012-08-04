@@ -535,7 +535,7 @@ def like(request, storyid=""):
 
 @csrf_exempt
 def story(request, storyid=""):
-    if not saveSessionAndRegisterUser(request):
+    if not saveSessionAndRegisterUser(request, "story"):
         if not storyid == "":
             return redirect('/?story=' + storyid)
         else:
@@ -646,7 +646,7 @@ def clearSession(request):
     request.session.pop('accessCredentials', None)
     analyticsPageView("logout")
             
-def saveSessionAndRegisterUser(request):
+def saveSessionAndRegisterUser(request, via_story=""):
     if 'token' in request.session:
         if not 'accessCredentials' in request.session:
             clearSession(request)
@@ -661,6 +661,7 @@ def saveSessionAndRegisterUser(request):
             user.last_date = datetime.datetime.now()
             user.page_views += 1
             user.save()
+        analyticsPageView("total_page_views")
         return True # already logged in
     elif 'token' in request.POST and request.POST['token']: # just logged in
         request.session['token'] = request.POST['token']
@@ -702,7 +703,11 @@ def saveSessionAndRegisterUser(request):
                     user.email = email
                     user.is_registered = True
                     user.save()
-            analyticsPageView("login_conversion")
+                    
+            if via_story != "":
+                analyticsPageView("login_story_conversion")
+            else:
+                analyticsPageView("login_conversion")
             return True # login successful
         else:
             clearSession(request)
