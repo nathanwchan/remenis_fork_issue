@@ -77,13 +77,13 @@
                 <div class="modal-body">
                     <div class="row-fluid">
                         <div class="span7" style="margin-left: 5px;">
-                            <p>Title:<br><input id="title_for_edit" type="text" class="span11" name="title" placeholder="(optional)" autocomplete="off"></p>
-                            <p>When did this story happen?</p>
+                            <p><!--Title:<br>--><input id="title_for_edit" type="text" class="span11" name="title" placeholder="Title" autocomplete="off"></p>
+                            <p style="color: grey;">When did this story happen?</p>
                             <div id="post_date_div" style="margin-top: -8px;">
                                 <select id="date_year_select" name="story_date_year" style="width: 100px;"></select>
                                 <button id="add_month_button" type="button" style="margin-bottom: 7px;" onclick="addMonth()">+ add month</button>
                             </div>
-                            <p>Tell us your story:<br><textarea id="story_for_edit" name="story" class="span11" rows="6"></textarea></p>
+                            <p><!--Tell us your story:<br>--><textarea id="story_for_edit" name="story" placeholder="Tell us your story..." class="span11" rows="6"></textarea></p>
                             <div style="margin-top: 10px;">
                                 <label class="checkbox span2" id="checkbox_label" rel="tooltip" title="Only the friends tagged in this story will be able to view it.">
                                     <input id="private_checkbox" name="private" type="checkbox"> Private
@@ -91,8 +91,8 @@
                             </div>
                         </div>
                         <div class="span5" style="margin-left: 0px;">
-                            <p>Who was in the story?<br><input id="tagged_friend_searchBox" type="text" class="input-large" data-provide="typeahead" data-items="6" data-source='{{ friends_name_array_string|safe }}' placeholder="enter friend's name" autocomplete="off"></p>
-                            <h3>tagged friends</h3>
+                            <p><!--Who was in the story?<br>--><input id="tagged_friend_searchBox" type="text" class="input-large" data-provide="typeahead" data-items="6" data-source='{{ friends_name_array_string|safe }}' placeholder="Who was in the story?" autocomplete="off"></p>
+                            <p style="color: grey; font-size: 16; margin-bottom: 2px;">tagged friends</p>
                             <input type="hidden" id="post-tagged-friends" name="tagged_friends">
                             <table class="table table-unbordered" id="post-tagged-friends-table" style="margin-left: -4px;">
                                 <tbody id="post-tagged-friends-body">
