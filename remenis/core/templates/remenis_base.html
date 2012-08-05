@@ -55,16 +55,6 @@
         {% block splash %}
         {% endblock %}
         
-        <div id="fb-root"></div>
-        <script>(function(d, s, id) {
-                 var js, fjs = d.getElementsByTagName(s)[0];
-                 if (d.getElementById(id)) return;
-                 js = d.createElement(s); js.id = id;
-                 js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=297031353727647";
-                 fjs.parentNode.insertBefore(js, fjs);
-                 }(document, 'script', 'facebook-jssdk'));
-        </script>
-        
         <!--post modal-->
         <div class="modal hide fade" id="post" style="display: none; width: 580px;">
             <div class="modal-header">
@@ -167,7 +157,7 @@
             </div>
         </div>
 
-        <div style="margin-bottom: 400px;">
+        <div>
             {% block no_sidebar %}
             <div class="sidebar-nav-fixed" style="float: left; width: 200px; margin-top: -10px;">
                 <div class="well">
@@ -204,11 +194,10 @@
         </div>
         
         {% block no_footer %}
-        <footer>
-            <hr style="width: 100%;">
+        <div style="margin-top: 400px;">
             <div class="fb-like" data-href="http://www.remenis.com" data-send="true" data-width="450" data-show-faces="true" data-font="lucida grande" style="margin: 0px 0px 10px 20px; float: left;"></div>
             <p style="margin-right: 20px; float: right;">&copy; 2012 Nathan Chan</p>
-        </footer>
+        </div>
         {% endblock %}
         
         
