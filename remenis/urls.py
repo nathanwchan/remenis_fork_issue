@@ -30,6 +30,7 @@ urlpatterns = patterns('',
     url(r'^messagesent3/$', views.messagesent3),
     url(r'^story/(\d+)/$', views.story),
     url(r'^api/story/(\d+)/$', views.api_story),
+    url(r'^test_error/$', views.test_error),
     
     url(r'^logout/$', views.logout),
 )
