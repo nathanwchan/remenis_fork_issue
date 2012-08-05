@@ -14,6 +14,10 @@ from operator import itemgetter
 from itertools import groupby
     
 @csrf_exempt
+def test_error(request):
+    throw
+    
+@csrf_exempt
 def login(request):
     if 'token' in request.session:
         analyticsPageView("login_already_logged_in")
