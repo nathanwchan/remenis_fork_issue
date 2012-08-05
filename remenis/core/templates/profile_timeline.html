@@ -29,7 +29,7 @@
                 <tr><td>
                     <div style="margin-bottom: -10px;">
                         <p>
-                        <a href="/story/{{ story.id }}" style="color: blue;"><strong>{{ story.title }}</strong></a>
+                        <a href="/story/{{ story.id }}"><strong>{{ story.title }}</strong></a>
                         &nbsp;
                         <i style="color: #CFCFCF">
                             {% if story.story_date_month != 0 %}
@@ -51,7 +51,7 @@
                 </td></tr>
                 <tr><td>
                     <div class="row-fluid">
-                        <div class="span6" style="margin-top: 3px;">
+                        <div class="span7" style="margin-top: 3px;">
                             {% for dic_storyid, dic_taggedusers in stories_tagged_users_dictionary.items %}
                                 {% ifequal dic_storyid story.id %}
                                     <a href="/{{ story.authorid.fbid }}" class="nounderline">
@@ -67,9 +67,9 @@
                                 {% endifequal %}
                             {% endfor %}
                         </div>
-                        <div class="span6" style="margin-top: 5px;">
+                        <div class="span5" style="margin-top: 5px;">
                             <div class="input-append pull-right" style="margin-right: 8px;" >
-                            <img src="/static/remenis_favicon.png" width=30 />
+                            <!--<img src="/static/remenis_favicon.png" width=30 />-->
                             
                             <span class="add-on" style="font-size: 10; height: 10px; width: 18px; margin-left: 4px; background-color: #258EAA; color: white;
                                 -webkit-transform: rotate(270deg);

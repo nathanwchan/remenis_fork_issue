@@ -998,6 +998,10 @@ input[type="checkbox"]:focus {
   width: 270px;
 }
 
+.input-xmlarge {
+  width: 335px;
+}
+
 .input-xxlarge {
   width: 530px;
 }

@@ -33,9 +33,9 @@
                 <tr><td>
                     <div class="row-fluid" style="margin-top: 0px;">
                         <p class="span10" style="margin: 0px -10px 0px 0px; font-size: 16;">
-                            <a href="/{{ story.authorid.fbid }}"><strong>{{ story.authorid.full_name }}</strong></a>
+                            <a href="/{{ story.authorid.fbid }}" style="color: #292929;"><strong>{{ story.authorid.full_name }}</strong></a>
                             <span style="color: grey;"> wrote </span>
-                        <a href="/story/{{ story.id }}" style="color: blue;">{% if story.title == '' %}...{% else %}<strong>{{ story.title }}</strong>{% endif %}</a>
+                        <a href="/story/{{ story.id }}">{% if story.title == '' %}...{% else %}<strong>{{ story.title }}</strong>{% endif %}</a>
                         </p>
                         <p align="right" style="color: grey; font-size: 12; {% if story.authorid.fbid == userid %} margin-right: 32px; {% endif %}">
                             {% for dic_storyid, dic_storypostdate in stories_post_date_dictionary.items %}
@@ -80,9 +80,9 @@
                             <input type="hidden" name="storyid" value="{{ story.id }}">
                             <input type="hidden" name="comment_flag" value="false">
                             <div class="input-append">
-                                <img src="/static/remenis_favicon.png" width=30 />
+                                <!--<img src="/static/remenis_favicon.png" width=30 />-->
 
-                                <input name="comment" type="text" class="input-xlarge comment_text_box" size="16" placeholder="write a comment..." autocomplete="off" style="margin-left: 4px;">
+                                <input name="comment" type="text" class="input-xmlarge comment_text_box" size="16" placeholder="write a comment..." autocomplete="off" style="margin-left: 4px;">
                                 
                                 <span class="add-on" style="font-size: 10; height: 10px; width: 18px; margin-left: -11px; background-color: #258EAA; color: white;
                                     -webkit-transform: rotate(270deg);
@@ -99,14 +99,14 @@
                                     </p>
                                 </span>
                                 
-                                <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -10px;"
+                                <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -11px;"
                                     {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
                                     <i class="icon-heart"></i>
                                 </button>
                                 <button class="btn btn-medium" type="button" style="margin-left: -5px;" rel="popover" data-original-title="Bookmark" data-content="coming soon..." data-placement="top">
                                     <i class="icon-bookmark"></i>
                                 </button>
-                                <button class="btn btn-medium" onclick="PostToYourWall({{ story.id }})" type="button" style="margin-left: -4px;">
+                                <button class="btn btn-medium" onclick="PostToYourWall({{ story.id }})" type="button" style="margin-left: -5px;">
                                     <i class="icon-share-alt"></i>
                                 </button>
                             </div>
