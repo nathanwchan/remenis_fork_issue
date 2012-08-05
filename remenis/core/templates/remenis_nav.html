@@ -1,28 +1,30 @@
-<div class="navbar-custom" style="padding: 10px; height:20px;">
-    <div style="width: 900px; margin: 0px auto;">
-        <div style="float: right; display: block;">
-            <div class="btn-group" style="float: right; margin-left: 10px; margin-top: -5px;">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                    <!--<i class="icon-user"></i> {{ fullname }}-->
-                    <img src="https://graph.facebook.com/{{ userid }}/picture?type=square" class="rounded3" height="20" width="20"/>
-                    {{ fullname }}
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/profile">Profile</a></li>
-                    <li><a href="#">Settings</a></li>
-                    <li class="divider"></li>
-                    <li><a href="/logout">Sign Out</a></li>
-                </ul>
-            </div>
-            <div style="float: right; margin-top: -11px;">
-                <form name="searchForm" class="navbar-search" action="" method="get">
-                    <input type="hidden" id="search_friend_id" name="q">
-                    <div class="input-append">
-                        <input id="searchBox" type="text" class="search-query" data-provide="typeahead" data-items="6" data-source='{{ friends_name_array_string|safe }}' placeholder="Search for a friend" autocomplete="off">
-                        <span class="add-on" style="margin-left: -4px; height: 20px;"><i class="icon-search" style="margin-top: 2px;"></i></span>
-                    </div>
-                </form>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div style="width: 900px; margin: 0px auto;">
+            <div style="float: right; display: block;">
+                <div class="btn-group" style="float: right; margin-left: 10px; margin-top: 0px;">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        <!--<i class="icon-user"></i> {{ fullname }}-->
+                        <img src="https://graph.facebook.com/{{ userid }}/picture?type=square" class="rounded3" height="20" width="20"/>
+                        {{ fullname }}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/logout">Sign Out</a></li>
+                    </ul>
+                </div>
+                <div style="float: right; margin-top: -1px;">
+                    <form name="searchForm" class="navbar-search" action="" method="get">
+                        <input type="hidden" id="search_friend_id" name="q">
+                        <div class="input-append">
+                            <input id="searchBox" type="text" class="search-query" data-provide="typeahead" data-items="6" data-source='{{ friends_name_array_string|safe }}' placeholder="Search for a friend" autocomplete="off">
+                            <span class="add-on" style="margin-left: -4px; height: 20px;"><i class="icon-search" style="margin-top: 2px;"></i></span>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
