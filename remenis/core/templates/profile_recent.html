@@ -231,7 +231,15 @@
         </div>
         </td></tr>
         {% empty %}
-        <p>No stories.</p>
+            {% if active_tab == 'home' %}
+                <p style="font-size: 14; margin-top: 10px;">Congratulations, looks like you're the first of your friends on Remenis!  Why not start things off?</p>
+                <br>
+                <a class="btn btn-primary btn-large" data-toggle="modal" href="#post">Tell us a story</a>
+            {% else %}
+                <p style="font-size: 14; margin-top: 10px;">Looks like there aren't any stories about you yet.  Why not start things off?</p>
+                <br>
+                <a class="btn btn-primary btn-large" data-toggle="modal" href="#post">Tell us a story</a>
+            {% endif %}
         {% endfor %}
         </table>
 
