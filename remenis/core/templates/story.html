@@ -76,14 +76,14 @@
                                     </p>
                                 </span>
                                 
-                                <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -10px;"
+                                <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -11px;"
                                     {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
                                     <i class="icon-heart"></i>
                                 </button>
                                 <button class="btn btn-medium" type="button" style="margin-left: -5px;" rel="popover" data-original-title="Bookmark" data-content="coming soon..." data-placement="top">
                                     <i class="icon-bookmark"></i>
                                 </button>
-                                <button class="btn btn-medium" onclick="PostToYourWall({{ story.id }})" type="button" style="margin-left: -4px;">
+                                <button class="btn btn-medium" onclick="PostToYourWall({{ story.id }})" type="button" style="margin-left: -5px;">
                                     <i class="icon-share-alt"></i>
                                 </button>
                             </div>

@@ -55,6 +55,7 @@
         {% block splash %}
         {% endblock %}
         
+        {% block no_body %}
         <!--post modal-->
         <div class="modal hide fade" id="post" style="display: none; width: 580px;">
             <div class="modal-header">
@@ -158,7 +159,6 @@
         </div>
 
         <div>
-            {% block no_sidebar %}
             <div class="sidebar-nav-fixed" style="float: left; width: 200px; margin-top: -10px;">
                 <div class="well">
                     <img src="/static/remenis_logo.png" width="200" style="margin: 0px auto 20px;"/>
@@ -185,13 +185,13 @@
                     </div>
                 </div>
             </div>
-            {% endblock %}
             
             <div style="margin-top: 60px; margin-left: 250px;">
             {% block content %}
             {% endblock %}
             </div>
         </div>
+        {% endblock %}
         
         {% block no_footer %}
         <div style="margin-top: 400px;">
