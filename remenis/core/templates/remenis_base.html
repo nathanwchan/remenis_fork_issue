@@ -14,7 +14,8 @@
         
         {% block head_extra %}
         {% endblock %}
-            
+        
+        {% block test_feed_1 %}
         <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
         <style type="text/css">
             body {
@@ -47,6 +48,7 @@
              })();
             
         </script>
+        {% endblock %}
     </head>
     <body class="background" {% block inside_body %}{% endblock %}>
         {% block nav %}
@@ -159,6 +161,7 @@
         </div>
 
         <div>
+            {% block no_sidebar %}
             <div class="sidebar-nav-fixed" style="float: left; width: 200px; margin-top: -10px;">
                 <div class="well">
                     <img src="/static/remenis_logo.png" width="200" style="margin: 0px auto 20px;"/>
@@ -185,6 +188,7 @@
                     </div>
                 </div>
             </div>
+            {% endblock %}
             
             <div style="margin-top: 60px; margin-left: 250px;">
             {% block content %}
@@ -203,11 +207,14 @@
         
         {% block load_javascript %}
         {% endblock %}
+        
+        {% block test_feed_2 %}
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="/static/js/jquery.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
         <script src="http://connect.facebook.net/en_US/all.js"></script>
+        {% endblock %}
         
         <!--utils-->
         <script>
