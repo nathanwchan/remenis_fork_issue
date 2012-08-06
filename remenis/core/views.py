@@ -968,11 +968,13 @@ def getStoryOfTheDay():
     return stories_of_the_day[story_of_the_day_index].text
 
 def analyticsPageView(page):
-    try:
-        page_view = PageView.objects.get(page=page)
-    except PageView.DoesNotExist:
-        page_view = PageView(page=page, count=1)
-    else:
-        page_view.count += 1
-    page_view.save()
+#    try:
+#        page_view = PageView.objects.get(page=page)
+#    except PageView.DoesNotExist:
+#        page_view = PageView(page=page, count=1)
+#    else:
+#        page_view.count += 1
+#    page_view.save()
+    commit = False
     
+    else:
