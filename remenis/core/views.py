@@ -976,5 +976,3 @@ def analyticsPageView(page):
 #        page_view.count += 1
 #    page_view.save()
     commit = False
-    
-    else:
