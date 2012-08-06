@@ -123,7 +123,7 @@ def test_feed(request, userid, access_token):
     liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
 
     analyticsPageView("test_home")
-    return render_to_response('test_feed.html', locals())        
+    return HttpResponse(True)        
 
 def test_getStoriesOfUser(request, user, logged_in_user_id):
     stories_written_by_user = Story.objects.filter(authorid = user)
