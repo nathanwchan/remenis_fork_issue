@@ -56,7 +56,7 @@ SITE_ID = 1
 EMAIL_USE_TLS       = True
 EMAIL_HOST          = 'smtp.gmail.com'
 EMAIL_HOST_USER     = 'no-reply@remenis.com'
-EMAIL_HOST_PASSWORD = 'Stories20!2'
+EMAIL_HOST_PASSWORD = 'Stories20!!'
 EMAIL_PORT          = 587
 DEFAULT_FROM_EMAIL = 'Remenis <no-reply@remenis.com>'
 
