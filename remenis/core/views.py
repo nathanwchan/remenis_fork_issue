@@ -720,6 +720,72 @@ def story(request, storyid=""):
     return render_to_response('story.html', locals())
 
 @csrf_exempt
+def test_story(request, storyid, userid, access_token):
+    try:
+        user = User.objects.get(fbid=userid)
+    except User.DoesNotExist:
+        throw
+    else:
+        user.last_date = datetime.datetime.now()
+        user.page_views += 1
+        user.save()
+    analyticsPageView("test_total_page_views")
+    
+    user = User.objects.get(fbid=userid)
+    fullname = user.full_name
+    logged_in_user = User.objects.get(fbid=userid)
+    notification_count = Notification.objects.filter(userid = logged_in_user).count
+    story_of_the_day = getStoryOfTheDay()
+    
+    url_to_open = 'https://graph.facebook.com/' + userid + '/friends'
+    url_to_open += '?access_token=' + access_token
+    http_response = urllib2.urlopen(url_to_open)
+    graph_json = http_response.read()
+    graph = json.loads(graph_json)
+    myfriends = graph['data']
+    
+    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array.append(str(fullname))
+    friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
+    friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
+    
+    friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_id_array.append(str(userid))
+    
+    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
+            
+    try:
+        story = Story.objects.get(id=int(storyid))
+    except Story.DoesNotExist:
+#        story = False
+#        error = "Story doesn't exist."
+        return HttpResponse(False)
+    else:
+        # Check if you have access to this story
+        story_tagged_users = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
+        # - check if private story
+#        if story.is_private and userid != story.authorid.fbid and not userid in [x.fbid for x in story_tagged_users]:
+#            story = False
+#            error = "You do not have access to this story."
+#        else:
+        story_comments = []
+        story_comments_objects = StoryComment.objects.filter(storyid = story)
+        for comment in story_comments_objects:
+            story_comments.append({'storyid': comment.storyid,
+                                   'authorid': comment.authorid,
+                                   'comment': comment.comment,
+                                   'post_date': getStoryPostDate(comment.post_date)
+                                   })
+        story_likes = StoryLike.objects.filter(storyid = story)
+        story_post_date = getStoryPostDate(story.post_date)
+        liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
+        # analytics - track story page views
+#        story.page_views += 1
+#        story.save()
+    
+    return HttpResponse(True)
+
+@csrf_exempt
 def api_story(request, storyid=""):
     if not saveSessionAndRegisterUser(request):
         return HttpResponse(False)
