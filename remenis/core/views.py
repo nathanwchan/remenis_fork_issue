@@ -40,8 +40,7 @@ def logout(request):
     return redirect('/')
 
 @csrf_exempt
-def test_feed(request):
-    userid = "508314289"
+def test_feed(request, userid, access_token):
     try:
         user = User.objects.get(fbid=userid)
     except User.DoesNotExist:
@@ -59,7 +58,7 @@ def test_feed(request):
     story_of_the_day = getStoryOfTheDay()
     
     url_to_open = 'https://graph.facebook.com/' + userid + '/friends'
-    url_to_open += '?access_token=' + 'AAACEdEose0cBAC1ZBRSoXIZAuo4gdP43EKrEWK06gj6aE8mEwEQEWssuYUAdZCGNut15wf4Bu9A40RWJKHEGiSkGbLlSLZBslxQsfdZBPwwZDZD'
+    url_to_open += '?access_token=' + access_token
     http_response = urllib2.urlopen(url_to_open)
     graph_json = http_response.read()
     graph = json.loads(graph_json)
@@ -86,7 +85,7 @@ def test_feed(request):
             # do nothing
             stories_in_feed_all += []
         else:  
-            stories_in_feed_all += test_getStoriesOfUser(request, user)
+            stories_in_feed_all += test_getStoriesOfUser(request, user, userid)
     
     stories_about_user = [] # actually should be called stories_in_feed, but re-using profile.html
     # remove duplicates
@@ -126,7 +125,7 @@ def test_feed(request):
     analyticsPageView("test_home")
     return render_to_response('profile_recent.html', locals())        
 
-def test_getStoriesOfUser(request, user):
+def test_getStoriesOfUser(request, user, logged_in_user_id):
     stories_written_by_user = Story.objects.filter(authorid = user)
     stories_user_tagged_in = [x.storyid for x in TaggedUser.objects.filter(taggeduserid=user)]
     stories_of_user_all = stories_user_tagged_in
@@ -136,7 +135,6 @@ def test_getStoriesOfUser(request, user):
         if not story_written_by_user in stories_of_user_all:
             stories_of_user_all.append(story_written_by_user)
 
-    logged_in_user_id = "508314289"
     stories_of_user = []
     
     # exclude private stories
@@ -976,3 +974,4 @@ def analyticsPageView(page):
     else:
         page_view.count += 1
     page_view.save()
+    

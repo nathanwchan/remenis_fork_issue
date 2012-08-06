@@ -31,7 +31,7 @@ urlpatterns = patterns('',
     url(r'^story/(\d+)/$', views.story),
     url(r'^api/story/(\d+)/$', views.api_story),
     url(r'^mu-049a28c9-36388991-73c00a84-2c679173/$', views.blitz),
-    url(r'^test_feed/$', views.test_feed),
+    url(r'^test_feed/(\d+)/(\w+)/$', views.test_feed),
     
     url(r'^logout/$', views.logout),
 )
