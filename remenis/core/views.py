@@ -798,7 +798,7 @@ def api_story(request, storyid=""):
         return HttpResponse(False)
     else:
         # Check if you have access to this story
-        tagged_users = [int(x.taggeduserid.fbid) for x in TaggedUser.objects.filter(storyid = story)]
+        tagged_users = [x.taggeduserid.fbid for x in TaggedUser.objects.filter(storyid = story)]
         # - check if private story
         if story.is_private and userid != story.authorid.fbid and not userid in tagged_users:
             return HttpResponse(False)
