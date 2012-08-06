@@ -152,9 +152,9 @@ def feed(request):
     if not saveSessionAndRegisterUser(request):
         return redirect('/')
     
-    fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
+    fullname = logged_in_user.full_name
     notification_count = Notification.objects.filter(userid = logged_in_user).count
     story_of_the_day = getStoryOfTheDay()
     
@@ -235,9 +235,9 @@ def profile(request, profileid=""):
     if not saveSessionAndRegisterUser(request):
         return redirect('/')
     
-    fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
+    fullname = logged_in_user.full_name
     notification_count = Notification.objects.filter(userid = logged_in_user).count
     story_of_the_day = getStoryOfTheDay()
     
@@ -322,9 +322,9 @@ def notifications(request):
     if not saveSessionAndRegisterUser(request):
         return redirect('/')
     
-    fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
+    fullname = logged_in_user.full_name
     notification_count = Notification.objects.filter(userid = logged_in_user).count
     story_of_the_day = getStoryOfTheDay()
     
@@ -361,9 +361,9 @@ def notifications_clear(request):
     if not saveSessionAndRegisterUser(request):
         return redirect('/')
     
-    fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
+    fullname = logged_in_user.full_name
     notification_count = Notification.objects.filter(userid = logged_in_user).count
     
     Notification.objects.filter(userid = logged_in_user).delete()
@@ -375,9 +375,9 @@ def searcherror(request):
     if not saveSessionAndRegisterUser(request):
         return redirect('/')
     
-    fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
+    fullname = logged_in_user.full_name
     notification_count = Notification.objects.filter(userid = logged_in_user).count
     story_of_the_day = getStoryOfTheDay()
     
@@ -413,8 +413,9 @@ def post(request):
     
     active_tab = "post"
     
-    fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
+    logged_in_user = User.objects.get(fbid=userid)
+    fullname = logged_in_user.full_name
     
     myfriends = getGraphForMe(request, 'friends', True)
     
@@ -663,9 +664,9 @@ def story(request, storyid=""):
         else:
             return redirect('/')
     
-    fullname = getMyFullName(request)
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
+    fullname = logged_in_user.full_name
     notification_count = Notification.objects.filter(userid = logged_in_user).count
     story_of_the_day = getStoryOfTheDay()
     
