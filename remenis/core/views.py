@@ -12,7 +12,10 @@ from django.views.decorators.csrf import csrf_exempt
 import urllib, urllib2, json
 from operator import itemgetter
 from itertools import groupby
-    
+
+def blitz(request):
+    return HttpResponse('42')
+
 @csrf_exempt
     
 @csrf_exempt
