@@ -711,7 +711,9 @@ def saveSessionAndRegisterUser(request, via_story=""):
                                     last_name=lastname,
                                     full_name=fullname,
                                     email=email,
-                                    is_registered=True
+                                    is_registered=True,
+                                    last_date = datetime.datetime.now(),
+                                    page_views = 1
                                     )
                 user_to_save.save()
             else:
@@ -722,6 +724,8 @@ def saveSessionAndRegisterUser(request, via_story=""):
                     user.full_name = fullname
                     user.email = email
                     user.is_registered = True
+                    user.last_date = datetime.datetime.now()
+                    user.page_views += 1
                     user.save()
                     
             if via_story != "":
