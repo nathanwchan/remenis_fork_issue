@@ -236,7 +236,11 @@
                 <br>
                 <a class="btn btn-primary btn-large" data-toggle="modal" href="#post">Tell us a story</a>
             {% else %}
+                {% if active_tab == 'profile' %}
                 <p style="font-size: 14; margin-top: 10px;">Looks like there aren't any stories about you yet.  Why not start things off?</p>
+                {% else %}
+                <p style="font-size: 14; margin-top: 10px;">Looks like there aren't any stories about {{ profile_name }} yet.  Why not start things off?</p>
+                {% endif %}
                 <br>
                 <a class="btn btn-primary btn-large" data-toggle="modal" href="#post">Tell us a story</a>
             {% endif %}
