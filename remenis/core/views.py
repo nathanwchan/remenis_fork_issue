@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.mail import send_mail
+from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives
 import datetime, random, re, logging, operator
 from datetime import timedelta
 from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, Notification, StoryOfTheDay, PageView, BetaEmail
@@ -15,8 +15,6 @@ from itertools import groupby
 
 def blitz(request):
     return HttpResponse('42')
-
-@csrf_exempt
     
 @csrf_exempt
 def login(request):
@@ -502,6 +500,7 @@ def post(request):
                 if not existing_tagged_user in tagged_friends:
                     TaggedUser.objects.filter(storyid = story).filter(taggeduserid=User.objects.get(fbid=existing_tagged_user)).delete()
         
+        new_tagged_users = []
         for tagged_friend in tagged_friends:
             try:    
                 tagged_user = User.objects.get(fbid=tagged_friend)
@@ -517,6 +516,7 @@ def post(request):
             except TaggedUser.DoesNotExist:
                 tagged_user_to_save = TaggedUser(storyid=story, taggeduserid=tagged_user)
                 tagged_user_to_save.save()
+                new_tagged_users.append(tagged_user)
             
             # notification
             if tagged_user.fbid != userid and not tagged_user.fbid in existing_tagged_users:
@@ -535,6 +535,9 @@ def post(request):
         
         if request.POST["story_of_the_day_flag"] == "true":
             analyticsPageView("post_story_via_story_of_the_day")
+            
+        # send email notification
+        sendEmail(story, new_tagged_users)
         
         redirect_url = request.META["HTTP_REFERER"]
         if redirect_url.find('?') != -1:
@@ -1042,3 +1045,31 @@ def analyticsPageView(page):
         page_view.count += 1
     page_view.save()
 
+def sendEmail(story, to_users):
+    to_users_email = []
+    for to_user in to_users:
+        if to_user != story.authorid and to_user.email.find('@') != -1: ##### TO DO: check if user has unsubscribed from emails
+            to_users_email.append(to_user.email)
+
+    subject = story.authorid.full_name + ' wrote a story about you on Remenis!'
+    message_html = '<strong>' + story.authorid.first_name + ' tagged you in <a href="http://www.remenis.com/story/' + str(story.id) + '">"' + story.title + '"</a></strong><br><br>'
+    message_plain = story.authorid.first_name + ' tagged you in "' + story.title + '"\r\n\r\n'
+    if len(story.story) > 20:
+        message_html += story.story[:max(min(len(story.story) - 20, 200), 20)] + "... "
+        message_plain += story.story[:max(min(len(story.story) - 20, 200), 20)] + "...\r\n\r\n"
+    else:
+        message_html += story.story
+        message_plain += story.story + '\r\n'
+    message_html += '<a href="http://www.remenis.com/story/' + str(story.id) + '">See the full story and comments</a><br><br><br>'
+    message_html += 'Happy reading,<br>The Remenis Team<br><br>'
+    message_html += '<a href="http://www.remenis.com">See what your friends have written today</a>'
+#    message_html += ' | <a href="http://www.remenis.com/settings">Unsubscribe</a>'
+    message_plain += 'See the full story and comments at: http://www.remenis.com/story/' + str(story.id) + '\r\n\r\n\r\n'
+    message_plain += 'Happy reading,\r\nThe Remenis Team\r\n\r\n'
+#    message_plain += 'Unsubscribe here: http://www.remenis.com/settings'
+    from_email = settings.DEFAULT_FROM_EMAIL
+    
+    for to_email in to_users_email:
+        msg = EmailMultiAlternatives(subject, message_plain, from_email, [to_email])
+        msg.attach_alternative(message_html, "text/html")
+        msg.send()
