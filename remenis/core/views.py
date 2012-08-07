@@ -1048,7 +1048,7 @@ def analyticsPageView(page):
 def sendEmail(story, to_users):
     to_users_email = []
     for to_user in to_users:
-        if to_user != story.authorid and to_user.email.find('@') != -1: ##### TO DO: check if user has unsubscribed from emails
+        if to_user != story.authorid and to_user.email and to_user.email.find('@') != -1: ##### TO DO: check if user has unsubscribed from emails
             to_users_email.append(to_user.email)
 
     subject = story.authorid.full_name + ' wrote a story about you on Remenis!'
