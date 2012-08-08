@@ -1108,7 +1108,7 @@ def sendEmail(story, to_users):
         message_html += story.story[:max(min(len(story.story) - 20, 200), 20)] + "... "
         message_plain += story.story[:max(min(len(story.story) - 20, 200), 20)] + "...\r\n\r\n"
     else:
-        message_html += story.story
+        message_html += story.story + " "
         message_plain += story.story + '\r\n'
     message_html += '<a href="http://www.remenis.com/story/' + str(story.id) + '">See the full story and comments</a><br><br><br>'
     message_html += 'Happy reading,<br>The Remenis Team<br><br>'
