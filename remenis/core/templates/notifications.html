@@ -9,13 +9,13 @@
             <tr><td>
                 <p>
                 {% if notification.type == 'tagged' %}
-                <strong>You've been tagged in </strong><a href="/story/{{ notification.storyid.id }}">"{{ notification.storyid.title }}"</a>
+                <strong>You've been tagged in </strong><a href="/story/{{ notification.storyid.id }}" target="_blank">"{{ notification.storyid.title }}"</a>
                 {% endif %}
                 {% if notification.type == 'comment' %}
-                {{ notification.count }} {% if notification.count == 1 %}person{% else %}people{% endif %} commented on <a href="/story/{{ notification.storyid.id }}">"{{ notification.storyid.title }}"</a>
+                {{ notification.count }} {% if notification.count == 1 %}person{% else %}people{% endif %} commented on <a href="/story/{{ notification.storyid.id }}" target="_blank">"{{ notification.storyid.title }}"</a>
                 {% endif %}
                 {% if notification.type == 'like' %}
-                {{ notification.count }} {% if notification.count == 1 %}person{% else %}people{% endif %} liked <a href="/story/{{ notification.storyid.id }}">"{{ notification.storyid.title }}"</a>
+                {{ notification.count }} {% if notification.count == 1 %}person{% else %}people{% endif %} liked <a href="/story/{{ notification.storyid.id }}" target="_blank">"{{ notification.storyid.title }}"</a>
                 {% endif %}
                 </p>
             </td></tr>
