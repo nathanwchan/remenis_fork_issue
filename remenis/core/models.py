@@ -9,6 +9,7 @@ class User(models.Model):
     is_registered = models.BooleanField()
     last_date = models.DateTimeField(blank=True, null=True)
     page_views = models.IntegerField(default=0)
+    unsubscribe_email = models.BooleanField()
 
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)

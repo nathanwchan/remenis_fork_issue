@@ -24,13 +24,17 @@ def login(request):
     else:
         token_url = urllib.quote_plus(settings.SITE_ROOT_URL)
         subsite = "home%2F"
-        if 'story' in request.GET:
-            if request.GET['story']:
-                subsite = "story%2F"
-                story_id = request.GET['story'] + "%2F"
-                analyticsPageView("login_story")
-                return render_to_response('login_story.html', locals())
-    analyticsPageView("login")
+        if 'story' in request.GET and request.GET['story']:
+            subsite = "story%2F"
+            story_id = request.GET['story'] + "%2F"
+            login_message = "Sign in to view this story!"
+            analyticsPageView("login_story")
+        elif 'settings' in request.GET:
+            subsite = "settings%2F"
+            login_message = "Sign in to update your settings."
+            analyticsPageView("login_settings")
+        else:
+            analyticsPageView("login")
     return render_to_response('login.html', locals())
 
 def logout(request):
@@ -367,7 +371,53 @@ def notifications_clear(request):
     Notification.objects.filter(userid = logged_in_user).delete()
     analyticsPageView("notifications_clear")
     return redirect('/notifications/')
+
+
+@csrf_exempt
+def settings_page(request):
+    if not saveSessionAndRegisterUser(request):
+        return redirect('/?settings=true') # settings login page
     
+    userid = (request.session['accessCredentials']).get('uid')
+    logged_in_user = User.objects.get(fbid=userid)
+    fullname = logged_in_user.full_name
+    notification_count = Notification.objects.filter(userid = logged_in_user).count
+    story_of_the_day = getStoryOfTheDay()
+    
+    myfriends = getGraphForMe(request, 'friends', True)
+    
+    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array.append(str(fullname))
+    friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
+    friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
+    
+    friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_id_array.append(str(userid))
+    
+    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
+
+    if 'q' in request.GET:
+        active_tab = "none"
+        if request.GET['q']:
+            query = request.GET['q']
+            analyticsPageView("search")
+            return redirect('/' + query)
+        else:
+            return redirect('/searcherror/?error=1')
+    
+    if request.method == 'POST' and not 'token' in request.POST: # not first time login (via settings login page)
+        if 'unsubscribe_email' in request.POST and request.POST["unsubscribe_email"] == "on":
+            logged_in_user.unsubscribe_email = True
+        else:
+            logged_in_user.unsubscribe_email = False
+        logged_in_user.save()
+        success_message = "Your settings have been saved."
+
+    unsubscribe_email = logged_in_user.unsubscribe_email
+                
+    analyticsPageView("settings")
+    return render_to_response('settings.html', locals())
+            
 @csrf_exempt
 def searcherror(request):
     if not saveSessionAndRegisterUser(request):
@@ -1048,7 +1098,7 @@ def analyticsPageView(page):
 def sendEmail(story, to_users):
     to_users_email = []
     for to_user in to_users:
-        if to_user != story.authorid and to_user.email and to_user.email.find('@') != -1: ##### TO DO: check if user has unsubscribed from emails
+        if not to_user.unsubscribe_email and to_user != story.authorid and to_user.email and to_user.email.find('@') != -1:
             to_users_email.append(to_user.email)
 
     subject = story.authorid.full_name + ' wrote a story about you on Remenis!'
@@ -1063,10 +1113,10 @@ def sendEmail(story, to_users):
     message_html += '<a href="http://www.remenis.com/story/' + str(story.id) + '">See the full story and comments</a><br><br><br>'
     message_html += 'Happy reading,<br>The Remenis Team<br><br>'
     message_html += '<a href="http://www.remenis.com">See what your friends have written today</a>'
-#    message_html += ' | <a href="http://www.remenis.com/settings">Unsubscribe</a>'
+    message_html += ' | <a href="http://www.remenis.com/settings">Unsubscribe</a>'
     message_plain += 'See the full story and comments at: http://www.remenis.com/story/' + str(story.id) + '\r\n\r\n\r\n'
     message_plain += 'Happy reading,\r\nThe Remenis Team\r\n\r\n'
-#    message_plain += 'Unsubscribe here: http://www.remenis.com/settings'
+    message_plain += 'Unsubscribe here: http://www.remenis.com/settings'
     from_email = settings.DEFAULT_FROM_EMAIL
     
     for to_email in to_users_email:
