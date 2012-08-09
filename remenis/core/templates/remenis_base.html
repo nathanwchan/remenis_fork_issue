@@ -652,6 +652,7 @@
             }
         </script>
         
+        {% block no_feedback %}
         <script type="text/javascript">
             var uvOptions = {};
             (function() {
@@ -660,6 +661,8 @@
              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
              })();
         </script>
+        {% endblock %}
+        
         {% block load_javascript2 %}
         {% endblock %}
     </body>
