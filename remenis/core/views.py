@@ -586,7 +586,7 @@ def post(request):
                 try:
                     notification_temp = Notification.objects.get(storyid=story, userid=tagged_user, type="tagged")
                 except Notification.DoesNotExist:
-                    notification_to_save = Notification(storyid=story, userid=tagged_user, type="tagged", post_date=datetime.datetime.now())
+                    notification_to_save = Notification(storyid=story, userid=tagged_user, type="tagged", post_date=datetime.datetime.now(), seen = False)
                     notification_to_save.save()
         
         if newstory:
@@ -659,11 +659,12 @@ def comment(request):
                     try:
                         notification = Notification.objects.get(storyid=story, userid=user_to_be_notified, type="comment")
                     except Notification.DoesNotExist:
-                        notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="comment", count=1, post_date=datetime.datetime.now())
+                        notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="comment", count=1, post_date=datetime.datetime.now(), seen = False)
                         notification_to_save.save()
                     else:
                         notification.count += 1
                         notification.post_date = datetime.datetime.now()
+                        notification.seen = False
                         notification.save()
                     
                 
@@ -710,11 +711,12 @@ def like(request, storyid=""):
                         try:
                             notification = Notification.objects.get(storyid=story, userid=user_to_be_notified, type="like")
                         except Notification.DoesNotExist:
-                            notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="like", count=1, post_date=datetime.datetime.now())
+                            notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="like", count=1, post_date=datetime.datetime.now(), seen = False)
                             notification_to_save.save()
                         else:
                             notification.count += 1
                             notification.post_date = datetime.datetime.now()
+                            notification.seen = False
                             notification.save()
             
     redirect_url = request.META["HTTP_REFERER"]

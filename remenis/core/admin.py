@@ -29,6 +29,7 @@ class TaggedUserAdmin(admin.ModelAdmin):
 class StoryCommentAdmin(admin.ModelAdmin):
     list_display = ('story_id', 'author_name', 'comment', 'post_date')
     search_fields = ('story_id', 'author_name', 'comment', 'post_date')
+    ordering = ('-post_date',)
     
     def story_id(self, instance):
         return instance.storyid.id
@@ -49,6 +50,7 @@ class StoryLikeAdmin(admin.ModelAdmin):
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ('story_id', 'user_name', 'type', 'count', 'post_date', 'seen')
     search_fields = ('story_id', 'user_name', 'type', 'count', 'post_date', 'seen')
+    ordering = ('-post_date',)
     
     def story_id(self, instance):
         return instance.storyid.id
