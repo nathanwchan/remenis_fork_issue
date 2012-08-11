@@ -8,6 +8,9 @@
             {% for notification in notifications %}
             <tr><td>
                 <p style="float: left;">
+                {% if not notification.seen %}
+                <sup style="color: red;">New!</sup>
+                {% endif %}
                 {% if notification.type == 'tagged' %}
                 <strong>You've been tagged in </strong><a href="/story/{{ notification.storyid.id }}" target="_blank">"{{ notification.storyid.title }}"</a>
                 {% endif %}

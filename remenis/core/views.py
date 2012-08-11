@@ -56,7 +56,7 @@ def test_feed(request, userid, access_token):
     user = User.objects.get(fbid=userid)
     fullname = user.full_name
     logged_in_user = User.objects.get(fbid=userid)
-    notification_count = Notification.objects.filter(userid = logged_in_user).count
+    notification_count = Notification.objects.filter(userid = logged_in_user, seen = False).count
     story_of_the_day = getStoryOfTheDay()
     
     url_to_open = 'https://graph.facebook.com/' + userid + '/friends'
@@ -157,7 +157,7 @@ def feed(request):
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
     fullname = logged_in_user.full_name
-    notification_count = Notification.objects.filter(userid = logged_in_user).count
+    notification_count = Notification.objects.filter(userid = logged_in_user, seen = False).count
     story_of_the_day = getStoryOfTheDay()
     
     myfriends = getGraphForMe(request, 'friends', True)
@@ -240,7 +240,7 @@ def profile(request, profileid=""):
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
     fullname = logged_in_user.full_name
-    notification_count = Notification.objects.filter(userid = logged_in_user).count
+    notification_count = Notification.objects.filter(userid = logged_in_user, seen = False).count
     story_of_the_day = getStoryOfTheDay()
     
     myfriends = getGraphForMe(request, 'friends', True)
@@ -327,7 +327,7 @@ def notifications(request):
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
     fullname = logged_in_user.full_name
-    notification_count = Notification.objects.filter(userid = logged_in_user).count
+    notification_count = Notification.objects.filter(userid = logged_in_user, seen = False).count
     story_of_the_day = getStoryOfTheDay()
     
     myfriends = getGraphForMe(request, 'friends', True)
@@ -361,8 +361,12 @@ def notifications(request):
                               'userid': notification_object.userid,
                               'type': notification_object.type,
                               'count': notification_object.count,
-                              'post_date': getStoryPostDate(notification_object.post_date)
+                              'post_date': getStoryPostDate(notification_object.post_date),
+                              'seen': notification_object.seen,
                               })
+        if not notification_object.seen:
+            notification_object.seen = True
+            notification_object.save()
     
     analyticsPageView("notifications")
     return render_to_response('notifications.html', locals())
@@ -375,7 +379,7 @@ def notifications_clear(request):
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
     fullname = logged_in_user.full_name
-    notification_count = Notification.objects.filter(userid = logged_in_user).count
+    notification_count = Notification.objects.filter(userid = logged_in_user, seen = False).count
     
     Notification.objects.filter(userid = logged_in_user).delete()
     analyticsPageView("notifications_clear")
@@ -390,7 +394,7 @@ def settings_page(request):
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
     fullname = logged_in_user.full_name
-    notification_count = Notification.objects.filter(userid = logged_in_user).count
+    notification_count = Notification.objects.filter(userid = logged_in_user, seen = False).count
     story_of_the_day = getStoryOfTheDay()
     
     myfriends = getGraphForMe(request, 'friends', True)
@@ -435,7 +439,7 @@ def searcherror(request):
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
     fullname = logged_in_user.full_name
-    notification_count = Notification.objects.filter(userid = logged_in_user).count
+    notification_count = Notification.objects.filter(userid = logged_in_user, seen = False).count
     story_of_the_day = getStoryOfTheDay()
     
     myfriends = getGraphForMe(request, 'friends', True)
@@ -731,7 +735,7 @@ def story(request, storyid=""):
     userid = (request.session['accessCredentials']).get('uid')
     logged_in_user = User.objects.get(fbid=userid)
     fullname = logged_in_user.full_name
-    notification_count = Notification.objects.filter(userid = logged_in_user).count
+    notification_count = Notification.objects.filter(userid = logged_in_user, seen = False).count
     story_of_the_day = getStoryOfTheDay()
     
     myfriends = getGraphForMe(request, 'friends', True)
@@ -798,7 +802,7 @@ def test_story(request, storyid, userid, access_token):
     user = User.objects.get(fbid=userid)
     fullname = user.full_name
     logged_in_user = User.objects.get(fbid=userid)
-    notification_count = Notification.objects.filter(userid = logged_in_user).count
+    notification_count = Notification.objects.filter(userid = logged_in_user, seen = False).count
     story_of_the_day = getStoryOfTheDay()
     
     url_to_open = 'https://graph.facebook.com/' + userid + '/friends'

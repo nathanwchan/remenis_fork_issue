@@ -47,8 +47,8 @@ class StoryLikeAdmin(admin.ModelAdmin):
         return instance.authorid.full_name
     
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ('story_id', 'user_name', 'type', 'count', 'post_date')
-    search_fields = ('story_id', 'user_name', 'type', 'count', 'post_date')
+    list_display = ('story_id', 'user_name', 'type', 'count', 'post_date', 'seen')
+    search_fields = ('story_id', 'user_name', 'type', 'count', 'post_date', 'seen')
     
     def story_id(self, instance):
         return instance.storyid.id
