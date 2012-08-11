@@ -77,6 +77,13 @@ class PageView(models.Model):
     
     class Admin:
         pass
+
+class Information(models.Model):
+    type = models.CharField(max_length=40)
+    text = models.TextField()
+    
+    class Admin:
+        pass
     
 class BetaEmail(models.Model):
     email = models.EmailField(blank=True, null=True)

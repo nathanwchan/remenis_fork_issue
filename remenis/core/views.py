@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives
 import datetime, random, re, logging, operator
 from datetime import timedelta
-from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, Notification, StoryOfTheDay, PageView, BetaEmail
+from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, Notification, StoryOfTheDay, PageView, Information, BetaEmail
 from remenis import settings
 
 from django.template import RequestContext
@@ -385,6 +385,45 @@ def notifications_clear(request):
     analyticsPageView("notifications_clear")
     return redirect('/notifications/')
 
+@csrf_exempt
+def whatsnext(request):
+    if not saveSessionAndRegisterUser(request):
+        return redirect('/')
+    
+    userid = (request.session['accessCredentials']).get('uid')
+    logged_in_user = User.objects.get(fbid=userid)
+    fullname = logged_in_user.full_name
+    notification_count = Notification.objects.filter(userid = logged_in_user, seen = False).count
+    story_of_the_day = getStoryOfTheDay()
+    
+    myfriends = getGraphForMe(request, 'friends', True)
+    
+    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array.append(str(fullname))
+    friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
+    friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
+    
+    friends_id_array = [x['id'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_id_array.append(str(userid))
+    
+    friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
+
+    if 'q' in request.GET:
+        active_tab = "none"
+        if request.GET['q']:
+            query = request.GET['q']
+            analyticsPageView("search")
+            return redirect('/' + query)
+        else:
+            return redirect('/searcherror/?error=1') 
+    
+    active_tab = "whatsnext"
+    
+    whatsnext_object = Information.objects.get(type='whatsnext')
+    whatsnext = whatsnext_object.text.split('\r\n')
+    
+    analyticsPageView("whatsnext")
+    return render_to_response('whatsnext.html', locals())
 
 @csrf_exempt
 def settings_page(request):

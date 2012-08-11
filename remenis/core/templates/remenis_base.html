@@ -176,6 +176,9 @@
                         <li {% ifequal active_tab "post" %}class="active"{% endifequal %}>
                             <a data-toggle="modal" href="#post"><i class="icon-pencil" style="margin-right: 6px"></i>Post</a>
                         </li>
+                        <li {% ifequal active_tab "whatsnext" %}class="active"{% endifequal %}>
+                            <a href="/whatsnext"><i class="icon-forward" style="margin-right: 6px"></i>What's Next?</a>
+                        </li>
                     </ul>
                     <div style="text-align: left; background: url('/static/storyoftheday.png'); width: 151px; height: 77px; margin: 20px 0px 20px;">
                         <p id="story_of_the_day" style="font-size: 13px; font-family: Verdana; color: #000000; padding: 5px 10px 5px 5px;">{{ story_of_the_day }}</p>
