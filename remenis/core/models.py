@@ -59,6 +59,7 @@ class Notification(models.Model):
     userid = models.ForeignKey(User)
     type = models.CharField(max_length=20) # tagged, comment, like
     count = models.IntegerField(default=0)
+    post_date = models.DateTimeField(blank=True, null=True)
     
     class Admin:
         pass

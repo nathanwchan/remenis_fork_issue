@@ -7,7 +7,7 @@
         <table class="table table-bordered" style="width: 700px; margin: 30px 0px;">
             {% for notification in notifications %}
             <tr><td>
-                <p>
+                <p style="float: left;">
                 {% if notification.type == 'tagged' %}
                 <strong>You've been tagged in </strong><a href="/story/{{ notification.storyid.id }}" target="_blank">"{{ notification.storyid.title }}"</a>
                 {% endif %}
@@ -17,6 +17,9 @@
                 {% if notification.type == 'like' %}
                 {{ notification.count }} {% if notification.count == 1 %}person{% else %}people{% endif %} liked <a href="/story/{{ notification.storyid.id }}" target="_blank">"{{ notification.storyid.title }}"</a>
                 {% endif %}
+                </p>
+                <p style="margin-top: -3px; color: grey; font-size: 10; float: right;">
+                {{ notification.post_date }}
                 </p>
             </td></tr>
             {% endfor %}

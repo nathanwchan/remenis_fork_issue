@@ -353,7 +353,16 @@ def notifications(request):
     
     active_tab = "notifications"
     
-    notifications = Notification.objects.filter(userid = logged_in_user)
+    notifications_objects = Notification.objects.filter(userid = logged_in_user)
+    notifications_objects = sorted(notifications_objects, key=lambda x: x.post_date, reverse=True) # sort by post date
+    notifications = []
+    for notification_object in notifications_objects:
+        notifications.append({'storyid': notification_object.storyid,
+                              'userid': notification_object.userid,
+                              'type': notification_object.type,
+                              'count': notification_object.count,
+                              'post_date': getStoryPostDate(notification_object.post_date)
+                              })
     
     analyticsPageView("notifications")
     return render_to_response('notifications.html', locals())
@@ -573,7 +582,7 @@ def post(request):
                 try:
                     notification_temp = Notification.objects.get(storyid=story, userid=tagged_user, type="tagged")
                 except Notification.DoesNotExist:
-                    notification_to_save = Notification(storyid=story, userid=tagged_user, type="tagged")
+                    notification_to_save = Notification(storyid=story, userid=tagged_user, type="tagged", post_date=datetime.datetime.now())
                     notification_to_save.save()
         
         if newstory:
@@ -646,10 +655,11 @@ def comment(request):
                     try:
                         notification = Notification.objects.get(storyid=story, userid=user_to_be_notified, type="comment")
                     except Notification.DoesNotExist:
-                        notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="comment", count=1)
+                        notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="comment", count=1, post_date=datetime.datetime.now())
                         notification_to_save.save()
                     else:
                         notification.count += 1
+                        notification.post_date = datetime.datetime.now()
                         notification.save()
                     
                 
@@ -696,10 +706,11 @@ def like(request, storyid=""):
                         try:
                             notification = Notification.objects.get(storyid=story, userid=user_to_be_notified, type="like")
                         except Notification.DoesNotExist:
-                            notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="like", count=1)
+                            notification_to_save = Notification(storyid=story, userid=user_to_be_notified, type="like", count=1, post_date=datetime.datetime.now())
                             notification_to_save.save()
                         else:
                             notification.count += 1
+                            notification.post_date = datetime.datetime.now()
                             notification.save()
             
     redirect_url = request.META["HTTP_REFERER"]
@@ -1066,6 +1077,9 @@ def convertMonthToInt(month_string):
     return 0
 
 def getStoryPostDate(post_datetime):
+    if not post_datetime:
+        return ""
+    
     now = datetime.datetime.now()
     timedelta = now - post_datetime
     
