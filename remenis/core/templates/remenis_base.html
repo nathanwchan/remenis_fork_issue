@@ -171,7 +171,7 @@
                             <a href="/profile"><i class="icon-user" style="margin-right: 6px"></i>Profile</a>
                         </li>
                         <li {% ifequal active_tab "notifications" %}class="active"{% endifequal %}>
-                            <a href="/notifications"><i class="icon-flag" style="margin-right: 6px"></i>Notifications {% if notification_count > 0 %}<span style="">({{ notification_count }})</span>{% endif %}</a>
+                            <a href="/notifications"><i class="icon-flag" style="margin-right: 6px"></i>Notifications {% if notification_count > 0 %}<span style="color: red; font-size: 14px;"><strong>{{ notification_count }}</strong></span>{% endif %}</a>
                         </li>
                         <li {% ifequal active_tab "post" %}class="active"{% endifequal %}>
                             <a data-toggle="modal" href="#post"><i class="icon-pencil" style="margin-right: 6px"></i>Post</a>
