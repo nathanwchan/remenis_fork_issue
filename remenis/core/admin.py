@@ -2,7 +2,7 @@ from django.contrib import admin
 from models import User, Story, TaggedUser, StoryComment, StoryLike, Notification, StoryOfTheDay, PageView, Information, BetaEmail
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'fbid', 'first_name', 'last_name', 'full_name', 'email', 'is_registered', 'last_date', 'page_views', 'unsubscribe_email')
+    list_display = ('id', 'fbid', 'first_name', 'last_name', 'full_name', 'email', 'is_registered', 'first_date', 'last_date', 'page_views', 'unsubscribe_email')
     search_fields = ('first_name', 'last_name', 'full_name', 'email')
     ordering = ('-is_registered', '-last_date')
 
