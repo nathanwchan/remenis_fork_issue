@@ -32,7 +32,7 @@
                         <!--<a href="/story/{{ story.id }}"><strong>{{ story.title }}</strong></a>-->
                         <a href="/story/{{ story.id }}">{% if story.title == '' %}...{% else %}<strong>{{ story.title }}</strong>{% endif %}</a>
                         &nbsp;
-                        <i style="color: #CFCFCF">
+                        <i style="color: #CFCFCF; font-size: 14;">
                             {% for dic_storyid, dic_storydatestring in stories_date_string_dictionary.items %}
                                 {% ifequal dic_storyid story.id %}
                                     {{ dic_storydatestring }}
