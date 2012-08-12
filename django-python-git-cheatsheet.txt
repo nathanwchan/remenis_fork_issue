@@ -66,3 +66,4 @@ python manage.py schemamigration core --auto
 python manage.py migrate core
 python manage.py migrate core 0002 --fake --delete-ghost-migrations
 
+heroku pg:info --app remenis

@@ -49,6 +49,15 @@
         </script>
     </head>
     <body class="background" {% block inside_body %}{% endblock %}>
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+                 var js, fjs = d.getElementsByTagName(s)[0];
+                 if (d.getElementById(id)) return;
+                 js = d.createElement(s); js.id = id;
+                 js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=297031353727647";
+                 fjs.parentNode.insertBefore(js, fjs);
+                 }(document, 'script', 'facebook-jssdk'));</script>
+        
         {% block nav %}
         {% endblock %}
         
@@ -174,7 +183,7 @@
                             <a href="/notifications"><i class="icon-flag" style="margin-right: 6px"></i>Notifications {% if notification_count > 0 %}<span style="color: red; font-size: 14px;"><strong>{{ notification_count }}</strong></span>{% endif %}</a>
                         </li>
                         <li {% ifequal active_tab "post" %}class="active"{% endifequal %}>
-                            <a data-toggle="modal" href="#post"><i class="icon-pencil" style="margin-right: 6px"></i>Post</a>
+                            <a data-toggle="modal" href="#post"><i class="icon-pencil" style="margin-right: 6px"></i>Post a Story</a>
                         </li>
                         <li {% ifequal active_tab "whatsnext" %}class="active"{% endifequal %}>
                             <a href="/whatsnext"><i class="icon-forward" style="margin-right: 6px"></i>What's Next?</a>
@@ -200,7 +209,7 @@
         
         {% block no_footer %}
         <div style="margin-top: 400px;">
-            <div class="fb-like" data-href="http://www.remenis.com" data-send="true" data-width="1000" data-show-faces="true" data-font="lucida grande" style="margin: 0px 0px 10px 20px; float: left;"></div>
+            <div class="fb-like" data-href="https://www.facebook.com/remenis" data-send="true" data-width="1000" data-show-faces="true" data-font="lucida grande" style="margin: 0px 0px 10px 20px; float: left;"></div>
             <p style="margin-right: 20px; float: right;">&copy; 2012 Nathan Chan</p>
         </div>
         {% endblock %}

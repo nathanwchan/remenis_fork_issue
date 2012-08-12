@@ -898,6 +898,7 @@ def test_story(request, storyid, userid, access_token):
         story_likes = StoryLike.objects.filter(storyid = story)
         story_post_date = getStoryPostDate(story.post_date)
         liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
+        story_date_string = getStoryFullDateString(story)
         # analytics - track story page views
 #        story.page_views += 1
 #        story.save()
