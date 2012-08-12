@@ -102,6 +102,7 @@ def test_feed(request, userid, access_token):
     story_comments = []
     story_likes = []
     story_post_date = []
+    story_date_string = []
     for story in stories_about_user:
         tagged_users_in_story = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
         tagged_users.append(tagged_users_in_story)
@@ -117,10 +118,12 @@ def test_feed(request, userid, access_token):
         story_comments.append(story_comments_of_story)
         story_likes.append(StoryLike.objects.filter(storyid = story))
         story_post_date.append(getStoryPostDate(story.post_date))
+        story_date_string.append(getStoryFullDateString(story))
     stories_tagged_users_dictionary = dict(zip(stories_about_user_ids, tagged_users))
     stories_comments_dictionary = dict(zip(stories_about_user_ids, story_comments))
     stories_likes_dictionary = dict(zip(stories_about_user_ids, story_likes))
     stories_post_date_dictionary = dict(zip(stories_about_user_ids, story_post_date))
+    stories_date_string_dictionary = dict(zip(stories_about_user_ids, story_date_string))
     
     liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
 
@@ -207,6 +210,7 @@ def feed(request):
     story_comments = []
     story_likes = []
     story_post_date = []
+    story_date_string = []
     for story in stories_about_user:
         tagged_users_in_story = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
         tagged_users.append(tagged_users_in_story)
@@ -222,10 +226,12 @@ def feed(request):
         story_comments.append(story_comments_of_story)
         story_likes.append(StoryLike.objects.filter(storyid = story))
         story_post_date.append(getStoryPostDate(story.post_date))
+        story_date_string.append(getStoryFullDateString(story))
     stories_tagged_users_dictionary = dict(zip(stories_about_user_ids, tagged_users))
     stories_comments_dictionary = dict(zip(stories_about_user_ids, story_comments))
     stories_likes_dictionary = dict(zip(stories_about_user_ids, story_likes))
     stories_post_date_dictionary = dict(zip(stories_about_user_ids, story_post_date))
+    stories_date_string_dictionary = dict(zip(stories_about_user_ids, story_date_string))
     
     liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
 
@@ -294,6 +300,7 @@ def profile(request, profileid=""):
     story_comments = []
     story_likes = []
     story_post_date = []
+    story_date_string = []
     for story in stories_about_user:
         tagged_users_in_story = [x.taggeduserid for x in TaggedUser.objects.filter(storyid = story)]
         tagged_users.append(tagged_users_in_story)
@@ -309,10 +316,12 @@ def profile(request, profileid=""):
         story_comments.append(story_comments_of_story)
         story_likes.append(StoryLike.objects.filter(storyid = story))
         story_post_date.append(getStoryPostDate(story.post_date))
+        story_date_string.append(getStoryFullDateString(story))
     stories_tagged_users_dictionary = dict(zip(stories_about_user_ids, tagged_users))
     stories_comments_dictionary = dict(zip(stories_about_user_ids, story_comments))
     stories_likes_dictionary = dict(zip(stories_about_user_ids, story_likes))
     stories_post_date_dictionary = dict(zip(stories_about_user_ids, story_post_date))
+    stories_date_string_dictionary = dict(zip(stories_about_user_ids, story_date_string))
     
     liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
     
@@ -823,6 +832,7 @@ def story(request, storyid=""):
             story_likes = StoryLike.objects.filter(storyid = story)
             story_post_date = getStoryPostDate(story.post_date)
             liked_story_ids = [x.storyid.id for x in StoryLike.objects.filter(authorid = logged_in_user)]
+            story_date_string = getStoryFullDateString(story)
             # analytics - track story page views
             story.page_views += 1
             story.save()
@@ -1110,6 +1120,7 @@ def getMyFullName(request):
     return user.full_name
 
 monthDictionary = {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"}
+monthFullDictionary = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
 
 def convertMonthToString(month_int):
     if monthDictionary.has_key(month_int):
@@ -1117,11 +1128,29 @@ def convertMonthToString(month_int):
     else:
         return "---"
 
+def convertMonthToFullString(month_int):
+    if monthFullDictionary.has_key(month_int):
+        return monthFullDictionary[month_int]
+    else:
+        return ""
+
 def convertMonthToInt(month_string):
     for key in monthDictionary:
         if monthDictionary[key] == month_string:
             return key
     return 0
+
+def getStoryFullDateString(story):
+    month = convertMonthToFullString(story.story_date_month)
+    day = str(story.story_date_day)
+    year = str(story.story_date_year)
+    fullstring = ""
+    if not month == "":
+        fullstring += month + " "
+        if not day == "0":
+            fullstring += day + ", "
+    fullstring += year
+    return fullstring
 
 def getStoryPostDate(post_datetime):
     if not post_datetime:

@@ -32,10 +32,18 @@
             <table class="table table-bordered" style="width: 500px; float: left;">
                 <tr><td>
                     <div class="row-fluid" style="margin-top: 0px;">
-                        <p class="span10" style="margin: 0px -10px 0px 0px; font-size: 16;">
+                        <p class="span10" style="margin: 0px -10px 0px 0px; font-size: 16; line-height: 125%;">
                             <a href="/{{ story.authorid.fbid }}" style="color: #292929;"><strong>{{ story.authorid.full_name }}</strong></a>
                             <span style="color: grey;"> wrote </span>
-                        <a href="/story/{{ story.id }}">{% if story.title == '' %}...{% else %}<strong>{{ story.title }}</strong>{% endif %}</a>
+                            <a href="/story/{{ story.id }}">{% if story.title == '' %}...{% else %}<strong>{{ story.title }}</strong>{% endif %}</a>
+                            <br>
+                            <i style="color: #CFCFCF">
+                                {% for dic_storyid, dic_storydatestring in stories_date_string_dictionary.items %}
+                                    {% ifequal dic_storyid story.id %}
+                                        {{ dic_storydatestring }}
+                                    {% endifequal %}
+                                {% endfor %}
+                            </i>
                         </p>
                         <p align="right" style="color: grey; font-size: 12; {% if story.authorid.fbid == userid %} margin-right: 32px; {% endif %}">
                             {% for dic_storyid, dic_storypostdate in stories_post_date_dictionary.items %}
@@ -58,17 +66,7 @@
                     </div>
                 </td></tr>
                 <tr><td>
-                    <p style="color: grey; margin-bottom: 0px; font-size: 14;">{{ story.story|linebreaksbr }} &nbsp;
-                        <i style="color: #CFCFCF">
-                            {% if story.story_date_month != 0 %}
-                            {{ story.story_date_month }} / 
-                            {% endif %}
-                            {% if story.story_date_day != 0 %}
-                            {{ story.story_date_day }} / 
-                            {% endif %}
-                            {{ story.story_date_year }}
-                        </i>
-                    </p>
+                    <p style="color: grey; margin-bottom: 0px; font-size: 14;">{{ story.story|linebreaksbr }} &nbsp;</p>
                     {% if story.is_private %}
                     <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin-bottom: -6px;" rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
                     {% endif %}

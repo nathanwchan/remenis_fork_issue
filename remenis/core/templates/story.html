@@ -16,10 +16,12 @@
                 <tr><td>
                     <div>
                         <div class="row-fluid" style="margin-top: 0px;">
-                            <p class="span10" style="margin: 0px 0px; font-size: 16;">
+                            <p class="span10" style="margin: 0px 0px; font-size: 16; line-height: 125%;">
                                 <a href="/{{ story.authorid.fbid }}" style="color: #292929;"><strong>{{ story.authorid.full_name }}</strong></a>
                                 <span style="color: grey;"> wrote </span>
                                 <a href="/story/{{ story.id }}"><strong>{{ story.title }}</strong></a>
+                                <br>
+                                <i style="color: #CFCFCF">{{ story_date_string }}</i>
                             </p>
                             <p align="right" style="color: grey; font-size: 12; {% if story.authorid.fbid == userid %} margin-right: 32px; {% endif %}">
                                 {{ story_post_date }}
@@ -39,17 +41,7 @@
                     </div>
                 </td></tr>
                 <tr><td>
-                    <p style="color: grey; margin-bottom: 0px; font-size: 14;">{{ story.story|linebreaksbr }} &nbsp;
-                        <i style="color: #CFCFCF">
-                            {% if story.story_date_month != 0 %}
-                            {{ story.story_date_month }} / 
-                            {% endif %}
-                            {% if story.story_date_day != 0 %}
-                            {{ story.story_date_day }} / 
-                            {% endif %}
-                            {{ story.story_date_year }}
-                        </i>
-                    </p>
+                    <p style="color: grey; margin-bottom: 0px; font-size: 14;">{{ story.story|linebreaksbr }} &nbsp;</p>
                     {% if story.is_private %}
                     <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin-bottom: -6px;" rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
                     {% endif %}

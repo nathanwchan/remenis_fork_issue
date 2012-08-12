@@ -29,16 +29,15 @@
                 <tr><td>
                     <div style="margin-bottom: -10px;">
                         <p>
-                        <a href="/story/{{ story.id }}"><strong>{{ story.title }}</strong></a>
+                        <!--<a href="/story/{{ story.id }}"><strong>{{ story.title }}</strong></a>-->
+                        <a href="/story/{{ story.id }}">{% if story.title == '' %}...{% else %}<strong>{{ story.title }}</strong>{% endif %}</a>
                         &nbsp;
                         <i style="color: #CFCFCF">
-                            {% if story.story_date_month != 0 %}
-                            {{ story.story_date_month }} / 
-                            {% endif %}
-                            {% if story.story_date_day != 0 %}
-                            {{ story.story_date_day }} / 
-                            {% endif %}
-                            {{ story.story_date_year }}
+                            {% for dic_storyid, dic_storydatestring in stories_date_string_dictionary.items %}
+                                {% ifequal dic_storyid story.id %}
+                                    {{ dic_storydatestring }}
+                                {% endifequal %}
+                            {% endfor %}
                         </i>
                         </p>
                     </div>
