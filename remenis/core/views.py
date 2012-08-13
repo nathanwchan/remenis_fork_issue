@@ -1021,9 +1021,9 @@ def saveSessionAndRegisterUser(request, via_story=""):
                     user.email = email
                     user.is_registered = True
                     user.first_date = datetime.datetime.now()
-                    user.last_date = datetime.datetime.now()
-                    user.page_views += 1
-                    user.save()
+                user.last_date = datetime.datetime.now()
+                user.page_views += 1
+                user.save()
                     
             if via_story != "":
                 analyticsPageView("login_story_conversion")
