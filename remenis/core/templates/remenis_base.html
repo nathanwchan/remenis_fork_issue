@@ -171,22 +171,22 @@
             {% block no_sidebar %}
             <div class="sidebar-nav-fixed" style="float: left; width: 200px; margin-top: -10px;">
                 <div class="well">
-                    <img src="/static/remenis_logo.png" width="200" style="margin: 0px auto 20px;"/>
+                    <a href="/"><img src="/static/remenis_logo.png" width="200" style="margin: 0px auto 20px;"/></a>
                     <ul class="nav nav-list">
                         <li {% ifequal active_tab "home" %}class="active"{% endifequal %}>
-                            <a href="/home"><i class="icon-home" style="margin-right: 6px"></i>Home</a>
+                            <a href="/home/"><i class="icon-home" style="margin-right: 6px"></i>Home</a>
                         </li>
                         <li {% ifequal active_tab "profile" %}class="active"{% endifequal %}>
-                            <a href="/profile"><i class="icon-user" style="margin-right: 6px"></i>Profile</a>
+                            <a href="/profile/"><i class="icon-user" style="margin-right: 6px"></i>Profile</a>
                         </li>
                         <li {% ifequal active_tab "notifications" %}class="active"{% endifequal %}>
-                            <a href="/notifications"><i class="icon-flag" style="margin-right: 6px"></i>Notifications {% if notification_count > 0 %}<span style="color: red; font-size: 14px;"><strong>{{ notification_count }}</strong></span>{% endif %}</a>
+                            <a href="/notifications/"><i class="icon-flag" style="margin-right: 6px"></i>Notifications {% if notification_count > 0 %}<span style="color: red; font-size: 14px;"><strong>{{ notification_count }}</strong></span>{% endif %}</a>
                         </li>
                         <li {% ifequal active_tab "post" %}class="active"{% endifequal %}>
                             <a data-toggle="modal" href="#post"><i class="icon-pencil" style="margin-right: 6px"></i>Post a Story</a>
                         </li>
                         <li {% ifequal active_tab "whatsnext" %}class="active"{% endifequal %}>
-                            <a href="/whatsnext"><i class="icon-forward" style="margin-right: 6px"></i>What's Next?</a>
+                            <a href="/whatsnext/"><i class="icon-forward" style="margin-right: 6px"></i>What's Next?</a>
                         </li>
                     </ul>
                     <div style="text-align: left; background: url('/static/storyoftheday.png'); width: 151px; height: 77px; margin: 20px 0px 20px;">
