@@ -62,20 +62,20 @@
                                     -moz-transform: rotate(270deg);
                                     -o-transform: rotate(270deg);
                                     -ms-transform: rotate(270deg);
-                                    transform: rotate(270deg);">
+                                    transform: rotate(270deg);"
+                                    rel="tooltip" title="Number of likes">
                                     <p style="margin: -5px;">
                                         {{ story_likes|length }}
                                     </p>
                                 </span>
                                 
-                                <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -11px;"
-                                    {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
+                                <button class="btn btn-medium" onclick="location.href='/like/{{ story.id }}'" style="margin-left: -11px;" rel="tooltip" title="Like this story!" {% if story.id in liked_story_ids %} disabled="disabled" {% endif %}>
                                     <i class="icon-heart"></i>
                                 </button>
-                                <button class="btn btn-medium" type="button" style="margin-left: -5px;" rel="popover" data-original-title="Bookmark" data-content="coming soon..." data-placement="top">
+                                <button class="btn btn-medium" type="button" style="margin-left: -5px;" rel="tooltip" title="Bookmark - coming soon!">
                                     <i class="icon-bookmark"></i>
                                 </button>
-                                <button class="btn btn-medium" onclick="PostToYourWall({{ story.id }})" type="button" style="margin-left: -5px;">
+                                <button class="btn btn-medium" onclick="PostToYourWall({{ story.id }})" type="button" style="margin-left: -5px;" rel="tooltip" title="Share on Facebook!">
                                     <i class="icon-share-alt"></i>
                                 </button>
                             </div>
