@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives
-import datetime, random, re, logging, operator
+import datetime, random, re, logging, operator, unicodedata
 from datetime import timedelta
 from remenis.core.models import User, Story, StoryComment, StoryLike, TaggedUser, Notification, StoryOfTheDay, PageView, Information, BetaEmail
 from remenis import settings
@@ -66,7 +66,8 @@ def test_feed(request, userid, access_token):
     graph = json.loads(graph_json)
     myfriends = graph['data']
     
-    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array_unnormalized = [x['name'] for x in myfriends]
+    friends_name_array = [unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore') for x in friends_name_array_unnormalized]
     friends_name_array.append(str(fullname))
     friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
     friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
@@ -165,7 +166,8 @@ def feed(request):
     
     myfriends = getGraphForMe(request, 'friends', True)
     
-    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array_unnormalized = [x['name'] for x in myfriends]
+    friends_name_array = [unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore') for x in friends_name_array_unnormalized]
     friends_name_array.append(str(fullname))
     friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
     friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
@@ -251,7 +253,8 @@ def profile(request, profileid=""):
     
     myfriends = getGraphForMe(request, 'friends', True)
     
-    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array_unnormalized = [x['name'] for x in myfriends]
+    friends_name_array = [unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore') for x in friends_name_array_unnormalized]
     friends_name_array.append(str(fullname))
     friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
     friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
@@ -341,7 +344,8 @@ def notifications(request):
     
     myfriends = getGraphForMe(request, 'friends', True)
     
-    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array_unnormalized = [x['name'] for x in myfriends]
+    friends_name_array = [unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore') for x in friends_name_array_unnormalized]
     friends_name_array.append(str(fullname))
     friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
     friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
@@ -407,7 +411,8 @@ def whatsnext(request):
     
     myfriends = getGraphForMe(request, 'friends', True)
     
-    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array_unnormalized = [x['name'] for x in myfriends]
+    friends_name_array = [unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore') for x in friends_name_array_unnormalized]
     friends_name_array.append(str(fullname))
     friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
     friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
@@ -447,7 +452,8 @@ def settings_page(request):
     
     myfriends = getGraphForMe(request, 'friends', True)
     
-    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array_unnormalized = [x['name'] for x in myfriends]
+    friends_name_array = [unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore') for x in friends_name_array_unnormalized]
     friends_name_array.append(str(fullname))
     friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
     friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
@@ -492,7 +498,8 @@ def searcherror(request):
     
     myfriends = getGraphForMe(request, 'friends', True)
     
-    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array_unnormalized = [x['name'] for x in myfriends]
+    friends_name_array = [unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore') for x in friends_name_array_unnormalized]
     friends_name_array.append(str(fullname))
     friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
     friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
@@ -528,7 +535,8 @@ def post(request):
     
     myfriends = getGraphForMe(request, 'friends', True)
     
-    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array_unnormalized = [x['name'] for x in myfriends]
+    friends_name_array = [unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore') for x in friends_name_array_unnormalized]
     friends_name_array.append(str(fullname))
     friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
     friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
@@ -790,7 +798,8 @@ def story(request, storyid=""):
     
     myfriends = getGraphForMe(request, 'friends', True)
     
-    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array_unnormalized = [x['name'] for x in myfriends]
+    friends_name_array = [unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore') for x in friends_name_array_unnormalized]
     friends_name_array.append(str(fullname))
     friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
     friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
@@ -863,7 +872,8 @@ def test_story(request, storyid, userid, access_token):
     graph = json.loads(graph_json)
     myfriends = graph['data']
     
-    friends_name_array = [x['name'].encode('ASCII', 'ignore') for x in myfriends]
+    friends_name_array_unnormalized = [x['name'] for x in myfriends]
+    friends_name_array = [unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore') for x in friends_name_array_unnormalized]
     friends_name_array.append(str(fullname))
     friends_name_array_temp = [str.replace(name, "'", "&#39;") if "'" in name else name for name in friends_name_array]
     friends_name_array_string =  str.replace(str(friends_name_array_temp), "'", "\"")
