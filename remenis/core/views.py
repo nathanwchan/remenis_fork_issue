@@ -76,7 +76,7 @@ def test_feed(request, userid, access_token):
     
     friends_dictionary = json.dumps(dict(zip(friends_id_array, friends_name_array)))
     
-    profile_name = "Remenis Feed"
+    profile_name = "Most recent stories"
     active_tab = "home"
 
     stories_in_feed_all = []
@@ -184,7 +184,7 @@ def feed(request):
         else:
             return redirect('/searcherror/?error=1') 
     
-    profile_name = "Remenis Feed"
+    profile_name = "Most recent stories"
     active_tab = "home"
 
     stories_in_feed_all = []
