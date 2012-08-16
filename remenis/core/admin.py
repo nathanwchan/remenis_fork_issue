@@ -63,6 +63,7 @@ class StoryOfTheDayAdmin(admin.ModelAdmin):
     
 class PageViewAdmin(admin.ModelAdmin):
     list_display = ('page', 'count')
+    ordering = ('page',)
 
 class InformationAdmin(admin.ModelAdmin):
     list_display = ('type', 'text')
