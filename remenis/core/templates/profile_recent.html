@@ -68,7 +68,7 @@
                 <tr><td>
                     <p style="color: grey; margin-bottom: 0px; font-size: 14;">
                     {% if story.story|length > 500 %}
-                        {{ story.story|linebreaksbr|slice:":500" }}<span id="story-{{ story.id }}-show">... <a href="#" onclick="showHide('story-{{ story.id }}');return false;"> See more &darr;</a></span><span id="story-{{ story.id }}-more" style="display: none;">{{ story.story|linebreaksbr|slice:"500:" }}<!--<a href="#" onclick="showHide('story-{{ story.id }}');return false;"> &uarr; Hide</a>--></span>
+                        {{ story.story|linebreaksbr|slice:":500" }}<span id="story-{{ story.id }}-show">... <a href="#" onclick="showHide('story-{{ story.id }}');return false;"> See more &darr;</a></span><span id="story-{{ story.id }}-more" style="display: none;">{{ story.story|linebreaksbr|slice:"500:" }}<!--<a href="#" onclick="showHide('story-{{ story.id }}');return false;"> See less &uarr;</a>--></span>
                     {% else %}
                         {{ story.story|linebreaksbr }}
                     {% endif %}
