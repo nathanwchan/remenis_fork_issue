@@ -1,11 +1,9 @@
 {% extends "remenis_base_nav.html" %}
 
         {% block content %}
-        <div class="span9">
-            <div class="hero-unit">
-                {% if error %}
-                <p style="color: red;">{{ error }}</p>
-                {% endif %}
-            </div>
-        </div>
+        
+        {% if error %}
+        <p style="margin-top: 80px; color: red;">{{ error }}</p>
+        {% endif %}
+
         {% endblock %}
