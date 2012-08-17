@@ -203,7 +203,7 @@
                                 {% endif %}
                                 <tr><td>
                                     <a href="/story/{{ story.id }}">
-                                        <span style="font-size: 13px;">and {{ dic_taggedusers|length }} others...</span>
+                                        <span style="font-size: 13px;">and {{ dic_taggedusers|length|add:"-2" }} others...</span>
                                     </a>
                                 </td></tr>
                             {% else %}
