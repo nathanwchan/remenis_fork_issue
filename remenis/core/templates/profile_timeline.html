@@ -43,7 +43,13 @@
                     </div>
                 </td></tr>
                 <tr><td>
-                    <p style="color: grey; margin-bottom: 0px; font-size: 14;">{{ story.story|linebreaksbr }}</p>
+                    <p style="color: grey; margin-bottom: 0px; font-size: 14;">
+                    {% if story.story|length > 500 %}
+                        {{ story.story|linebreaksbr|slice:":500" }}<span id="story-{{ story.id }}-show">... <a href="#" onclick="showHide('story-{{ story.id }}');return false;"> See more &darr;</a></span><span id="story-{{ story.id }}-more" style="display: none;">{{ story.story|linebreaksbr|slice:"500:" }}<!--<a href="#" onclick="showHide('story-{{ story.id }}');return false;"> &uarr; Hide</a>--></span>
+                    {% else %}
+                        {{ story.story|linebreaksbr }}
+                    {% endif %}
+                    </p>
                     {% if story.is_private %}
                     <p class="pull-right" style="color: #CFCFCF; font-size: 12; margin-bottom: -6px;" rel="tooltip" title="Only those in this story are able to see it."><i>Private</i></p>
                     {% endif %}

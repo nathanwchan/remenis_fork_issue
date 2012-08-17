@@ -666,6 +666,22 @@
             }
         </script>
         
+        <!--javascript for expand story-->
+        <script>
+            function showHide(shID) {
+                if (document.getElementById(shID+'-more')) {
+                    if (document.getElementById(shID+'-show').style.display != 'none') {
+                        document.getElementById(shID+'-show').style.display = 'none';
+                        document.getElementById(shID+'-more').style.display = 'inline';
+                    }
+                    else {
+                        document.getElementById(shID+'-show').style.display = 'inline';
+                        document.getElementById(shID+'-more').style.display = 'none';
+                    }
+                }
+            }    
+        </script>
+        
         {% block no_feedback %}
         <script type="text/javascript">
             var uvOptions = {};
